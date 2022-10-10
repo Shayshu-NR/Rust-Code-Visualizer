@@ -1,5 +1,3 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
 // This method is called when your extension is activated
@@ -14,9 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
 	let disposable = vscode.commands.registerCommand('rust-code-visualizer.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Rust-Code-Visualizer!');
+		vscode.window.showInformationMessage('Hello from Rust-Code-Visualizer!');
 	});
 
 	context.subscriptions.push(disposable);
