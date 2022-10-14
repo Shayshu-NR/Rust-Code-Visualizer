@@ -7,6 +7,151 @@
 
 module.exports = require("vscode");
 
+/***/ }),
+/* 2 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Panel = void 0;
+const vscode = __webpack_require__(1);
+const utilities_1 = __webpack_require__(3);
+/**
+ *
+ *
+ * @export
+ * @class Panel
+ */
+class Panel {
+    constructor(panel, extensionUri) {
+        this._disposables = [];
+        this._panel = panel;
+        this._extensionUri = extensionUri;
+        this._update();
+        this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
+    }
+    static createOrShow(extensionUri) {
+        const column = vscode.window.activeTextEditor
+            ? vscode.window.activeTextEditor.viewColumn
+            : undefined;
+        // If we already have a panel, show it.
+        if (Panel.currentPanel) {
+            Panel.currentPanel._panel.reveal(column);
+            Panel.currentPanel._update();
+            return;
+        }
+        // Otherwise, create a new panel.
+        const panel = vscode.window.createWebviewPanel(Panel.viewType, "Panel", column || vscode.ViewColumn.One, {
+            // Enable javascript in the webview
+            enableScripts: true,
+            // And restrict the webview to only loading content from our extension's `media` directory.
+            localResourceRoots: [
+                vscode.Uri.joinPath(extensionUri, "media"),
+                vscode.Uri.joinPath(extensionUri, "out/compiled"),
+            ],
+        });
+        Panel.currentPanel = new Panel(panel, extensionUri);
+    }
+    static kill() {
+        Panel.currentPanel?.dispose();
+        Panel.currentPanel = undefined;
+    }
+    static revive(panel, extensionUri) {
+        Panel.currentPanel = new Panel(panel, extensionUri);
+    }
+    dispose() {
+        Panel.currentPanel = undefined;
+        // Clean up our resources
+        this._panel.dispose();
+        while (this._disposables.length) {
+            const x = this._disposables.pop();
+            if (x) {
+                x.dispose();
+            }
+        }
+    }
+    async _update() {
+        const webview = this._panel.webview;
+        this._panel.webview.html = this._getHtmlForWebview(webview);
+        // When the webview receives a message back from the user what should we do?
+        webview.onDidReceiveMessage(async (data) => {
+            switch (data.type) {
+                case "onInfo": {
+                    if (!data.value) {
+                        return;
+                    }
+                    vscode.window.showInformationMessage(data.value);
+                    break;
+                }
+                case "onError": {
+                    if (!data.value) {
+                        return;
+                    }
+                    vscode.window.showErrorMessage(data.value);
+                    break;
+                }
+            }
+        });
+    }
+    _getHtmlForWebview(webview) {
+        // Specify where to grab the script that is generated from react...
+        const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "out/compiled", "Panel.js"));
+        // Specify where to grab the css for the panel
+        const stylesResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "reset.css"));
+        // More css to add to the panel
+        const stylesMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "vscode.css"));
+        const nonce = (0, utilities_1.getNonce)();
+        return `
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta http-equiv="Content-Security-Policy" content="img-src https: data:; style-src 'unsafe-inline' ${webview.cspSource}; script-src 'nonce-${nonce}';">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <link href="${stylesResetUri}" rel="stylesheet">
+          <link href="${stylesMainUri}" rel="stylesheet">
+          <script nonce="${nonce}">
+          </script>
+      </head>
+
+      <body>
+        <h1>
+          Rust Code Graph!
+        </h1>
+      </body>
+      <script src="${scriptUri}" nonce="${nonce}">
+    </html>
+    `;
+    }
+}
+exports.Panel = Panel;
+Panel.viewType = "hello-world";
+
+
+/***/ }),
+/* 3 */
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getNonce = void 0;
+/**
+ * Creates a number only used once for unique IDs
+ *
+ * @export
+ * @return {*}  {string}
+ */
+function getNonce() {
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 32; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+}
+exports.getNonce = getNonce;
+
+
 /***/ })
 /******/ 	]);
 /************************************************************************/
@@ -43,22 +188,17 @@ var exports = __webpack_exports__;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.deactivate = exports.activate = void 0;
 const vscode = __webpack_require__(1);
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
+const panel_1 = __webpack_require__(2);
 function activate(context) {
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
-    console.log('Congratulations, your extension "rust-code-visualizer" is now active!');
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with registerCommand
-    // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('rust-code-visualizer.helloWorld', () => {
-        vscode.window.showInformationMessage('Hello from Rust-Code-Visualizer!');
-    });
-    context.subscriptions.push(disposable);
+    // Register a VSCode command and push it to the subscriptions so it can be called 
+    context.subscriptions.push(vscode.commands.registerCommand("rust-code-visualizer.helloWorld", () => {
+        vscode.window.showInformationMessage("Hello from Rust-Code-Visualizer!");
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand("rust-code-visualizer.Graph", () => {
+        panel_1.Panel.createOrShow(context.extensionUri);
+    }));
 }
 exports.activate = activate;
-// This method is called when your extension is deactivated
 function deactivate() { }
 exports.deactivate = deactivate;
 
