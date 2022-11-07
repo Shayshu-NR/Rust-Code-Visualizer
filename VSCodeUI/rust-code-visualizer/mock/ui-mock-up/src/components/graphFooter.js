@@ -1,3 +1,5 @@
+import 'bootstrap-icons/font/bootstrap-icons.css'
+
 function GraphFooter() {
     return (
         <div className="mx-auto px-2 sm:px-6 lg:px-8 pb-4">

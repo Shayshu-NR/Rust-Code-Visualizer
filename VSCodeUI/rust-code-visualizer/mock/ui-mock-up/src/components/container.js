@@ -1,21 +1,18 @@
 import '../input.css';
-import GraphFooter from './graphFooter';
+import GraphFooter from './graphFooter.js';
+import GraphBody from './graphBody';
+import GraphHeader from './graphHeader';
 
 
 function Container() {
     return (
-        <div className="container mx-auto px-4 rounded bg-gray-700 border-slate-600">
+        <div className="container mx-auto rounded bg-gray-700 border-slate-600">
             {/* Header */}
-            <div className="mx-auto px-2 sm:px-6 lg:px-8 pb-4">
+            <GraphHeader props={{}}></GraphHeader>
                 
-
-            </div>
-
             {/* Body */}
-            <div className="mx-auto px-2 sm:px-6 lg:px-8 pb-4">
+            <GraphBody></GraphBody>
 
-
-            </div>
 
             {/* Footer */}
              <GraphFooter></GraphFooter>
