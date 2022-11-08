@@ -1,5 +1,5 @@
 import './App.css';
-import Container from './components/container';
+import GraphContainer from './components/graphContainer';
 
 
 function App() {
@@ -7,7 +7,7 @@ function App() {
     <>
     <div style={{display: "flex", justifyContent: "center", alignItems: "center"}} className="p-5">
       
-      <Container></Container> 
+      <GraphContainer></GraphContainer> 
     </div>
     </>
   );

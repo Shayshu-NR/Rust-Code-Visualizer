@@ -4,7 +4,7 @@ import GraphBody from './graphBody';
 import GraphHeader from './graphHeader';
 
 
-function Container() {
+function GraphContainer() {
     return (
         <div className="container mx-auto rounded bg-gray-700 border-slate-600">
             {/* Header */}
@@ -20,4 +20,4 @@ function Container() {
     )
 }
 
-export default Container;
+export default GraphContainer;
