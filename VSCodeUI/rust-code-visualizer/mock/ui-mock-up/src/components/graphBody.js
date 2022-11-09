@@ -18,31 +18,46 @@ function GraphBody({ collapseState }) {
 
     const elements = CytoscapeComponent.normalizeElements({
         nodes: [
-            { data: { id: 'one', label: 'Node 1' }, position: { x: 0, y: 0 } },
-            { data: { id: 'two', label: 'Node 2' }, position: { x: 100, y: 0 } }
+            { data: { id: 'one', label: 'Node 1' }, position: { x: 0, y: 50 } },
+            { data: { id: 'two', label: 'Node 2' }, position: { x: 100, y: 50 } },
+            { data: { id: 'three', label: 'Node 3' }, position: { x: 120, y: 60 }}
         ],
         edges: [
             {
                 data: { source: 'one', target: 'two', label: 'Edge from Node1 to Node2' }
+            },
+            {
+                data: { source : 'one', target : 'three', label : 'Edge'}
             }
         ]
     })
 
+    console.log(elements);
+
     const styleSheet = [
         {
-            selector: "node",
+            selector: 'node',
             style: {
-                backgroundColor: "white",
-                width: 30,
-                height: 30
+                width: '25rem',
+                height: '25rem',
+                shape: 'rectangle',
+                label: "data(label)",
+                color: "white"
+            }
+        },
+        {
+            selector: 'edge',
+            style: {
+                width: 5
             }
         }
     ];
 
+    const layout = { name: 'grid' };
 
     return (
         <div className={containerCollapseClass}>
-            <CytoscapeComponent elements={elements} style={{ width: '100%', height: '600px', display: collapseState ? 'none' : 'block' }} stylesheet={styleSheet} />
+            <CytoscapeComponent elements={elements} style={{ width: '100%', height: 'auto', minHeight: '300px', display: collapseState ? 'none' : 'block' }} stylesheet={styleSheet} layout={layout}/>
         </div>
     )
 }
