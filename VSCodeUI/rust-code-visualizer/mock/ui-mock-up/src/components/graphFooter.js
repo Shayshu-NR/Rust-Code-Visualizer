@@ -1,8 +1,21 @@
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
-function GraphFooter() {
+function GraphFooter({collapseState}) {
+    let classNames = require('classnames');
+
+    let containerCollapseClass = classNames({
+        'collapse': collapseState,
+        'visible': !collapseState,
+        'mx-auto': !collapseState,
+        'px-2': !collapseState,
+        'sm:px-6': !collapseState,
+        'lg:px-8': !collapseState,
+        'pb-4': !collapseState,
+        'hidden' : collapseState
+    });
+
     return (
-        <div className="mx-auto px-2 sm:px-6 lg:px-8 pb-4">
+        <div className={containerCollapseClass}>
             <div className='flex flex-row'>
                 <div className='basis-2/5'>
                     <div className="relative">
@@ -12,6 +25,9 @@ function GraphFooter() {
                         <input type="search" id="default-search" className="block p-4 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search" />
                         <button type="submit" className="search-btn">Search</button>
                     </div>
+                </div>
+                <div className='basis-2/6'>
+
                 </div>
                 <div className='basis-1/6'>
                     <div className="flex align-middle rounded-md items-center pl-3 h-full w-full" role="group">
