@@ -1,3 +1,30 @@
+# Notes from Matthew
+
+## To build this copy of Cargo Callgraph using Rust:
+1. enter the cargo-callgraph folder
+2. Run `cargo build`
+
+
+Note 1: Use the following command to use the latest version of the rust compiler: `rustup default stable`
+
+Note 2: if there is a `rust-toolchain` file, then it will overwrite whatever version of rust you are trying to use. Delete or rename it locally.
+
+
+## Current error fixes:
+### Error\[E0554\]
+Use the +nightly keyword in the `cargo` command to enable experimental features.
+
+I.E. `cargo +nightly build`
+
+This will change the current build being used to the nightly version.
+
+### Error\[E0463\]: can't find crate for `CRATE_LIBRARY`
+Try installing the following. (You may need to install these on both your stable and nightly versions of Rust.
+
+`rustup component add rustc-dev llvm-tools-preview`
+
+
+# README From original Author
 Compute the callgraph of a crate.
 
 ## Usage
