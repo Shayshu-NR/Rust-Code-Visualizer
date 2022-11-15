@@ -28,25 +28,25 @@ use crate::html::render::IndexItem;
 /// to `Send` so it may be stored in a `Arc` instance and shared among the various
 /// rendering threads.
 #[derive(Default)]
-crate struct Cache {
+pub(crate) struct Cache {
     /// Maps a type ID to all known implementations for that type. This is only
     /// recognized for intra-crate `ResolvedPath` types, and is used to print
     /// out extra documentation on the page of an enum/struct.
     ///
     /// The values of the map are a list of implementations and documentation
     /// found on that implementation.
-    crate impls: FxHashMap<DefId, Vec<Impl>>,
+    pub(crate) impls: FxHashMap<DefId, Vec<Impl>>,
 
     /// Maintains a mapping of local crate `DefId`s to the fully qualified name
     /// and "short type description" of that node. This is used when generating
     /// URLs when a type is being linked to. External paths are not located in
     /// this map because the `External` type itself has all the information
     /// necessary.
-    crate paths: FxHashMap<DefId, (Vec<String>, ItemType)>,
+    pub(crate) paths: FxHashMap<DefId, (Vec<String>, ItemType)>,
 
     /// Similar to `paths`, but only holds external paths. This is only used for
     /// generating explicit hyperlinks to other crates.
-    crate external_paths: FxHashMap<DefId, (Vec<String>, ItemType)>,
+    pub(crate) external_paths: FxHashMap<DefId, (Vec<String>, ItemType)>,
 
     /// Maps local `DefId`s of exported types to fully qualified paths.
     /// Unlike 'paths', this mapping ignores any renames that occur
@@ -58,36 +58,36 @@ crate struct Cache {
     /// to the path used if the corresponding type is inlined. By
     /// doing this, we can detect duplicate impls on a trait page, and only display
     /// the impl for the inlined type.
-    crate exact_paths: FxHashMap<DefId, Vec<String>>,
+    pub(crate) exact_paths: FxHashMap<DefId, Vec<String>>,
 
     /// This map contains information about all known traits of this crate.
     /// Implementations of a crate should inherit the documentation of the
     /// parent trait if no extra documentation is specified, and default methods
     /// should show up in documentation about trait implementations.
-    crate traits: FxHashMap<DefId, clean::Trait>,
+    pub(crate) traits: FxHashMap<DefId, clean::Trait>,
 
     /// When rendering traits, it's often useful to be able to list all
     /// implementors of the trait, and this mapping is exactly, that: a mapping
     /// of trait ids to the list of known implementors of the trait
-    crate implementors: FxHashMap<DefId, Vec<Impl>>,
+    pub(crate) implementors: FxHashMap<DefId, Vec<Impl>>,
 
     /// Cache of where external crate documentation can be found.
-    crate extern_locations: FxHashMap<CrateNum, (Symbol, PathBuf, ExternalLocation)>,
+    pub(crate) extern_locations: FxHashMap<CrateNum, (Symbol, PathBuf, ExternalLocation)>,
 
     /// Cache of where documentation for primitives can be found.
-    crate primitive_locations: FxHashMap<clean::PrimitiveType, DefId>,
+    pub(crate) primitive_locations: FxHashMap<clean::PrimitiveType, DefId>,
 
     // Note that external items for which `doc(hidden)` applies to are shown as
     // non-reachable while local items aren't. This is because we're reusing
     // the access levels from the privacy check pass.
-    crate access_levels: AccessLevels<DefId>,
+    pub(crate) access_levels: AccessLevels<DefId>,
 
     /// The version of the crate being documented, if given from the `--crate-version` flag.
-    crate crate_version: Option<String>,
+    pub(crate) crate_version: Option<String>,
 
     /// Whether to document private items.
     /// This is stored in `Cache` so it doesn't need to be passed through all rustdoc functions.
-    crate document_private: bool,
+    pub(crate) document_private: bool,
 
     // Private fields only used when initially crawling a crate to build a cache
     stack: Vec<String>,
@@ -96,17 +96,17 @@ crate struct Cache {
     stripped_mod: bool,
     masked_crates: FxHashSet<CrateNum>,
 
-    crate search_index: Vec<IndexItem>,
-    crate deref_trait_did: Option<DefId>,
-    crate deref_mut_trait_did: Option<DefId>,
-    crate owned_box_did: Option<DefId>,
+    pub(crate) search_index: Vec<IndexItem>,
+    pub(crate) deref_trait_did: Option<DefId>,
+    pub(crate) deref_mut_trait_did: Option<DefId>,
+    pub(crate) owned_box_did: Option<DefId>,
 
     // In rare case where a structure is defined in one module but implemented
     // in another, if the implementing module is parsed before defining module,
     // then the fully qualified name of the structure isn't presented in `paths`
     // yet when its implementation methods are being indexed. Caches such methods
     // and their parent id here and indexes them at the end of crate parsing.
-    crate orphan_impl_items: Vec<(DefId, clean::Item)>,
+    pub(crate) orphan_impl_items: Vec<(DefId, clean::Item)>,
 
     // Similarly to `orphan_impl_items`, sometimes trait impls are picked up
     // even though the trait itself is not exported. This can happen if a trait
@@ -119,7 +119,7 @@ crate struct Cache {
 
     /// Aliases added through `#[doc(alias = "...")]`. Since a few items can have the same alias,
     /// we need the alias element to have an array of items.
-    crate aliases: BTreeMap<String, Vec<usize>>,
+    pub(crate) aliases: BTreeMap<String, Vec<usize>>,
 }
 
 /// This struct is used to wrap the `cache` and `tcx` in order to run `DocFolder`.
@@ -130,7 +130,7 @@ struct CacheBuilder<'a, 'tcx> {
 }
 
 impl Cache {
-    crate fn from_krate<'tcx>(
+    pub(crate) fn from_krate<'tcx>(
         render_info: RenderInfo,
         document_private: bool,
         extern_html_root_urls: &BTreeMap<String, String>,

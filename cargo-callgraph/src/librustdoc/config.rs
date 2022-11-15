@@ -30,7 +30,7 @@ use crate::passes::{self, Condition, DefaultPassOption};
 use crate::theme;
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
-crate enum OutputFormat {
+pub(crate) enum OutputFormat {
     Json,
     Html,
 }
@@ -42,7 +42,7 @@ impl Default for OutputFormat {
 }
 
 impl OutputFormat {
-    crate fn is_json(&self) -> bool {
+    pub(crate) fn is_json(&self) -> bool {
         matches!(self, OutputFormat::Json)
     }
 }
@@ -61,100 +61,100 @@ impl TryFrom<&str> for OutputFormat {
 
 /// Configuration options for rustdoc.
 #[derive(Clone)]
-crate struct Options {
+pub(crate) struct Options {
     // Basic options / Options passed directly to rustc
     /// The crate root or Markdown file to load.
-    crate input: PathBuf,
+    pub(crate) input: PathBuf,
     /// The name of the crate being documented.
-    crate crate_name: Option<String>,
+    pub(crate) crate_name: Option<String>,
     /// Whether or not this is a proc-macro crate
-    crate proc_macro_crate: bool,
+    pub(crate) proc_macro_crate: bool,
     /// How to format errors and warnings.
-    crate error_format: ErrorOutputType,
+    pub(crate) error_format: ErrorOutputType,
     /// Library search paths to hand to the compiler.
-    crate libs: Vec<SearchPath>,
+    pub(crate) libs: Vec<SearchPath>,
     /// Library search paths strings to hand to the compiler.
-    crate lib_strs: Vec<String>,
+    pub(crate) lib_strs: Vec<String>,
     /// The list of external crates to link against.
-    crate externs: Externs,
+    pub(crate) externs: Externs,
     /// The list of external crates strings to link against.
-    crate extern_strs: Vec<String>,
+    pub(crate) extern_strs: Vec<String>,
     /// List of `cfg` flags to hand to the compiler. Always includes `rustdoc`.
-    crate cfgs: Vec<String>,
+    pub(crate) cfgs: Vec<String>,
     /// Codegen options to hand to the compiler.
-    crate codegen_options: CodegenOptions,
+    pub(crate) codegen_options: CodegenOptions,
     /// Codegen options strings to hand to the compiler.
-    crate codegen_options_strs: Vec<String>,
+    pub(crate) codegen_options_strs: Vec<String>,
     /// Debugging (`-Z`) options to pass to the compiler.
-    crate debugging_opts: DebuggingOptions,
+    pub(crate) debugging_opts: DebuggingOptions,
     /// Debugging (`-Z`) options strings to pass to the compiler.
-    crate debugging_opts_strs: Vec<String>,
+    pub(crate) debugging_opts_strs: Vec<String>,
     /// The target used to compile the crate against.
-    crate target: TargetTriple,
+    pub(crate) target: TargetTriple,
     /// Edition used when reading the crate. Defaults to "2015". Also used by default when
     /// compiling doctests from the crate.
-    crate edition: Edition,
+    pub(crate) edition: Edition,
     /// The path to the sysroot. Used during the compilation process.
-    crate maybe_sysroot: Option<PathBuf>,
+    pub(crate) maybe_sysroot: Option<PathBuf>,
     /// Lint information passed over the command-line.
-    crate lint_opts: Vec<(String, Level)>,
+    pub(crate) lint_opts: Vec<(String, Level)>,
     /// Whether to ask rustc to describe the lints it knows. Practically speaking, this will not be
     /// used, since we abort if we have no input file, but it's included for completeness.
-    crate describe_lints: bool,
+    pub(crate) describe_lints: bool,
     /// What level to cap lints at.
-    crate lint_cap: Option<Level>,
+    pub(crate) lint_cap: Option<Level>,
 
     // Options specific to running doctests
     /// Whether we should run doctests instead of generating docs.
-    crate should_test: bool,
+    pub(crate) should_test: bool,
     /// List of arguments to pass to the test harness, if running tests.
-    crate test_args: Vec<String>,
+    pub(crate) test_args: Vec<String>,
     /// The working directory in which to run tests.
-    crate test_run_directory: Option<PathBuf>,
+    pub(crate) test_run_directory: Option<PathBuf>,
     /// Optional path to persist the doctest executables to, defaults to a
     /// temporary directory if not set.
-    crate persist_doctests: Option<PathBuf>,
+    pub(crate) persist_doctests: Option<PathBuf>,
     /// Runtool to run doctests with
-    crate runtool: Option<String>,
+    pub(crate) runtool: Option<String>,
     /// Arguments to pass to the runtool
-    crate runtool_args: Vec<String>,
+    pub(crate) runtool_args: Vec<String>,
     /// Whether to allow ignoring doctests on a per-target basis
     /// For example, using ignore-foo to ignore running the doctest on any target that
     /// contains "foo" as a substring
-    crate enable_per_target_ignores: bool,
+    pub(crate) enable_per_target_ignores: bool,
 
     /// The path to a rustc-like binary to build tests with. If not set, we
     /// default to loading from `$sysroot/bin/rustc`.
-    crate test_builder: Option<PathBuf>,
+    pub(crate) test_builder: Option<PathBuf>,
 
     // Options that affect the documentation process
     /// The selected default set of passes to use.
     ///
     /// Be aware: This option can come both from the CLI and from crate attributes!
-    crate default_passes: DefaultPassOption,
+    pub(crate) default_passes: DefaultPassOption,
     /// Any passes manually selected by the user.
     ///
     /// Be aware: This option can come both from the CLI and from crate attributes!
-    crate manual_passes: Vec<String>,
+    pub(crate) manual_passes: Vec<String>,
     /// Whether to display warnings during doc generation or while gathering doctests. By default,
     /// all non-rustdoc-specific lints are allowed when generating docs.
-    crate display_warnings: bool,
+    pub(crate) display_warnings: bool,
     /// Whether to run the `calculate-doc-coverage` pass, which counts the number of public items
     /// with and without documentation.
-    crate show_coverage: bool,
+    pub(crate) show_coverage: bool,
 
     // Options that alter generated documentation pages
     /// Crate version to note on the sidebar of generated docs.
-    crate crate_version: Option<String>,
+    pub(crate) crate_version: Option<String>,
     /// Collected options specific to outputting final pages.
-    crate render_options: RenderOptions,
+    pub(crate) render_options: RenderOptions,
     /// The format that we output when rendering.
     ///
     /// Currently used only for the `--show-coverage` option.
-    crate output_format: OutputFormat,
+    pub(crate) output_format: OutputFormat,
     /// If this option is set to `true`, rustdoc will only run checks and not generate
     /// documentation.
-    crate run_check: bool,
+    pub(crate) run_check: bool,
 }
 
 impl fmt::Debug for Options {
@@ -203,89 +203,89 @@ impl fmt::Debug for Options {
 
 /// Configuration options for the HTML page-creation process.
 #[derive(Clone, Debug)]
-crate struct RenderOptions {
+pub(crate) struct RenderOptions {
     /// Output directory to generate docs into. Defaults to `doc`.
-    crate output: PathBuf,
+    pub(crate) output: PathBuf,
     /// External files to insert into generated pages.
-    crate external_html: ExternalHtml,
+    pub(crate) external_html: ExternalHtml,
     /// A pre-populated `IdMap` with the default headings and any headings added by Markdown files
     /// processed by `external_html`.
-    crate id_map: IdMap,
+    pub(crate) id_map: IdMap,
     /// If present, playground URL to use in the "Run" button added to code samples.
     ///
     /// Be aware: This option can come both from the CLI and from crate attributes!
-    crate playground_url: Option<String>,
+    pub(crate) playground_url: Option<String>,
     /// Whether to sort modules alphabetically on a module page instead of using declaration order.
     /// `true` by default.
     //
     // FIXME(misdreavus): the flag name is `--sort-modules-by-appearance` but the meaning is
     // inverted once read.
-    crate sort_modules_alphabetically: bool,
+    pub(crate) sort_modules_alphabetically: bool,
     /// List of themes to extend the docs with. Original argument name is included to assist in
     /// displaying errors if it fails a theme check.
-    crate themes: Vec<StylePath>,
+    pub(crate) themes: Vec<StylePath>,
     /// If present, CSS file that contains rules to add to the default CSS.
-    crate extension_css: Option<PathBuf>,
+    pub(crate) extension_css: Option<PathBuf>,
     /// A map of crate names to the URL to use instead of querying the crate's `html_root_url`.
-    crate extern_html_root_urls: BTreeMap<String, String>,
+    pub(crate) extern_html_root_urls: BTreeMap<String, String>,
     /// A map of the default settings (values are as for DOM storage API). Keys should lack the
     /// `rustdoc-` prefix.
-    crate default_settings: FxHashMap<String, String>,
+    pub(crate) default_settings: FxHashMap<String, String>,
     /// If present, suffix added to CSS/JavaScript files when referencing them in generated pages.
-    crate resource_suffix: String,
+    pub(crate) resource_suffix: String,
     /// Whether to run the static CSS/JavaScript through a minifier when outputting them. `true` by
     /// default.
     //
     // FIXME(misdreavus): the flag name is `--disable-minification` but the meaning is inverted
     // once read.
-    crate enable_minification: bool,
+    pub(crate) enable_minification: bool,
     /// Whether to create an index page in the root of the output directory. If this is true but
     /// `enable_index_page` is None, generate a static listing of crates instead.
-    crate enable_index_page: bool,
+    pub(crate) enable_index_page: bool,
     /// A file to use as the index page at the root of the output directory. Overrides
     /// `enable_index_page` to be true if set.
-    crate index_page: Option<PathBuf>,
+    pub(crate) index_page: Option<PathBuf>,
     /// An optional path to use as the location of static files. If not set, uses combinations of
     /// `../` to reach the documentation root.
-    crate static_root_path: Option<String>,
+    pub(crate) static_root_path: Option<String>,
 
     // Options specific to reading standalone Markdown files
     /// Whether to generate a table of contents on the output file when reading a standalone
     /// Markdown file.
-    crate markdown_no_toc: bool,
+    pub(crate) markdown_no_toc: bool,
     /// Additional CSS files to link in pages generated from standalone Markdown files.
-    crate markdown_css: Vec<String>,
+    pub(crate) markdown_css: Vec<String>,
     /// If present, playground URL to use in the "Run" button added to code samples generated from
     /// standalone Markdown files. If not present, `playground_url` is used.
-    crate markdown_playground_url: Option<String>,
+    pub(crate) markdown_playground_url: Option<String>,
     /// If false, the `select` element to have search filtering by crates on rendered docs
     /// won't be generated.
-    crate generate_search_filter: bool,
+    pub(crate) generate_search_filter: bool,
     /// Document items that have lower than `pub` visibility.
-    crate document_private: bool,
+    pub(crate) document_private: bool,
     /// Document items that have `doc(hidden)`.
-    crate document_hidden: bool,
-    crate unstable_features: rustc_feature::UnstableFeatures,
+    pub(crate) document_hidden: bool,
+    pub(crate) unstable_features: rustc_feature::UnstableFeatures,
 }
 
 /// Temporary storage for data obtained during `RustdocVisitor::clean()`.
 /// Later on moved into `cache`.
 #[derive(Default, Clone)]
-crate struct RenderInfo {
-    crate inlined: FxHashSet<DefId>,
-    crate external_paths: crate::core::ExternalPaths,
-    crate exact_paths: FxHashMap<DefId, Vec<String>>,
-    crate access_levels: AccessLevels<DefId>,
-    crate deref_trait_did: Option<DefId>,
-    crate deref_mut_trait_did: Option<DefId>,
-    crate owned_box_did: Option<DefId>,
-    crate output_format: OutputFormat,
+pub(crate) struct RenderInfo {
+    pub(crate) inlined: FxHashSet<DefId>,
+    pub(crate) external_paths: crate::core::ExternalPaths,
+    pub(crate) exact_paths: FxHashMap<DefId, Vec<String>>,
+    pub(crate) access_levels: AccessLevels<DefId>,
+    pub(crate) deref_trait_did: Option<DefId>,
+    pub(crate) deref_mut_trait_did: Option<DefId>,
+    pub(crate) owned_box_did: Option<DefId>,
+    pub(crate) output_format: OutputFormat,
 }
 
 impl Options {
     /// Parses the given command-line for options. If an error message or other early-return has
     /// been printed, returns `Err` with the exit code.
-    crate fn from_matches(matches: &getopts::Matches) -> Result<Options, i32> {
+    pub(crate) fn from_matches(matches: &getopts::Matches) -> Result<Options, i32> {
         // Check for unstable options.
         nightly_options::check_nightly_options(&matches, &opts());
 
@@ -663,7 +663,7 @@ impl Options {
     }
 
     /// Returns `true` if the file given as `self.input` is a Markdown file.
-    crate fn markdown_input(&self) -> bool {
+    pub(crate) fn markdown_input(&self) -> bool {
         self.input.extension().map_or(false, |e| e == "md" || e == "markdown")
     }
 }

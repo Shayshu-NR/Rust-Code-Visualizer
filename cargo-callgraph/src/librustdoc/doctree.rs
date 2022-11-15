@@ -4,21 +4,21 @@ use rustc_span::{self, Span, Symbol};
 
 use rustc_hir as hir;
 
-crate struct Module<'hir> {
-    crate name: Option<Symbol>,
-    crate where_outer: Span,
-    crate where_inner: Span,
-    crate mods: Vec<Module<'hir>>,
-    crate id: hir::HirId,
+pub(crate) struct Module<'hir> {
+    pub(crate) name: Option<Symbol>,
+    pub(crate) where_outer: Span,
+    pub(crate) where_inner: Span,
+    pub(crate) mods: Vec<Module<'hir>>,
+    pub(crate) id: hir::HirId,
     // (item, renamed)
-    crate items: Vec<(&'hir hir::Item<'hir>, Option<Symbol>)>,
-    crate foreigns: Vec<(&'hir hir::ForeignItem<'hir>, Option<Symbol>)>,
-    crate macros: Vec<(&'hir hir::MacroDef<'hir>, Option<Symbol>)>,
-    crate is_crate: bool,
+    pub(crate) items: Vec<(&'hir hir::Item<'hir>, Option<Symbol>)>,
+    pub(crate) foreigns: Vec<(&'hir hir::ForeignItem<'hir>, Option<Symbol>)>,
+    pub(crate) macros: Vec<(&'hir hir::MacroDef<'hir>, Option<Symbol>)>,
+    pub(crate) is_crate: bool,
 }
 
 impl Module<'hir> {
-    crate fn new(name: Option<Symbol>) -> Module<'hir> {
+    pub(crate) fn new(name: Option<Symbol>) -> Module<'hir> {
         Module {
             name,
             id: hir::CRATE_HIR_ID,

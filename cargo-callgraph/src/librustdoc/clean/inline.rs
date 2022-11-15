@@ -36,7 +36,7 @@ type Attrs<'hir> = rustc_middle::ty::Attributes<'hir>;
 /// and `Some` of a vector of items if it was successfully expanded.
 ///
 /// `parent_module` refers to the parent of the *re-export*, not the original item.
-crate fn try_inline(
+pub(crate) fn try_inline(
     cx: &DocContext<'_>,
     parent_module: DefId,
     res: Res,
@@ -128,7 +128,7 @@ crate fn try_inline(
     Some(ret)
 }
 
-crate fn try_inline_glob(
+pub(crate) fn try_inline_glob(
     cx: &DocContext<'_>,
     res: Res,
     visited: &mut FxHashSet<DefId>,
@@ -148,7 +148,7 @@ crate fn try_inline_glob(
     }
 }
 
-crate fn load_attrs<'hir>(cx: &DocContext<'hir>, did: DefId) -> Attrs<'hir> {
+pub(crate) fn load_attrs<'hir>(cx: &DocContext<'hir>, did: DefId) -> Attrs<'hir> {
     cx.tcx.get_attrs(did)
 }
 
@@ -156,7 +156,7 @@ crate fn load_attrs<'hir>(cx: &DocContext<'hir>, did: DefId) -> Attrs<'hir> {
 ///
 /// These names are used later on by HTML rendering to generate things like
 /// source links back to the original item.
-crate fn record_extern_fqn(cx: &DocContext<'_>, did: DefId, kind: clean::TypeKind) {
+pub(crate) fn record_extern_fqn(cx: &DocContext<'_>, did: DefId, kind: clean::TypeKind) {
     let crate_name = cx.tcx.crate_name(did.krate).to_string();
 
     let relative = cx.tcx.def_path(did).data.into_iter().filter_map(|elem| {
@@ -187,7 +187,7 @@ crate fn record_extern_fqn(cx: &DocContext<'_>, did: DefId, kind: clean::TypeKin
     }
 }
 
-crate fn build_external_trait(cx: &DocContext<'_>, did: DefId) -> clean::Trait {
+pub(crate) fn build_external_trait(cx: &DocContext<'_>, did: DefId) -> clean::Trait {
     let trait_items =
         cx.tcx.associated_items(did).in_definition_order().map(|item| item.clean(cx)).collect();
 
@@ -269,7 +269,7 @@ fn build_type_alias(cx: &DocContext<'_>, did: DefId) -> clean::Typedef {
 }
 
 /// Builds all inherent implementations of an ADT (struct/union/enum) or Trait item/path/reexport.
-crate fn build_impls(
+pub(crate) fn build_impls(
     cx: &DocContext<'_>,
     parent_module: Option<DefId>,
     did: DefId,
@@ -310,7 +310,7 @@ fn merge_attrs(
 }
 
 /// Builds a specific implementation of a type. The `did` could be a type method or trait method.
-crate fn build_impl(
+pub(crate) fn build_impl(
     cx: &DocContext<'_>,
     parent_module: impl Into<Option<DefId>>,
     did: DefId,
@@ -486,7 +486,7 @@ fn build_module(cx: &DocContext<'_>, did: DefId, visited: &mut FxHashSet<DefId>)
     clean::Module { items, is_crate: false }
 }
 
-crate fn print_inlined_const(cx: &DocContext<'_>, did: DefId) -> String {
+pub(crate) fn print_inlined_const(cx: &DocContext<'_>, did: DefId) -> String {
     if let Some(did) = did.as_local() {
         let hir_id = cx.tcx.hir().local_def_id_to_hir_id(did);
         rustc_hir_pretty::id_to_string(&cx.tcx.hir(), hir_id)
@@ -603,7 +603,7 @@ fn separate_supertrait_bounds(
     (g, ty_bounds)
 }
 
-crate fn record_extern_trait(cx: &DocContext<'_>, did: DefId) {
+pub(crate) fn record_extern_trait(cx: &DocContext<'_>, did: DefId) {
     if did.is_local() {
         return;
     }

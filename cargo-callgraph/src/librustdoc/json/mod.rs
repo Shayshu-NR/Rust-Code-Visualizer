@@ -27,7 +27,7 @@ use crate::html::render::cache::ExternalLocation;
 use crate::json::conversions::from_def_id;
 
 #[derive(Clone)]
-crate struct JsonRenderer<'tcx> {
+pub(crate) struct JsonRenderer<'tcx> {
     tcx: TyCtxt<'tcx>,
     /// A mapping of IDs that contains all local items for this crate which gets output as a top
     /// level field of the JSON blob.

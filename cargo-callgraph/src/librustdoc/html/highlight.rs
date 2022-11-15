@@ -18,7 +18,7 @@ use rustc_span::with_default_session_globals;
 use super::format::Buffer;
 
 /// Highlights `src`, returning the HTML output.
-crate fn render_with_highlighting(
+pub(crate) fn render_with_highlighting(
     src: &str,
     out: &mut Buffer,
     class: Option<&str>,

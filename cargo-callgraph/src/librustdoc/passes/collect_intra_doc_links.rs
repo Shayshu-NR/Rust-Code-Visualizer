@@ -41,13 +41,13 @@ use crate::passes::Pass;
 
 use super::span_of_attrs;
 
-crate const COLLECT_INTRA_DOC_LINKS: Pass = Pass {
+pub(crate) const COLLECT_INTRA_DOC_LINKS: Pass = Pass {
     name: "collect-intra-doc-links",
     run: collect_intra_doc_links,
     description: "resolves intra-doc links",
 };
 
-crate fn collect_intra_doc_links(krate: Crate, cx: &DocContext<'_>) -> Crate {
+pub(crate) fn collect_intra_doc_links(krate: Crate, cx: &DocContext<'_>) -> Crate {
     LinkCollector::new(cx).fold_crate(krate)
 }
 

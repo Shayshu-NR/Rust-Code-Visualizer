@@ -5,20 +5,20 @@ use std::path::Path;
 use std::str;
 
 #[derive(Clone, Debug)]
-crate struct ExternalHtml {
+pub(crate) struct ExternalHtml {
     /// Content that will be included inline in the <head> section of a
     /// rendered Markdown file or generated documentation
-    crate in_header: String,
+    pub(crate) in_header: String,
     /// Content that will be included inline between <body> and the content of
     /// a rendered Markdown file or generated documentation
-    crate before_content: String,
+    pub(crate) before_content: String,
     /// Content that will be included inline between the content and </body> of
     /// a rendered Markdown file or generated documentation
-    crate after_content: String,
+    pub(crate) after_content: String,
 }
 
 impl ExternalHtml {
-    crate fn load(
+    pub(crate) fn load(
         in_header: &[String],
         before_content: &[String],
         after_content: &[String],
@@ -50,12 +50,12 @@ impl ExternalHtml {
     }
 }
 
-crate enum LoadStringError {
+pub(crate) enum LoadStringError {
     ReadFail,
     BadUtf8,
 }
 
-crate fn load_string<P: AsRef<Path>>(
+pub(crate) fn load_string<P: AsRef<Path>>(
     file_path: P,
     diag: &rustc_errors::Handler,
 ) -> Result<String, LoadStringError> {

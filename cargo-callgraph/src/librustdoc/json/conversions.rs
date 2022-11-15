@@ -87,7 +87,7 @@ impl JsonRenderer<'_> {
     }
 }
 
-crate fn from_deprecation(deprecation: rustc_attr::Deprecation) -> Deprecation {
+pub(crate) fn from_deprecation(deprecation: rustc_attr::Deprecation) -> Deprecation {
     #[rustfmt::skip]
     let rustc_attr::Deprecation { since, note, is_since_rustc_version: _, suggestion: _ } = deprecation;
     Deprecation { since: since.map(|s| s.to_string()), note: note.map(|s| s.to_string()) }
@@ -145,7 +145,7 @@ impl From<clean::TypeBindingKind> for TypeBindingKind {
     }
 }
 
-crate fn from_def_id(did: DefId) -> Id {
+pub(crate) fn from_def_id(did: DefId) -> Id {
     Id(format!("{}:{}", did.krate.as_u32(), u32::from(did.index)))
 }
 
@@ -220,7 +220,7 @@ impl From<clean::Union> for Union {
     }
 }
 
-crate fn from_ctor_kind(struct_type: CtorKind) -> StructType {
+pub(crate) fn from_ctor_kind(struct_type: CtorKind) -> StructType {
     match struct_type {
         CtorKind::Fictive => StructType::Plain,
         CtorKind::Fn => StructType::Tuple,
@@ -228,7 +228,7 @@ crate fn from_ctor_kind(struct_type: CtorKind) -> StructType {
     }
 }
 
-crate fn from_fn_header(header: &rustc_hir::FnHeader) -> HashSet<Qualifiers> {
+pub(crate) fn from_fn_header(header: &rustc_hir::FnHeader) -> HashSet<Qualifiers> {
     let mut v = HashSet::new();
 
     if let rustc_hir::Unsafety::Unsafe = header.unsafety {
@@ -322,7 +322,7 @@ impl From<clean::GenericBound> for GenericBound {
     }
 }
 
-crate fn from_trait_bound_modifier(modifier: rustc_hir::TraitBoundModifier) -> TraitBoundModifier {
+pub(crate) fn from_trait_bound_modifier(modifier: rustc_hir::TraitBoundModifier) -> TraitBoundModifier {
     use rustc_hir::TraitBoundModifier::*;
     match modifier {
         None => TraitBoundModifier::None,
@@ -450,7 +450,7 @@ impl From<clean::Impl> for Impl {
     }
 }
 
-crate fn from_function_method(function: clean::Function, has_body: bool) -> Method {
+pub(crate) fn from_function_method(function: clean::Function, has_body: bool) -> Method {
     let clean::Function { header, decl, generics } = function;
     Method {
         decl: decl.into(),
@@ -526,7 +526,7 @@ impl From<clean::ProcMacro> for ProcMacro {
     }
 }
 
-crate fn from_macro_kind(kind: rustc_span::hygiene::MacroKind) -> MacroKind {
+pub(crate) fn from_macro_kind(kind: rustc_span::hygiene::MacroKind) -> MacroKind {
     use rustc_span::hygiene::MacroKind::*;
     match kind {
         Bang => MacroKind::Bang,

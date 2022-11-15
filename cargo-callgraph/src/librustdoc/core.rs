@@ -39,63 +39,63 @@ use crate::extract_dependencies::{extract_dependencies, render_dependencies};
 use crate::formats::cache::Cache;
 use crate::passes::{self, Condition::*, ConditionalPass};
 
-crate use rustc_session::config::{DebuggingOptions, Input, Options};
+pub(crate) use rustc_session::config::{DebuggingOptions, Input, Options};
 
-crate type ExternalPaths = FxHashMap<DefId, (Vec<String>, clean::TypeKind)>;
+pub(crate) type ExternalPaths = FxHashMap<DefId, (Vec<String>, clean::TypeKind)>;
 
-crate struct DocContext<'tcx> {
-    crate tcx: TyCtxt<'tcx>,
-    crate resolver: Rc<RefCell<interface::BoxedResolver>>,
+pub(crate) struct DocContext<'tcx> {
+    pub(crate) tcx: TyCtxt<'tcx>,
+    pub(crate) resolver: Rc<RefCell<interface::BoxedResolver>>,
     /// Used for normalization.
     ///
     /// Most of this logic is copied from rustc_lint::late.
-    crate param_env: Cell<ParamEnv<'tcx>>,
+    pub(crate) param_env: Cell<ParamEnv<'tcx>>,
     /// Later on moved into `cache`
-    crate renderinfo: RefCell<RenderInfo>,
+    pub(crate) renderinfo: RefCell<RenderInfo>,
     /// Later on moved through `clean::Crate` into `cache`
-    crate external_traits: Rc<RefCell<FxHashMap<DefId, clean::Trait>>>,
+    pub(crate) external_traits: Rc<RefCell<FxHashMap<DefId, clean::Trait>>>,
     /// Used while populating `external_traits` to ensure we don't process the same trait twice at
     /// the same time.
-    crate active_extern_traits: RefCell<FxHashSet<DefId>>,
+    pub(crate) active_extern_traits: RefCell<FxHashSet<DefId>>,
     // The current set of type and lifetime substitutions,
     // for expanding type aliases at the HIR level:
     /// Table `DefId` of type parameter -> substituted type
-    crate ty_substs: RefCell<FxHashMap<DefId, clean::Type>>,
+    pub(crate) ty_substs: RefCell<FxHashMap<DefId, clean::Type>>,
     /// Table `DefId` of lifetime parameter -> substituted lifetime
-    crate lt_substs: RefCell<FxHashMap<DefId, clean::Lifetime>>,
+    pub(crate) lt_substs: RefCell<FxHashMap<DefId, clean::Lifetime>>,
     /// Table `DefId` of const parameter -> substituted const
-    crate ct_substs: RefCell<FxHashMap<DefId, clean::Constant>>,
+    pub(crate) ct_substs: RefCell<FxHashMap<DefId, clean::Constant>>,
     /// Table synthetic type parameter for `impl Trait` in argument position -> bounds
-    crate impl_trait_bounds: RefCell<FxHashMap<ImplTraitParam, Vec<clean::GenericBound>>>,
-    crate fake_def_ids: RefCell<FxHashMap<CrateNum, DefIndex>>,
+    pub(crate) impl_trait_bounds: RefCell<FxHashMap<ImplTraitParam, Vec<clean::GenericBound>>>,
+    pub(crate) fake_def_ids: RefCell<FxHashMap<CrateNum, DefIndex>>,
     /// Auto-trait or blanket impls processed so far, as `(self_ty, trait_def_id)`.
     // FIXME(eddyb) make this a `ty::TraitRef<'tcx>` set.
-    crate generated_synthetics: RefCell<FxHashSet<(Ty<'tcx>, DefId)>>,
-    crate auto_traits: Vec<DefId>,
+    pub(crate) generated_synthetics: RefCell<FxHashSet<(Ty<'tcx>, DefId)>>,
+    pub(crate) auto_traits: Vec<DefId>,
     /// The options given to rustdoc that could be relevant to a pass.
-    crate render_options: RenderOptions,
+    pub(crate) render_options: RenderOptions,
     /// The traits in scope for a given module.
     ///
     /// See `collect_intra_doc_links::traits_implemented_by` for more details.
     /// `map<module, set<trait>>`
-    crate module_trait_cache: RefCell<FxHashMap<DefId, FxHashSet<DefId>>>,
+    pub(crate) module_trait_cache: RefCell<FxHashMap<DefId, FxHashSet<DefId>>>,
     /// Fake empty cache used when cache is required as parameter.
-    crate cache: Cache,
+    pub(crate) cache: Cache,
 }
 
 impl<'tcx> DocContext<'tcx> {
-    crate fn sess(&self) -> &Session {
+    pub(crate) fn sess(&self) -> &Session {
         &self.tcx.sess
     }
 
-    crate fn with_param_env<T, F: FnOnce() -> T>(&self, def_id: DefId, f: F) -> T {
+    pub(crate) fn with_param_env<T, F: FnOnce() -> T>(&self, def_id: DefId, f: F) -> T {
         let old_param_env = self.param_env.replace(self.tcx.param_env(def_id));
         let ret = f();
         self.param_env.set(old_param_env);
         ret
     }
 
-    crate fn enter_resolver<F, R>(&self, f: F) -> R
+    pub(crate) fn enter_resolver<F, R>(&self, f: F) -> R
     where
         F: FnOnce(&mut resolve::Resolver<'_>) -> R,
     {
@@ -104,7 +104,7 @@ impl<'tcx> DocContext<'tcx> {
 
     /// Call the closure with the given parameters set as
     /// the substitutions for a type alias' RHS.
-    crate fn enter_alias<F, R>(
+    pub(crate) fn enter_alias<F, R>(
         &self,
         ty_substs: FxHashMap<DefId, clean::Type>,
         lt_substs: FxHashMap<DefId, clean::Lifetime>,
@@ -140,7 +140,7 @@ impl<'tcx> DocContext<'tcx> {
     /// [`RefCell`]: std::cell::RefCell
     /// [`Debug`]: std::fmt::Debug
     /// [`clean::Item`]: crate::clean::types::Item
-    crate fn next_def_id(&self, crate_num: CrateNum) -> DefId {
+    pub(crate) fn next_def_id(&self, crate_num: CrateNum) -> DefId {
         let mut fake_ids = self.fake_def_ids.borrow_mut();
 
         let def_index = match fake_ids.entry(crate_num) {
@@ -169,7 +169,7 @@ impl<'tcx> DocContext<'tcx> {
 
     /// Like `hir().local_def_id_to_hir_id()`, but skips calling it on fake DefIds.
     /// (This avoids a slice-index-out-of-bounds panic.)
-    crate fn as_local_hir_id(&self, def_id: DefId) -> Option<HirId> {
+    pub(crate) fn as_local_hir_id(&self, def_id: DefId) -> Option<HirId> {
         if MAX_DEF_IDX.with(|m| {
             m.borrow().get(&def_id.krate).map(|&idx| idx <= def_id.index).unwrap_or(false)
         }) {
@@ -184,7 +184,7 @@ impl<'tcx> DocContext<'tcx> {
 ///
 /// If the given `error_format` is `ErrorOutputType::Json` and no `SourceMap` is given, a new one
 /// will be created for the handler.
-crate fn new_handler(
+pub(crate) fn new_handler(
     error_format: ErrorOutputType,
     source_map: Option<Lrc<source_map::SourceMap>>,
     debugging_opts: &DebuggingOptions,
@@ -287,7 +287,7 @@ where
 }
 
 /// Parse, resolve, and typecheck the given crate.
-crate fn create_config(
+pub(crate) fn create_config(
     RustdocOptions {
         input,
         crate_name,
@@ -419,7 +419,7 @@ crate fn create_config(
     }
 }
 
-crate fn create_resolver<'a>(
+pub(crate) fn create_resolver<'a>(
     externs: config::Externs,
     queries: &Queries<'a>,
     sess: &Session,
@@ -458,7 +458,7 @@ crate fn create_resolver<'a>(
     resolver.clone()
 }
 
-crate fn run_global_ctxt(
+pub(crate) fn run_global_ctxt(
     tcx: TyCtxt<'_>,
     resolver: Rc<RefCell<interface::BoxedResolver>>,
     mut default_passes: passes::DefaultPassOption,
@@ -655,12 +655,12 @@ crate fn run_global_ctxt(
 /// the name resolution pass may find errors that are never emitted.
 /// If typeck is called after this happens, then we'll get an ICE:
 /// 'Res::Error found but not reported'. To avoid this, emit the errors now.
-crate struct EmitIgnoredResolutionErrors<'tcx> {
+pub(crate) struct EmitIgnoredResolutionErrors<'tcx> {
     tcx: TyCtxt<'tcx>,
 }
 
 impl<'tcx> EmitIgnoredResolutionErrors<'tcx> {
-    crate fn new(tcx: TyCtxt<'tcx>) -> Self {
+    pub(crate) fn new(tcx: TyCtxt<'tcx>) -> Self {
         Self { tcx }
     }
 }
@@ -710,7 +710,7 @@ impl<'tcx> Visitor<'tcx> for EmitIgnoredResolutionErrors<'tcx> {
 /// `DefId` or parameter index (`ty::ParamTy.index`) of a synthetic type parameter
 /// for `impl Trait` in argument position.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
-crate enum ImplTraitParam {
+pub(crate) enum ImplTraitParam {
     DefId(DefId),
     ParamIndex(u32),
 }

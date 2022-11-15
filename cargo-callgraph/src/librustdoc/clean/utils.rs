@@ -17,7 +17,7 @@ use rustc_middle::ty::{self, DefIdTree, Ty, TyCtxt};
 use rustc_span::symbol::{kw, sym, Symbol};
 use std::mem;
 
-crate fn krate(mut cx: &mut DocContext<'_>) -> Crate {
+pub(crate) fn krate(mut cx: &mut DocContext<'_>) -> Crate {
     use crate::visit_lib::LibEmbargoVisitor;
 
     let krate = cx.tcx.hir().krate();
@@ -76,7 +76,7 @@ crate fn krate(mut cx: &mut DocContext<'_>) -> Crate {
         }));
     }
 
-    Crate {
+    pub(crate) {
         name,
         version: None,
         src,
@@ -159,7 +159,7 @@ pub(super) fn external_path(
     }
 }
 
-crate fn strip_type(ty: Type) -> Type {
+pub(crate) fn strip_type(ty: Type) -> Type {
     match ty {
         Type::ResolvedPath { path, param_names, did, is_generic } => {
             Type::ResolvedPath { path: strip_path(&path), param_names, did, is_generic }
@@ -182,7 +182,7 @@ crate fn strip_type(ty: Type) -> Type {
     }
 }
 
-crate fn strip_path(path: &Path) -> Path {
+pub(crate) fn strip_path(path: &Path) -> Path {
     let segments = path
         .segments
         .iter()
@@ -195,7 +195,7 @@ crate fn strip_path(path: &Path) -> Path {
     Path { global: path.global, res: path.res, segments }
 }
 
-crate fn qpath_to_string(p: &hir::QPath<'_>) -> String {
+pub(crate) fn qpath_to_string(p: &hir::QPath<'_>) -> String {
     let segments = match *p {
         hir::QPath::Resolved(_, ref path) => &path.segments,
         hir::QPath::TypeRelative(_, ref segment) => return segment.ident.to_string(),
@@ -214,7 +214,7 @@ crate fn qpath_to_string(p: &hir::QPath<'_>) -> String {
     s
 }
 
-crate fn build_deref_target_impls(cx: &DocContext<'_>, items: &[Item], ret: &mut Vec<Item>) {
+pub(crate) fn build_deref_target_impls(cx: &DocContext<'_>, items: &[Item], ret: &mut Vec<Item>) {
     let tcx = cx.tcx;
 
     for item in items {
@@ -235,7 +235,7 @@ crate fn build_deref_target_impls(cx: &DocContext<'_>, items: &[Item], ret: &mut
     }
 }
 
-crate trait ToSource {
+pub(crate) trait ToSource {
     fn to_src(&self, cx: &DocContext<'_>) -> String;
 }
 
@@ -251,7 +251,7 @@ impl ToSource for rustc_span::Span {
     }
 }
 
-crate fn name_from_pat(p: &hir::Pat<'_>) -> Symbol {
+pub(crate) fn name_from_pat(p: &hir::Pat<'_>) -> Symbol {
     use rustc_hir::*;
     debug!("trying to get a name from pattern: {:?}", p);
 
@@ -299,7 +299,7 @@ crate fn name_from_pat(p: &hir::Pat<'_>) -> Symbol {
     })
 }
 
-crate fn print_const(cx: &DocContext<'_>, n: &'tcx ty::Const<'_>) -> String {
+pub(crate) fn print_const(cx: &DocContext<'_>, n: &'tcx ty::Const<'_>) -> String {
     match n.val {
         ty::ConstKind::Unevaluated(def, _, promoted) => {
             let mut s = if let Some(def) = def.as_local() {
@@ -329,7 +329,7 @@ crate fn print_const(cx: &DocContext<'_>, n: &'tcx ty::Const<'_>) -> String {
     }
 }
 
-crate fn print_evaluated_const(cx: &DocContext<'_>, def_id: DefId) -> Option<String> {
+pub(crate) fn print_evaluated_const(cx: &DocContext<'_>, def_id: DefId) -> Option<String> {
     cx.tcx.const_eval_poly(def_id).ok().and_then(|val| {
         let ty = cx.tcx.type_of(def_id);
         match (val, ty.kind()) {
@@ -377,7 +377,7 @@ fn print_const_with_custom_print_scalar(cx: &DocContext<'_>, ct: &'tcx ty::Const
     }
 }
 
-crate fn is_literal_expr(cx: &DocContext<'_>, hir_id: hir::HirId) -> bool {
+pub(crate) fn is_literal_expr(cx: &DocContext<'_>, hir_id: hir::HirId) -> bool {
     if let hir::Node::Expr(expr) = cx.tcx.hir().get(hir_id) {
         if let hir::ExprKind::Lit(_) = &expr.kind {
             return true;
@@ -393,7 +393,7 @@ crate fn is_literal_expr(cx: &DocContext<'_>, hir_id: hir::HirId) -> bool {
     false
 }
 
-crate fn print_const_expr(tcx: TyCtxt<'_>, body: hir::BodyId) -> String {
+pub(crate) fn print_const_expr(tcx: TyCtxt<'_>, body: hir::BodyId) -> String {
     let hir = tcx.hir();
     let value = &hir.body(body).value;
 
@@ -407,7 +407,7 @@ crate fn print_const_expr(tcx: TyCtxt<'_>, body: hir::BodyId) -> String {
 }
 
 /// Given a type Path, resolve it to a Type using the TyCtxt
-crate fn resolve_type(cx: &DocContext<'_>, path: Path, id: hir::HirId) -> Type {
+pub(crate) fn resolve_type(cx: &DocContext<'_>, path: Path, id: hir::HirId) -> Type {
     debug!("resolve_type({:?},{:?})", path, id);
 
     let is_generic = match path.res {
@@ -425,7 +425,7 @@ crate fn resolve_type(cx: &DocContext<'_>, path: Path, id: hir::HirId) -> Type {
     ResolvedPath { path, param_names: None, did, is_generic }
 }
 
-crate fn get_auto_trait_and_blanket_impls(
+pub(crate) fn get_auto_trait_and_blanket_impls(
     cx: &DocContext<'tcx>,
     ty: Ty<'tcx>,
     param_env_def_id: DefId,
@@ -443,7 +443,7 @@ crate fn get_auto_trait_and_blanket_impls(
     auto_impls.into_iter().chain(blanket_impls)
 }
 
-crate fn register_res(cx: &DocContext<'_>, res: Res) -> DefId {
+pub(crate) fn register_res(cx: &DocContext<'_>, res: Res) -> DefId {
     debug!("register_res({:?})", res);
 
     let (did, kind) = match res {
@@ -483,14 +483,14 @@ crate fn register_res(cx: &DocContext<'_>, res: Res) -> DefId {
     did
 }
 
-crate fn resolve_use_source(cx: &DocContext<'_>, path: Path) -> ImportSource {
+pub(crate) fn resolve_use_source(cx: &DocContext<'_>, path: Path) -> ImportSource {
     ImportSource {
         did: if path.res.opt_def_id().is_none() { None } else { Some(register_res(cx, path.res)) },
         path,
     }
 }
 
-crate fn enter_impl_trait<F, R>(cx: &DocContext<'_>, f: F) -> R
+pub(crate) fn enter_impl_trait<F, R>(cx: &DocContext<'_>, f: F) -> R
 where
     F: FnOnce() -> R,
 {
@@ -504,7 +504,7 @@ where
 /// Find the nearest parent module of a [`DefId`].
 ///
 /// **Panics if the item it belongs to [is fake][Item::is_fake].**
-crate fn find_nearest_parent_module(tcx: TyCtxt<'_>, def_id: DefId) -> Option<DefId> {
+pub(crate) fn find_nearest_parent_module(tcx: TyCtxt<'_>, def_id: DefId) -> Option<DefId> {
     if def_id.is_top_level_module() {
         // The crate root has no parent. Use it as the root instead.
         Some(def_id)

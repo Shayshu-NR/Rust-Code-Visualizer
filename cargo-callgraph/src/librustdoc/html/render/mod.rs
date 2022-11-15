@@ -25,7 +25,7 @@
 //! These threads are not parallelized (they haven't been a bottleneck yet), and
 //! both occur before the crate is rendered.
 
-crate mod cache;
+pub(crate) mod cache;
 
 #[cfg(test)]
 mod tests;
@@ -84,9 +84,9 @@ use crate::html::{highlight, layout, static_files};
 use cache::{build_index, ExternalLocation};
 
 /// A pair of name and its optional document.
-crate type NameDoc = (String, Option<String>);
+pub(crate) type NameDoc = (String, Option<String>);
 
-crate fn ensure_trailing_slash(v: &str) -> impl fmt::Display + '_ {
+pub(crate) fn ensure_trailing_slash(v: &str) -> impl fmt::Display + '_ {
     crate::html::format::display_fn(move |f| {
         if !v.ends_with('/') && !v.is_empty() { write!(f, "{}/", v) } else { f.write_str(v) }
     })
@@ -100,68 +100,68 @@ crate fn ensure_trailing_slash(v: &str) -> impl fmt::Display + '_ {
 /// easily cloned because it is cloned per work-job (about once per item in the
 /// rustdoc tree).
 #[derive(Clone)]
-crate struct Context<'tcx> {
+pub(crate) struct Context<'tcx> {
     /// Current hierarchy of components leading down to what's currently being
     /// rendered
-    crate current: Vec<String>,
+    pub(crate) current: Vec<String>,
     /// The current destination folder of where HTML artifacts should be placed.
     /// This changes as the context descends into the module hierarchy.
-    crate dst: PathBuf,
+    pub(crate) dst: PathBuf,
     /// A flag, which when `true`, will render pages which redirect to the
     /// real location of an item. This is used to allow external links to
     /// publicly reused items to redirect to the right location.
-    crate render_redirect_pages: bool,
+    pub(crate) render_redirect_pages: bool,
     /// The map used to ensure all generated 'id=' attributes are unique.
     id_map: Rc<RefCell<IdMap>>,
     /// Tracks section IDs for `Deref` targets so they match in both the main
     /// body and the sidebar.
     deref_id_map: Rc<RefCell<FxHashMap<DefId, String>>>,
-    crate shared: Arc<SharedContext<'tcx>>,
+    pub(crate) shared: Arc<SharedContext<'tcx>>,
     all: Rc<RefCell<AllTypes>>,
     /// Storage for the errors produced while generating documentation so they
     /// can be printed together at the end.
-    crate errors: Rc<Receiver<String>>,
-    crate cache: Rc<Cache>,
+    pub(crate) errors: Rc<Receiver<String>>,
+    pub(crate) cache: Rc<Cache>,
 }
 
-crate struct SharedContext<'tcx> {
-    crate tcx: TyCtxt<'tcx>,
+pub(crate) struct SharedContext<'tcx> {
+    pub(crate) tcx: TyCtxt<'tcx>,
     /// The path to the crate root source minus the file name.
     /// Used for simplifying paths to the highlighted source code files.
-    crate src_root: PathBuf,
+    pub(crate) src_root: PathBuf,
     /// This describes the layout of each page, and is not modified after
     /// creation of the context (contains info like the favicon and added html).
-    crate layout: layout::Layout,
+    pub(crate) layout: layout::Layout,
     /// This flag indicates whether `[src]` links should be generated or not. If
     /// the source files are present in the html rendering, then this will be
     /// `true`.
-    crate include_sources: bool,
+    pub(crate) include_sources: bool,
     /// The local file sources we've emitted and their respective url-paths.
-    crate local_sources: FxHashMap<PathBuf, String>,
+    pub(crate) local_sources: FxHashMap<PathBuf, String>,
     /// Whether the collapsed pass ran
-    crate collapsed: bool,
+    pub(crate) collapsed: bool,
     /// The base-URL of the issue tracker for when an item has been tagged with
     /// an issue number.
-    crate issue_tracker_base_url: Option<String>,
+    pub(crate) issue_tracker_base_url: Option<String>,
     /// The directories that have already been created in this doc run. Used to reduce the number
     /// of spurious `create_dir_all` calls.
-    crate created_dirs: RefCell<FxHashSet<PathBuf>>,
+    pub(crate) created_dirs: RefCell<FxHashSet<PathBuf>>,
     /// This flag indicates whether listings of modules (in the side bar and documentation itself)
     /// should be ordered alphabetically or in order of appearance (in the source code).
-    crate sort_modules_alphabetically: bool,
+    pub(crate) sort_modules_alphabetically: bool,
     /// Additional CSS files to be added to the generated docs.
-    crate style_files: Vec<StylePath>,
+    pub(crate) style_files: Vec<StylePath>,
     /// Suffix to be added on resource files (if suffix is "-v2" then "light.css" becomes
     /// "light-v2.css").
-    crate resource_suffix: String,
+    pub(crate) resource_suffix: String,
     /// Optional path string to be used to load static files on output pages. If not set, uses
     /// combinations of `../` to reach the documentation root.
-    crate static_root_path: Option<String>,
+    pub(crate) static_root_path: Option<String>,
     /// The fs handle we are working with.
-    crate fs: DocFS,
+    pub(crate) fs: DocFS,
     /// The default edition used to parse doctests.
-    crate edition: Edition,
-    crate codes: ErrorCodes,
+    pub(crate) edition: Edition,
+    pub(crate) codes: ErrorCodes,
     playground: Option<markdown::Playground>,
 }
 
@@ -187,7 +187,7 @@ impl<'tcx> Context<'tcx> {
 }
 
 impl SharedContext<'_> {
-    crate fn ensure_dir(&self, dst: &Path) -> Result<(), Error> {
+    pub(crate) fn ensure_dir(&self, dst: &Path) -> Result<(), Error> {
         let mut dirs = self.created_dirs.borrow_mut();
         if !dirs.contains(dst) {
             try_err!(self.fs.create_dir_all(dst), dst);
@@ -199,7 +199,7 @@ impl SharedContext<'_> {
 
     /// Based on whether the `collapse-docs` pass was run, return either the `doc_value` or the
     /// `collapsed_doc_value` of the given item.
-    crate fn maybe_collapsed_doc_value<'a>(&self, item: &'a clean::Item) -> Option<String> {
+    pub(crate) fn maybe_collapsed_doc_value<'a>(&self, item: &'a clean::Item) -> Option<String> {
         if self.collapsed { item.collapsed_doc_value() } else { item.doc_value() }
     }
 }
@@ -210,14 +210,14 @@ impl SharedContext<'_> {
 /// Struct representing one entry in the JS search index. These are all emitted
 /// by hand to a large JS file at the end of cache-creation.
 #[derive(Debug)]
-crate struct IndexItem {
-    crate ty: ItemType,
-    crate name: String,
-    crate path: String,
-    crate desc: String,
-    crate parent: Option<DefId>,
-    crate parent_idx: Option<usize>,
-    crate search_type: Option<IndexItemFunctionType>,
+pub(crate) struct IndexItem {
+    pub(crate) ty: ItemType,
+    pub(crate) name: String,
+    pub(crate) path: String,
+    pub(crate) desc: String,
+    pub(crate) parent: Option<DefId>,
+    pub(crate) parent_idx: Option<usize>,
+    pub(crate) search_type: Option<IndexItemFunctionType>,
 }
 
 impl Serialize for IndexItem {
@@ -239,7 +239,7 @@ impl Serialize for IndexItem {
 
 /// A type used for the search index.
 #[derive(Debug)]
-crate struct RenderType {
+pub(crate) struct RenderType {
     ty: Option<DefId>,
     idx: Option<usize>,
     name: Option<String>,
@@ -270,7 +270,7 @@ impl Serialize for RenderType {
 
 /// A type used for the search index.
 #[derive(Debug)]
-crate struct Generic {
+pub(crate) struct Generic {
     name: String,
     defid: Option<DefId>,
     idx: Option<usize>,
@@ -291,7 +291,7 @@ impl Serialize for Generic {
 
 /// Full type of functions/methods in the search index.
 #[derive(Debug)]
-crate struct IndexItemFunctionType {
+pub(crate) struct IndexItemFunctionType {
     inputs: Vec<TypeWithKind>,
     output: Option<Vec<TypeWithKind>>,
 }
@@ -324,7 +324,7 @@ impl Serialize for IndexItemFunctionType {
 }
 
 #[derive(Debug)]
-crate struct TypeWithKind {
+pub(crate) struct TypeWithKind {
     ty: RenderType,
     kind: TypeKind,
 }
@@ -349,16 +349,16 @@ impl Serialize for TypeWithKind {
 }
 
 #[derive(Debug, Clone)]
-crate struct StylePath {
+pub(crate) struct StylePath {
     /// The path to the theme
-    crate path: PathBuf,
+    pub(crate) path: PathBuf,
     /// What the `disabled` attribute should be set to in the HTML tag
-    crate disabled: bool,
+    pub(crate) disabled: bool,
 }
 
-thread_local!(crate static CURRENT_DEPTH: Cell<usize> = Cell::new(0));
+thread_local!(pub(crate) static CURRENT_DEPTH: Cell<usize> = Cell::new(0));
 
-crate const INITIAL_IDS: [&'static str; 15] = [
+pub(crate) const INITIAL_IDS: [&'static str; 15] = [
     "main",
     "search",
     "help",
@@ -1229,7 +1229,7 @@ impl ItemEntry {
 }
 
 impl ItemEntry {
-    crate fn print(&self) -> impl fmt::Display + '_ {
+    pub(crate) fn print(&self) -> impl fmt::Display + '_ {
         crate::html::format::display_fn(move |f| {
             write!(f, "<a href=\"{}\">{}</a>", self.url, Escape(&self.name))
         })
@@ -1999,7 +1999,7 @@ fn document_non_exhaustive(w: &mut Buffer, item: &clean::Item) {
 }
 
 /// Compare two strings treating multi-digit numbers as single units (i.e. natural sort order).
-crate fn compare_names(mut lhs: &str, mut rhs: &str) -> Ordering {
+pub(crate) fn compare_names(mut lhs: &str, mut rhs: &str) -> Ordering {
     /// Takes a non-numeric and a numeric part from the given &str.
     fn take_parts<'a>(s: &mut &'a str) -> (&'a str, &'a str) {
         let i = s.find(|c: char| c.is_ascii_digit());
@@ -4860,7 +4860,7 @@ fn item_keyword(w: &mut Buffer, cx: &Context<'_>, it: &clean::Item) {
     document(w, cx, it, None)
 }
 
-crate const BASIC_KEYWORDS: &str = "rust, rustlang, rust-lang";
+pub(crate) const BASIC_KEYWORDS: &str = "rust, rustlang, rust-lang";
 
 fn make_item_keywords(it: &clean::Item) -> String {
     format!("{}, {}", BASIC_KEYWORDS, it.name.as_ref().unwrap())

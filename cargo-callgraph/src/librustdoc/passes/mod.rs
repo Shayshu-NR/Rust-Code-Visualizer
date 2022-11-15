@@ -9,64 +9,64 @@ use crate::clean::{self, DocFragmentKind};
 use crate::core::DocContext;
 
 mod stripper;
-crate use stripper::*;
+pub(crate) use stripper::*;
 
 mod non_autolinks;
-crate use self::non_autolinks::CHECK_NON_AUTOLINKS;
+pub(crate) use self::non_autolinks::CHECK_NON_AUTOLINKS;
 
 mod strip_hidden;
-crate use self::strip_hidden::STRIP_HIDDEN;
+pub(crate) use self::strip_hidden::STRIP_HIDDEN;
 
 mod strip_private;
-crate use self::strip_private::STRIP_PRIVATE;
+pub(crate) use self::strip_private::STRIP_PRIVATE;
 
 mod strip_priv_imports;
-crate use self::strip_priv_imports::STRIP_PRIV_IMPORTS;
+pub(crate) use self::strip_priv_imports::STRIP_PRIV_IMPORTS;
 
 mod unindent_comments;
-crate use self::unindent_comments::UNINDENT_COMMENTS;
+pub(crate) use self::unindent_comments::UNINDENT_COMMENTS;
 
 mod propagate_doc_cfg;
-crate use self::propagate_doc_cfg::PROPAGATE_DOC_CFG;
+pub(crate) use self::propagate_doc_cfg::PROPAGATE_DOC_CFG;
 
 mod collect_intra_doc_links;
-crate use self::collect_intra_doc_links::COLLECT_INTRA_DOC_LINKS;
+pub(crate) use self::collect_intra_doc_links::COLLECT_INTRA_DOC_LINKS;
 
 mod doc_test_lints;
-crate use self::doc_test_lints::CHECK_PRIVATE_ITEMS_DOC_TESTS;
+pub(crate) use self::doc_test_lints::CHECK_PRIVATE_ITEMS_DOC_TESTS;
 
 mod collect_trait_impls;
-crate use self::collect_trait_impls::COLLECT_TRAIT_IMPLS;
+pub(crate) use self::collect_trait_impls::COLLECT_TRAIT_IMPLS;
 
 mod check_code_block_syntax;
-crate use self::check_code_block_syntax::CHECK_CODE_BLOCK_SYNTAX;
+pub(crate) use self::check_code_block_syntax::CHECK_CODE_BLOCK_SYNTAX;
 
 mod calculate_doc_coverage;
-crate use self::calculate_doc_coverage::CALCULATE_DOC_COVERAGE;
+pub(crate) use self::calculate_doc_coverage::CALCULATE_DOC_COVERAGE;
 
 mod html_tags;
-crate use self::html_tags::CHECK_INVALID_HTML_TAGS;
+pub(crate) use self::html_tags::CHECK_INVALID_HTML_TAGS;
 
 /// A single pass over the cleaned documentation.
 ///
 /// Runs in the compiler context, so it has access to types and traits and the like.
 #[derive(Copy, Clone)]
-crate struct Pass {
-    crate name: &'static str,
-    crate run: fn(clean::Crate, &DocContext<'_>) -> clean::Crate,
-    crate description: &'static str,
+pub(crate) struct Pass {
+    pub(crate) name: &'static str,
+    pub(crate) run: fn(clean::Crate, &DocContext<'_>) -> clean::Crate,
+    pub(crate) description: &'static str,
 }
 
 /// In a list of passes, a pass that may or may not need to be run depending on options.
 #[derive(Copy, Clone)]
-crate struct ConditionalPass {
-    crate pass: Pass,
-    crate condition: Condition,
+pub(crate) struct ConditionalPass {
+    pub(crate) pass: Pass,
+    pub(crate) condition: Condition,
 }
 
 /// How to decide whether to run a conditional pass.
 #[derive(Copy, Clone)]
-crate enum Condition {
+pub(crate) enum Condition {
     Always,
     /// When `--document-private-items` is passed.
     WhenDocumentPrivate,
@@ -77,7 +77,7 @@ crate enum Condition {
 }
 
 /// The full list of passes.
-crate const PASSES: &[Pass] = &[
+pub(crate) const PASSES: &[Pass] = &[
     CHECK_PRIVATE_ITEMS_DOC_TESTS,
     STRIP_HIDDEN,
     UNINDENT_COMMENTS,
@@ -93,7 +93,7 @@ crate const PASSES: &[Pass] = &[
 ];
 
 /// The list of passes run by default.
-crate const DEFAULT_PASSES: &[ConditionalPass] = &[
+pub(crate) const DEFAULT_PASSES: &[ConditionalPass] = &[
     ConditionalPass::always(COLLECT_TRAIT_IMPLS),
     ConditionalPass::always(UNINDENT_COMMENTS),
     ConditionalPass::always(CHECK_PRIVATE_ITEMS_DOC_TESTS),
@@ -108,7 +108,7 @@ crate const DEFAULT_PASSES: &[ConditionalPass] = &[
 ];
 
 /// The list of default passes run when `--doc-coverage` is passed to rustdoc.
-crate const COVERAGE_PASSES: &[ConditionalPass] = &[
+pub(crate) const COVERAGE_PASSES: &[ConditionalPass] = &[
     ConditionalPass::always(COLLECT_TRAIT_IMPLS),
     ConditionalPass::new(STRIP_HIDDEN, WhenNotDocumentHidden),
     ConditionalPass::new(STRIP_PRIVATE, WhenNotDocumentPrivate),
@@ -116,11 +116,11 @@ crate const COVERAGE_PASSES: &[ConditionalPass] = &[
 ];
 
 impl ConditionalPass {
-    crate const fn always(pass: Pass) -> Self {
+    pub(crate) const fn always(pass: Pass) -> Self {
         Self::new(pass, Always)
     }
 
-    crate const fn new(pass: Pass, condition: Condition) -> Self {
+    pub(crate) const fn new(pass: Pass, condition: Condition) -> Self {
         ConditionalPass { pass, condition }
     }
 }
@@ -128,14 +128,14 @@ impl ConditionalPass {
 /// A shorthand way to refer to which set of passes to use, based on the presence of
 /// `--no-defaults` and `--show-coverage`.
 #[derive(Copy, Clone, PartialEq, Eq, Debug)]
-crate enum DefaultPassOption {
+pub(crate) enum DefaultPassOption {
     Default,
     Coverage,
     None,
 }
 
 /// Returns the given default set of passes.
-crate fn defaults(default_set: DefaultPassOption) -> &'static [ConditionalPass] {
+pub(crate) fn defaults(default_set: DefaultPassOption) -> &'static [ConditionalPass] {
     match default_set {
         DefaultPassOption::Default => DEFAULT_PASSES,
         DefaultPassOption::Coverage => COVERAGE_PASSES,
@@ -144,12 +144,12 @@ crate fn defaults(default_set: DefaultPassOption) -> &'static [ConditionalPass] 
 }
 
 /// If the given name matches a known pass, returns its information.
-crate fn find_pass(pass_name: &str) -> Option<Pass> {
+pub(crate) fn find_pass(pass_name: &str) -> Option<Pass> {
     PASSES.iter().find(|p| p.name == pass_name).copied()
 }
 
 /// Returns a span encompassing all the given attributes.
-crate fn span_of_attrs(attrs: &clean::Attributes) -> Option<Span> {
+pub(crate) fn span_of_attrs(attrs: &clean::Attributes) -> Option<Span> {
     if attrs.doc_strings.is_empty() {
         return None;
     }
@@ -166,7 +166,7 @@ crate fn span_of_attrs(attrs: &clean::Attributes) -> Option<Span> {
 /// This method will return `None` if we cannot construct a span from the source map or if the
 /// attributes are not all sugared doc comments. It's difficult to calculate the correct span in
 /// that case due to escaping and other source features.
-crate fn source_span_for_markdown_range(
+pub(crate) fn source_span_for_markdown_range(
     cx: &DocContext<'_>,
     markdown: &str,
     md_range: &Range<usize>,

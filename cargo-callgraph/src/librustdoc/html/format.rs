@@ -22,7 +22,7 @@ use crate::html::escape::Escape;
 use crate::html::render::cache::ExternalLocation;
 use crate::html::render::CURRENT_DEPTH;
 
-crate trait Print {
+pub(crate) trait Print {
     fn print(self, buffer: &mut Buffer);
 }
 
@@ -48,88 +48,88 @@ impl Print for &'_ str {
 }
 
 #[derive(Debug, Clone)]
-crate struct Buffer {
+pub(crate) struct Buffer {
     for_html: bool,
     buffer: String,
 }
 
 impl Buffer {
-    crate fn empty_from(v: &Buffer) -> Buffer {
+    pub(crate) fn empty_from(v: &Buffer) -> Buffer {
         Buffer { for_html: v.for_html, buffer: String::new() }
     }
 
-    crate fn html() -> Buffer {
+    pub(crate) fn html() -> Buffer {
         Buffer { for_html: true, buffer: String::new() }
     }
 
-    crate fn new() -> Buffer {
+    pub(crate) fn new() -> Buffer {
         Buffer { for_html: false, buffer: String::new() }
     }
 
-    crate fn is_empty(&self) -> bool {
+    pub(crate) fn is_empty(&self) -> bool {
         self.buffer.is_empty()
     }
 
-    crate fn into_inner(self) -> String {
+    pub(crate) fn into_inner(self) -> String {
         self.buffer
     }
 
-    crate fn insert_str(&mut self, idx: usize, s: &str) {
+    pub(crate) fn insert_str(&mut self, idx: usize, s: &str) {
         self.buffer.insert_str(idx, s);
     }
 
-    crate fn push_str(&mut self, s: &str) {
+    pub(crate) fn push_str(&mut self, s: &str) {
         self.buffer.push_str(s);
     }
 
     // Intended for consumption by write! and writeln! (std::fmt) but without
     // the fmt::Result return type imposed by fmt::Write (and avoiding the trait
     // import).
-    crate fn write_str(&mut self, s: &str) {
+    pub(crate) fn write_str(&mut self, s: &str) {
         self.buffer.push_str(s);
     }
 
     // Intended for consumption by write! and writeln! (std::fmt) but without
     // the fmt::Result return type imposed by fmt::Write (and avoiding the trait
     // import).
-    crate fn write_fmt(&mut self, v: fmt::Arguments<'_>) {
+    pub(crate) fn write_fmt(&mut self, v: fmt::Arguments<'_>) {
         use fmt::Write;
         self.buffer.write_fmt(v).unwrap();
     }
 
-    crate fn to_display<T: Print>(mut self, t: T) -> String {
+    pub(crate) fn to_display<T: Print>(mut self, t: T) -> String {
         t.print(&mut self);
         self.into_inner()
     }
 
-    crate fn is_for_html(&self) -> bool {
+    pub(crate) fn is_for_html(&self) -> bool {
         self.for_html
     }
 }
 
 /// Wrapper struct for properly emitting a function or method declaration.
-crate struct Function<'a> {
+pub(crate) struct Function<'a> {
     /// The declaration to emit.
-    crate decl: &'a clean::FnDecl,
+    pub(crate) decl: &'a clean::FnDecl,
     /// The length of the function header and name. In other words, the number of characters in the
     /// function declaration up to but not including the parentheses.
     ///
     /// Used to determine line-wrapping.
-    crate header_len: usize,
+    pub(crate) header_len: usize,
     /// The number of spaces to indent each successive line with, if line-wrapping is necessary.
-    crate indent: usize,
+    pub(crate) indent: usize,
     /// Whether the function is async or not.
-    crate asyncness: hir::IsAsync,
+    pub(crate) asyncness: hir::IsAsync,
 }
 
 /// Wrapper struct for emitting a where-clause from Generics.
-crate struct WhereClause<'a> {
+pub(crate) struct WhereClause<'a> {
     /// The Generics from which to emit a where-clause.
-    crate gens: &'a clean::Generics,
+    pub(crate) gens: &'a clean::Generics,
     /// The number of spaces to indent each line with.
-    crate indent: usize,
+    pub(crate) indent: usize,
     /// Whether the where-clause needs to add a comma and newline after the last bound.
-    crate end_newline: bool,
+    pub(crate) end_newline: bool,
 }
 
 fn comma_sep<T: fmt::Display>(items: impl Iterator<Item = T>) -> impl fmt::Display {
@@ -144,7 +144,7 @@ fn comma_sep<T: fmt::Display>(items: impl Iterator<Item = T>) -> impl fmt::Displ
     })
 }
 
-crate fn print_generic_bounds<'a>(
+pub(crate) fn print_generic_bounds<'a>(
     bounds: &'a [clean::GenericBound],
     cache: &'a Cache,
 ) -> impl fmt::Display + 'a {
@@ -164,7 +164,7 @@ crate fn print_generic_bounds<'a>(
 }
 
 impl clean::GenericParamDef {
-    crate fn print<'a>(&'a self, cache: &'a Cache) -> impl fmt::Display + 'a {
+    pub(crate) fn print<'a>(&'a self, cache: &'a Cache) -> impl fmt::Display + 'a {
         display_fn(move |f| match self.kind {
             clean::GenericParamDefKind::Lifetime => write!(f, "{}", self.name),
             clean::GenericParamDefKind::Type { ref bounds, ref default, .. } => {
@@ -200,7 +200,7 @@ impl clean::GenericParamDef {
 }
 
 impl clean::Generics {
-    crate fn print<'a>(&'a self, cache: &'a Cache) -> impl fmt::Display + 'a {
+    pub(crate) fn print<'a>(&'a self, cache: &'a Cache) -> impl fmt::Display + 'a {
         display_fn(move |f| {
             let real_params =
                 self.params.iter().filter(|p| !p.is_synthetic_type_param()).collect::<Vec<_>>();
@@ -217,7 +217,7 @@ impl clean::Generics {
 }
 
 impl<'a> WhereClause<'a> {
-    crate fn print<'b>(&'b self, cache: &'b Cache) -> impl fmt::Display + 'b {
+    pub(crate) fn print<'b>(&'b self, cache: &'b Cache) -> impl fmt::Display + 'b {
         display_fn(move |f| {
             let &WhereClause { gens, indent, end_newline } = self;
             if gens.where_predicates.is_empty() {
@@ -314,13 +314,13 @@ impl<'a> WhereClause<'a> {
 }
 
 impl clean::Lifetime {
-    crate fn print(&self) -> impl fmt::Display + '_ {
+    pub(crate) fn print(&self) -> impl fmt::Display + '_ {
         self.get_ref()
     }
 }
 
 impl clean::Constant {
-    crate fn print(&self) -> impl fmt::Display + '_ {
+    pub(crate) fn print(&self) -> impl fmt::Display + '_ {
         display_fn(move |f| {
             if f.alternate() {
                 f.write_str(&self.expr)
@@ -359,7 +359,7 @@ impl clean::PolyTrait {
 }
 
 impl clean::GenericBound {
-    crate fn print<'a>(&'a self, cache: &'a Cache) -> impl fmt::Display + 'a {
+    pub(crate) fn print<'a>(&'a self, cache: &'a Cache) -> impl fmt::Display + 'a {
         display_fn(move |f| match self {
             clean::GenericBound::Outlives(lt) => write!(f, "{}", lt.print()),
             clean::GenericBound::TraitBound(ty, modifier) => {
@@ -449,7 +449,7 @@ impl clean::GenericArgs {
 }
 
 impl clean::PathSegment {
-    crate fn print<'a>(&'a self, cache: &'a Cache) -> impl fmt::Display + 'a {
+    pub(crate) fn print<'a>(&'a self, cache: &'a Cache) -> impl fmt::Display + 'a {
         display_fn(move |f| {
             if f.alternate() {
                 write!(f, "{}{:#}", self.name, self.args.print(cache))
@@ -461,7 +461,7 @@ impl clean::PathSegment {
 }
 
 impl clean::Path {
-    crate fn print<'a>(&'a self, cache: &'a Cache) -> impl fmt::Display + 'a {
+    pub(crate) fn print<'a>(&'a self, cache: &'a Cache) -> impl fmt::Display + 'a {
         display_fn(move |f| {
             if self.global {
                 f.write_str("::")?
@@ -482,7 +482,7 @@ impl clean::Path {
     }
 }
 
-crate fn href(did: DefId, cache: &Cache) -> Option<(String, ItemType, Vec<String>)> {
+pub(crate) fn href(did: DefId, cache: &Cache) -> Option<(String, ItemType, Vec<String>)> {
     if !did.is_local() && !cache.access_levels.is_public(did) && !cache.document_private {
         return None;
     }
@@ -627,7 +627,7 @@ fn tybounds<'a>(
     })
 }
 
-crate fn anchor<'a>(did: DefId, text: &'a str, cache: &'a Cache) -> impl fmt::Display + 'a {
+pub(crate) fn anchor<'a>(did: DefId, text: &'a str, cache: &'a Cache) -> impl fmt::Display + 'a {
     display_fn(move |f| {
         if let Some((url, short_ty, fqp)) = href(did, cache) {
             write!(
@@ -886,13 +886,13 @@ fn fmt_type(
 }
 
 impl clean::Type {
-    crate fn print<'b, 'a: 'b>(&'a self, cache: &'b Cache) -> impl fmt::Display + 'b {
+    pub(crate) fn print<'b, 'a: 'b>(&'a self, cache: &'b Cache) -> impl fmt::Display + 'b {
         display_fn(move |f| fmt_type(self, f, false, cache))
     }
 }
 
 impl clean::Impl {
-    crate fn print<'a>(&'a self, cache: &'a Cache, use_absolute: bool) -> impl fmt::Display + 'a {
+    pub(crate) fn print<'a>(&'a self, cache: &'a Cache, use_absolute: bool) -> impl fmt::Display + 'a {
         display_fn(move |f| {
             if f.alternate() {
                 write!(f, "impl{:#} ", self.generics.print(cache))?;
@@ -922,7 +922,7 @@ impl clean::Impl {
 }
 
 impl clean::Arguments {
-    crate fn print<'a>(&'a self, cache: &'a Cache) -> impl fmt::Display + 'a {
+    pub(crate) fn print<'a>(&'a self, cache: &'a Cache) -> impl fmt::Display + 'a {
         display_fn(move |f| {
             for (i, input) in self.values.iter().enumerate() {
                 if !input.name.is_empty() {
@@ -943,7 +943,7 @@ impl clean::Arguments {
 }
 
 impl clean::FnRetTy {
-    crate fn print<'a>(&'a self, cache: &'a Cache) -> impl fmt::Display + 'a {
+    pub(crate) fn print<'a>(&'a self, cache: &'a Cache) -> impl fmt::Display + 'a {
         display_fn(move |f| match self {
             clean::Return(clean::Tuple(tys)) if tys.is_empty() => Ok(()),
             clean::Return(ty) if f.alternate() => write!(f, " -> {:#}", ty.print(cache)),
@@ -966,7 +966,7 @@ impl clean::BareFunctionDecl {
 }
 
 impl clean::FnDecl {
-    crate fn print<'a>(&'a self, cache: &'a Cache) -> impl fmt::Display + 'a {
+    pub(crate) fn print<'a>(&'a self, cache: &'a Cache) -> impl fmt::Display + 'a {
         display_fn(move |f| {
             let ellipsis = if self.c_variadic { ", ..." } else { "" };
             if f.alternate() {
@@ -991,7 +991,7 @@ impl clean::FnDecl {
 }
 
 impl Function<'_> {
-    crate fn print<'b, 'a: 'b>(&'a self, cache: &'b Cache) -> impl fmt::Display + 'b {
+    pub(crate) fn print<'b, 'a: 'b>(&'a self, cache: &'b Cache) -> impl fmt::Display + 'b {
         display_fn(move |f| {
             let &Function { decl, header_len, indent, asyncness } = self;
             let amp = if f.alternate() { "&" } else { "&amp;" };
@@ -1101,7 +1101,7 @@ impl Function<'_> {
 }
 
 impl clean::Visibility {
-    crate fn print_with_space<'tcx>(
+    pub(crate) fn print_with_space<'tcx>(
         self,
         tcx: TyCtxt<'tcx>,
         item_did: DefId,
@@ -1157,7 +1157,7 @@ impl clean::Visibility {
     }
 }
 
-crate trait PrintWithSpace {
+pub(crate) trait PrintWithSpace {
     fn print_with_space(&self) -> &str;
 }
 
@@ -1198,7 +1198,7 @@ impl PrintWithSpace for hir::Mutability {
 }
 
 impl clean::Import {
-    crate fn print<'b, 'a: 'b>(&'a self, cache: &'b Cache) -> impl fmt::Display + 'b {
+    pub(crate) fn print<'b, 'a: 'b>(&'a self, cache: &'b Cache) -> impl fmt::Display + 'b {
         display_fn(move |f| match self.kind {
             clean::ImportKind::Simple(name) => {
                 if name == self.source.path.last() {
@@ -1219,7 +1219,7 @@ impl clean::Import {
 }
 
 impl clean::ImportSource {
-    crate fn print<'b, 'a: 'b>(&'a self, cache: &'b Cache) -> impl fmt::Display + 'b {
+    pub(crate) fn print<'b, 'a: 'b>(&'a self, cache: &'b Cache) -> impl fmt::Display + 'b {
         display_fn(move |f| match self.did {
             Some(did) => resolved_path(f, did, &self.path, true, false, cache),
             _ => {
@@ -1239,7 +1239,7 @@ impl clean::ImportSource {
 }
 
 impl clean::TypeBinding {
-    crate fn print<'b, 'a: 'b>(&'a self, cache: &'b Cache) -> impl fmt::Display + 'b {
+    pub(crate) fn print<'b, 'a: 'b>(&'a self, cache: &'b Cache) -> impl fmt::Display + 'b {
         display_fn(move |f| {
             f.write_str(&*self.name.as_str())?;
             match self.kind {
@@ -1265,7 +1265,7 @@ impl clean::TypeBinding {
     }
 }
 
-crate fn print_abi_with_space(abi: Abi) -> impl fmt::Display {
+pub(crate) fn print_abi_with_space(abi: Abi) -> impl fmt::Display {
     display_fn(move |f| {
         let quot = if f.alternate() { "\"" } else { "&quot;" };
         match abi {
@@ -1275,12 +1275,12 @@ crate fn print_abi_with_space(abi: Abi) -> impl fmt::Display {
     })
 }
 
-crate fn print_default_space<'a>(v: bool) -> &'a str {
+pub(crate) fn print_default_space<'a>(v: bool) -> &'a str {
     if v { "default " } else { "" }
 }
 
 impl clean::GenericArg {
-    crate fn print<'b, 'a: 'b>(&'a self, cache: &'b Cache) -> impl fmt::Display + 'b {
+    pub(crate) fn print<'b, 'a: 'b>(&'a self, cache: &'b Cache) -> impl fmt::Display + 'b {
         display_fn(move |f| match self {
             clean::GenericArg::Lifetime(lt) => fmt::Display::fmt(&lt.print(), f),
             clean::GenericArg::Type(ty) => fmt::Display::fmt(&ty.print(cache), f),
@@ -1289,7 +1289,7 @@ impl clean::GenericArg {
     }
 }
 
-crate fn display_fn(f: impl FnOnce(&mut fmt::Formatter<'_>) -> fmt::Result) -> impl fmt::Display {
+pub(crate) fn display_fn(f: impl FnOnce(&mut fmt::Formatter<'_>) -> fmt::Result) -> impl fmt::Display {
     struct WithFormatter<F>(Cell<Option<F>>);
 
     impl<F> fmt::Display for WithFormatter<F>

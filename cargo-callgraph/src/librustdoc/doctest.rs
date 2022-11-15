@@ -31,17 +31,17 @@ use crate::html::markdown::{self, ErrorCodes, Ignore, LangString};
 use crate::passes::span_of_attrs;
 
 #[derive(Clone, Default)]
-crate struct TestOptions {
+pub(crate) struct TestOptions {
     /// Whether to disable the default `extern crate my_crate;` when creating doctests.
-    crate no_crate_inject: bool,
+    pub(crate) no_crate_inject: bool,
     /// Whether to emit compilation warnings when compiling doctests. Setting this will suppress
     /// the default `#![allow(unused)]`.
-    crate display_warnings: bool,
+    pub(crate) display_warnings: bool,
     /// Additional crate-level attributes to add to doctests.
-    crate attrs: Vec<String>,
+    pub(crate) attrs: Vec<String>,
 }
 
-crate fn run(options: Options) -> Result<(), ErrorReported> {
+pub(crate) fn run(options: Options) -> Result<(), ErrorReported> {
     let input = config::Input::File(options.input.clone());
 
     let invalid_codeblock_attributes_name = rustc_lint::builtin::INVALID_CODEBLOCK_ATTRIBUTES.name;
@@ -390,7 +390,7 @@ fn run_test(
 
 /// Transforms a test into code that can be compiled into a Rust binary, and returns the number of
 /// lines before the test code begins as well as if the output stream supports colors or not.
-crate fn make_test(
+pub(crate) fn make_test(
     s: &str,
     cratename: Option<&str>,
     dont_insert_main: bool,
@@ -674,7 +674,7 @@ fn partition_source(s: &str) -> (String, String, String) {
     (before, after, crates)
 }
 
-crate trait Tester {
+pub(crate) trait Tester {
     fn add_test(&mut self, test: String, config: LangString, line: usize);
     fn get_line(&self) -> usize {
         0
@@ -682,8 +682,8 @@ crate trait Tester {
     fn register_header(&mut self, _name: &str, _level: u32) {}
 }
 
-crate struct Collector {
-    crate tests: Vec<testing::TestDescAndFn>,
+pub(crate) struct Collector {
+    pub(crate) tests: Vec<testing::TestDescAndFn>,
 
     // The name of the test displayed to the user, separated by `::`.
     //
@@ -719,7 +719,7 @@ crate struct Collector {
 }
 
 impl Collector {
-    crate fn new(
+    pub(crate) fn new(
         cratename: String,
         options: Options,
         use_headers: bool,
@@ -751,7 +751,7 @@ impl Collector {
         format!("{} - {}(line {})", filename, item_path, line)
     }
 
-    crate fn set_position(&mut self, position: Span) {
+    pub(crate) fn set_position(&mut self, position: Span) {
         self.position = position;
     }
 

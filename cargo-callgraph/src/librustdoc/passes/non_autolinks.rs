@@ -9,7 +9,7 @@ use regex::Regex;
 use rustc_errors::Applicability;
 use rustc_session::lint;
 
-crate const CHECK_NON_AUTOLINKS: Pass = Pass {
+pub(crate) const CHECK_NON_AUTOLINKS: Pass = Pass {
     name: "check-non-autolinks",
     run: check_non_autolinks,
     description: "detects URLs that could be linkified",
@@ -52,7 +52,7 @@ impl<'a, 'tcx> NonAutolinksLinter<'a, 'tcx> {
     }
 }
 
-crate fn check_non_autolinks(krate: Crate, cx: &DocContext<'_>) -> Crate {
+pub(crate) fn check_non_autolinks(krate: Crate, cx: &DocContext<'_>) -> Crate {
     if !cx.tcx.sess.is_nightly_build() {
         krate
     } else {

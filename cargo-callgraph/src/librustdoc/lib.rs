@@ -10,7 +10,7 @@
 #![feature(bool_to_option)]
 #![feature(box_patterns)]
 #![feature(box_syntax)]
-#![feature(crate_visibility_modifier)]
+//#![feature(crate_visibility_modifier)]
 #![feature(default_free_fn)]
 #![feature(in_band_lifetimes)]
 #![feature(iter_intersperse)]

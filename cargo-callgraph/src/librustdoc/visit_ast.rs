@@ -32,7 +32,7 @@ fn def_id_to_path(tcx: TyCtxt<'_>, did: DefId) -> Vec<String> {
 // Also, is there some reason that this doesn't use the 'visit'
 // framework from syntax?.
 
-crate struct RustdocVisitor<'a, 'tcx> {
+pub(crate) struct RustdocVisitor<'a, 'tcx> {
     cx: &'a mut core::DocContext<'tcx>,
     view_item_stack: FxHashSet<hir::HirId>,
     inlining: bool,
@@ -42,7 +42,7 @@ crate struct RustdocVisitor<'a, 'tcx> {
 }
 
 impl<'a, 'tcx> RustdocVisitor<'a, 'tcx> {
-    crate fn new(cx: &'a mut core::DocContext<'tcx>) -> RustdocVisitor<'a, 'tcx> {
+    pub(crate) fn new(cx: &'a mut core::DocContext<'tcx>) -> RustdocVisitor<'a, 'tcx> {
         // If the root is re-exported, terminate all recursion.
         let mut stack = FxHashSet::default();
         stack.insert(hir::CRATE_HIR_ID);
@@ -60,7 +60,7 @@ impl<'a, 'tcx> RustdocVisitor<'a, 'tcx> {
         self.exact_paths.entry(did).or_insert_with(|| def_id_to_path(tcx, did));
     }
 
-    crate fn visit(mut self, krate: &'tcx hir::Crate<'_>) -> Module<'tcx> {
+    pub(crate) fn visit(mut self, krate: &'tcx hir::Crate<'_>) -> Module<'tcx> {
         let mut top_level_module = self.visit_mod_contents(
             krate.item.span,
             &Spanned { span: rustc_span::DUMMY_SP, node: hir::VisibilityKind::Public },

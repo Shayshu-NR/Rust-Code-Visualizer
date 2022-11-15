@@ -1,10 +1,10 @@
-crate mod escape;
-crate mod format;
-crate mod highlight;
-crate mod layout;
+pub(crate) mod escape;
+pub(crate) mod format;
+pub(crate) mod highlight;
+pub(crate) mod layout;
 // used by the error-index generator, so it needs to be public
 pub mod markdown;
-crate mod render;
-crate mod sources;
-crate mod static_files;
-crate mod toc;
+pub(crate) mod render;
+pub(crate) mod sources;
+pub(crate) mod static_files;
+pub(crate) mod toc;

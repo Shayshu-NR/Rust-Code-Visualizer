@@ -16,7 +16,7 @@ use crate::html::markdown::short_markdown_summary;
 use crate::html::render::{Generic, IndexItem, IndexItemFunctionType, RenderType, TypeWithKind};
 
 /// Indicates where an external crate can be found.
-crate enum ExternalLocation {
+pub(crate) enum ExternalLocation {
     /// Remote URL root of the external crate
     Remote(String),
     /// This external crate can be found in the local doc/ folder
@@ -27,7 +27,7 @@ crate enum ExternalLocation {
 
 /// Attempts to find where an external crate is located, given that we're
 /// rendering in to the specified source destination.
-crate fn extern_location(
+pub(crate) fn extern_location(
     e: &clean::ExternalCrate,
     extern_url: Option<&str>,
     dst: &Path,
@@ -65,7 +65,7 @@ crate fn extern_location(
 }
 
 /// Builds the search index from the collected metadata
-crate fn build_index<'tcx>(krate: &clean::Crate, cache: &mut Cache, tcx: TyCtxt<'tcx>) -> String {
+pub(crate) fn build_index<'tcx>(krate: &clean::Crate, cache: &mut Cache, tcx: TyCtxt<'tcx>) -> String {
     let mut defid_to_pathid = FxHashMap::default();
     let mut crate_items = Vec::with_capacity(cache.search_index.len());
     let mut crate_paths = vec![];
@@ -167,7 +167,7 @@ crate fn build_index<'tcx>(krate: &clean::Crate, cache: &mut Cache, tcx: TyCtxt<
     )
 }
 
-crate fn get_index_search_type<'tcx>(
+pub(crate) fn get_index_search_type<'tcx>(
     item: &clean::Item,
     cache: &Cache,
     tcx: TyCtxt<'tcx>,
@@ -252,7 +252,7 @@ fn get_generics(clean_type: &clean::Type, cache: &Cache) -> Option<Vec<Generic>>
 /// i.e. `[T, U]` when you have the following bounds: `T: Display, U: Option<T>` will return
 /// `[Display, Option]` (we just returns the list of the types, we don't care about the
 /// wrapped types in here).
-crate fn get_real_types<'tcx>(
+pub(crate) fn get_real_types<'tcx>(
     generics: &Generics,
     arg: &Type,
     tcx: TyCtxt<'tcx>,
@@ -331,7 +331,7 @@ crate fn get_real_types<'tcx>(
 ///
 /// i.e. `fn foo<A: Display, B: Option<A>>(x: u32, y: B)` will return
 /// `[u32, Display, Option]`.
-crate fn get_all_types<'tcx>(
+pub(crate) fn get_all_types<'tcx>(
     generics: &Generics,
     decl: &FnDecl,
     tcx: TyCtxt<'tcx>,

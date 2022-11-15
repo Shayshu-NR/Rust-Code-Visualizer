@@ -74,23 +74,23 @@ pub struct Markdown<'a>(
     pub &'a Option<Playground>,
 );
 /// A tuple struct like `Markdown` that renders the markdown with a table of contents.
-crate struct MarkdownWithToc<'a>(
-    crate &'a str,
-    crate &'a mut IdMap,
-    crate ErrorCodes,
-    crate Edition,
-    crate &'a Option<Playground>,
+pub(crate) struct MarkdownWithToc<'a>(
+    pub(crate) &'a str,
+    pub(crate) &'a mut IdMap,
+    pub(crate) ErrorCodes,
+    pub(crate) Edition,
+    pub(crate) &'a Option<Playground>,
 );
 /// A tuple struct like `Markdown` that renders the markdown escaping HTML tags.
-crate struct MarkdownHtml<'a>(
-    crate &'a str,
-    crate &'a mut IdMap,
-    crate ErrorCodes,
-    crate Edition,
-    crate &'a Option<Playground>,
+pub(crate) struct MarkdownHtml<'a>(
+    pub(crate) &'a str,
+    pub(crate) &'a mut IdMap,
+    pub(crate) ErrorCodes,
+    pub(crate) Edition,
+    pub(crate) &'a Option<Playground>,
 );
 /// A tuple struct like `Markdown` that renders only the first paragraph.
-crate struct MarkdownSummaryLine<'a>(pub &'a str, pub &'a [RenderedLink]);
+pub(crate) struct MarkdownSummaryLine<'a>(pub &'a str, pub &'a [RenderedLink]);
 
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub enum ErrorCodes {
@@ -99,14 +99,14 @@ pub enum ErrorCodes {
 }
 
 impl ErrorCodes {
-    crate fn from(b: bool) -> Self {
+    pub(crate) fn from(b: bool) -> Self {
         match b {
             true => ErrorCodes::Yes,
             false => ErrorCodes::No,
         }
     }
 
-    crate fn as_bool(self) -> bool {
+    pub(crate) fn as_bool(self) -> bool {
         match self {
             ErrorCodes::Yes => true,
             ErrorCodes::No => false,
@@ -623,7 +623,7 @@ impl<'a, I: Iterator<Item = SpannedEvent<'a>>> Iterator for Footnotes<'a, I> {
     }
 }
 
-crate fn find_testable_code<T: doctest::Tester>(
+pub(crate) fn find_testable_code<T: doctest::Tester>(
     doc: &str,
     tests: &mut T,
     error_codes: ErrorCodes,
@@ -689,7 +689,7 @@ crate fn find_testable_code<T: doctest::Tester>(
     }
 }
 
-crate struct ExtraInfo<'tcx> {
+pub(crate) struct ExtraInfo<'tcx> {
     hir_id: Option<HirId>,
     item_did: Option<DefId>,
     sp: Span,
@@ -697,11 +697,11 @@ crate struct ExtraInfo<'tcx> {
 }
 
 impl<'tcx> ExtraInfo<'tcx> {
-    crate fn new(tcx: TyCtxt<'tcx>, hir_id: HirId, sp: Span) -> ExtraInfo<'tcx> {
+    pub(crate) fn new(tcx: TyCtxt<'tcx>, hir_id: HirId, sp: Span) -> ExtraInfo<'tcx> {
         ExtraInfo { hir_id: Some(hir_id), item_did: None, sp, tcx }
     }
 
-    crate fn new_did(tcx: TyCtxt<'tcx>, did: DefId, sp: Span) -> ExtraInfo<'tcx> {
+    pub(crate) fn new_did(tcx: TyCtxt<'tcx>, did: DefId, sp: Span) -> ExtraInfo<'tcx> {
         ExtraInfo { hir_id: None, item_did: Some(did), sp, tcx }
     }
 
@@ -733,21 +733,21 @@ impl<'tcx> ExtraInfo<'tcx> {
 }
 
 #[derive(Eq, PartialEq, Clone, Debug)]
-crate struct LangString {
+pub(crate) struct LangString {
     original: String,
-    crate should_panic: bool,
-    crate no_run: bool,
-    crate ignore: Ignore,
-    crate rust: bool,
-    crate test_harness: bool,
-    crate compile_fail: bool,
-    crate error_codes: Vec<String>,
-    crate allow_fail: bool,
-    crate edition: Option<Edition>,
+    pub(crate) should_panic: bool,
+    pub(crate) no_run: bool,
+    pub(crate) ignore: Ignore,
+    pub(crate) rust: bool,
+    pub(crate) test_harness: bool,
+    pub(crate) compile_fail: bool,
+    pub(crate) error_codes: Vec<String>,
+    pub(crate) allow_fail: bool,
+    pub(crate) edition: Option<Edition>,
 }
 
 #[derive(Eq, PartialEq, Clone, Debug)]
-crate enum Ignore {
+pub(crate) enum Ignore {
     All,
     None,
     Some(Vec<String>),
@@ -938,7 +938,7 @@ impl Markdown<'_> {
 }
 
 impl MarkdownWithToc<'_> {
-    crate fn into_string(self) -> String {
+    pub(crate) fn into_string(self) -> String {
         let MarkdownWithToc(md, mut ids, codes, edition, playground) = self;
 
         let p = Parser::new_ext(md, opts()).into_offset_iter();
@@ -959,7 +959,7 @@ impl MarkdownWithToc<'_> {
 }
 
 impl MarkdownHtml<'_> {
-    crate fn into_string(self) -> String {
+    pub(crate) fn into_string(self) -> String {
         let MarkdownHtml(md, mut ids, codes, edition, playground) = self;
 
         // This is actually common enough to special-case
@@ -986,7 +986,7 @@ impl MarkdownHtml<'_> {
 }
 
 impl MarkdownSummaryLine<'_> {
-    crate fn into_string(self) -> String {
+    pub(crate) fn into_string(self) -> String {
         let MarkdownSummaryLine(md, links) = self;
         // This is actually common enough to special-case
         if md.is_empty() {
@@ -1090,7 +1090,7 @@ fn markdown_summary_with_limit(md: &str, length_limit: usize) -> (String, bool) 
 /// Will shorten to 59 or 60 characters, including an ellipsis (…) if it was shortened.
 ///
 /// See [`markdown_summary_with_limit`] for details about what is rendered and what is not.
-crate fn short_markdown_summary(markdown: &str) -> String {
+pub(crate) fn short_markdown_summary(markdown: &str) -> String {
     let (mut s, was_shortened) = markdown_summary_with_limit(markdown, 59);
 
     if was_shortened {
@@ -1106,7 +1106,7 @@ crate fn short_markdown_summary(markdown: &str) -> String {
 /// - Headings, links, and formatting are stripped.
 /// - Inline code is rendered as-is, surrounded by backticks.
 /// - HTML and code blocks are ignored.
-crate fn plain_text_summary(md: &str) -> String {
+pub(crate) fn plain_text_summary(md: &str) -> String {
     if md.is_empty() {
         return String::new();
     }
@@ -1131,13 +1131,13 @@ crate fn plain_text_summary(md: &str) -> String {
     s
 }
 
-crate struct MarkdownLink {
+pub(crate) struct MarkdownLink {
     pub kind: LinkType,
     pub link: String,
     pub range: Range<usize>,
 }
 
-crate fn markdown_links(md: &str) -> Vec<MarkdownLink> {
+pub(crate) fn markdown_links(md: &str) -> Vec<MarkdownLink> {
     if md.is_empty() {
         return vec![];
     }
@@ -1203,20 +1203,20 @@ crate fn markdown_links(md: &str) -> Vec<MarkdownLink> {
 }
 
 #[derive(Debug)]
-crate struct RustCodeBlock {
+pub(crate) struct RustCodeBlock {
     /// The range in the markdown that the code block occupies. Note that this includes the fences
     /// for fenced code blocks.
-    crate range: Range<usize>,
+    pub(crate) range: Range<usize>,
     /// The range in the markdown that the code within the code block occupies.
-    crate code: Range<usize>,
-    crate is_fenced: bool,
-    crate syntax: Option<String>,
-    crate is_ignore: bool,
+    pub(crate) code: Range<usize>,
+    pub(crate) is_fenced: bool,
+    pub(crate) syntax: Option<String>,
+    pub(crate) is_ignore: bool,
 }
 
 /// Returns a range of bytes for each code block in the markdown that is tagged as `rust` or
 /// untagged (and assumed to be rust).
-crate fn rust_code_blocks(md: &str, extra_info: &ExtraInfo<'_>) -> Vec<RustCodeBlock> {
+pub(crate) fn rust_code_blocks(md: &str, extra_info: &ExtraInfo<'_>) -> Vec<RustCodeBlock> {
     let mut code_blocks = vec![];
 
     if md.is_empty() {
@@ -1340,17 +1340,17 @@ impl IdMap {
         IdMap { map: init_id_map() }
     }
 
-    crate fn populate<I: IntoIterator<Item = S>, S: AsRef<str> + ToString>(&mut self, ids: I) {
+    pub(crate) fn populate<I: IntoIterator<Item = S>, S: AsRef<str> + ToString>(&mut self, ids: I) {
         for id in ids {
             let _ = self.derive(id);
         }
     }
 
-    crate fn reset(&mut self) {
+    pub(crate) fn reset(&mut self) {
         self.map = init_id_map();
     }
 
-    crate fn derive<S: AsRef<str> + ToString>(&mut self, candidate: S) -> String {
+    pub(crate) fn derive<S: AsRef<str> + ToString>(&mut self, candidate: S) -> String {
         let id = match self.map.get_mut(candidate.as_ref()) {
             None => candidate.to_string(),
             Some(a) => {

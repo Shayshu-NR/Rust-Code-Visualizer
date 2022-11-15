@@ -28,7 +28,7 @@ use crate::config::Options as RustdocOptions;
 use crate::config::RenderInfo;
 use crate::core::{init_lints, EmitIgnoredResolutionErrors};
 
-crate fn run_core(options: RustdocOptions) {
+pub(crate) fn run_core(options: RustdocOptions) {
     // Parse, resolve, and typecheck the given crate.
 
     let RustdocOptions {

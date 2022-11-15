@@ -8,33 +8,33 @@ use crate::html::format::{Buffer, Print};
 use crate::html::render::{ensure_trailing_slash, StylePath};
 
 #[derive(Clone)]
-crate struct Layout {
-    crate logo: String,
-    crate favicon: String,
-    crate external_html: ExternalHtml,
-    crate default_settings: FxHashMap<String, String>,
-    crate krate: String,
+pub(crate) struct Layout {
+    pub(crate) logo: String,
+    pub(crate) favicon: String,
+    pub(crate) external_html: ExternalHtml,
+    pub(crate) default_settings: FxHashMap<String, String>,
+    pub(crate) krate: String,
     /// The given user css file which allow to customize the generated
     /// documentation theme.
-    crate css_file_extension: Option<PathBuf>,
+    pub(crate) css_file_extension: Option<PathBuf>,
     /// If false, the `select` element to have search filtering by crates on rendered docs
     /// won't be generated.
-    crate generate_search_filter: bool,
+    pub(crate) generate_search_filter: bool,
 }
 
-crate struct Page<'a> {
-    crate title: &'a str,
-    crate css_class: &'a str,
-    crate root_path: &'a str,
-    crate static_root_path: Option<&'a str>,
-    crate description: &'a str,
-    crate keywords: &'a str,
-    crate resource_suffix: &'a str,
-    crate extra_scripts: &'a [&'a str],
-    crate static_extra_scripts: &'a [&'a str],
+pub(crate) struct Page<'a> {
+    pub(crate) title: &'a str,
+    pub(crate) css_class: &'a str,
+    pub(crate) root_path: &'a str,
+    pub(crate) static_root_path: Option<&'a str>,
+    pub(crate) description: &'a str,
+    pub(crate) keywords: &'a str,
+    pub(crate) resource_suffix: &'a str,
+    pub(crate) extra_scripts: &'a [&'a str],
+    pub(crate) static_extra_scripts: &'a [&'a str],
 }
 
-crate fn render<T: Print, S: Print>(
+pub(crate) fn render<T: Print, S: Print>(
     layout: &Layout,
     page: &Page<'_>,
     sidebar: S,
@@ -222,7 +222,7 @@ crate fn render<T: Print, S: Print>(
     )
 }
 
-crate fn redirect(url: &str) -> String {
+pub(crate) fn redirect(url: &str) -> String {
     // <script> triggers a redirect before refresh, so this is fine.
     format!(
         r##"<!DOCTYPE html>

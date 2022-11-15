@@ -9,7 +9,7 @@ use crate::formats::cache::Cache;
 /// Allows for different backends to rustdoc to be used with the `run_format()` function. Each
 /// backend renderer has hooks for initialization, documenting an item, entering and exiting a
 /// module, and cleanup/finalizing output.
-crate trait FormatRenderer<'tcx>: Clone {
+pub(crate) trait FormatRenderer<'tcx>: Clone {
     /// Gives a description of the renderer. Used for performance profiling.
     fn descr() -> &'static str;
 
@@ -46,7 +46,7 @@ crate trait FormatRenderer<'tcx>: Clone {
 }
 
 /// Main method for rendering a crate.
-crate fn run_format<'tcx, T: FormatRenderer<'tcx>>(
+pub(crate) fn run_format<'tcx, T: FormatRenderer<'tcx>>(
     krate: clean::Crate,
     options: RenderOptions,
     render_info: RenderInfo,
