@@ -45,7 +45,7 @@ use self::ItemKind::*;
 use self::SelfTy::*;
 use self::Type::*;
 
-thread_local!(crate static MAX_DEF_IDX: RefCell<FxHashMap<CrateNum, DefIndex>> = Default::default());
+thread_local!(pub(crate) static MAX_DEF_IDX: RefCell<FxHashMap<CrateNum, DefIndex>> = Default::default());
 
 #[derive(Clone, Debug)]
 pub(crate) struct Crate {
