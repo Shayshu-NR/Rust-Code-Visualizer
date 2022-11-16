@@ -11,10 +11,31 @@
   ],
   "activationEvents": [
     "onCommand:rust-code-visualizer.helloWorld",
-    "onCommand:rust-code-visualizer.Graph"
+    "onCommand:rust-code-visualizer.Graph",
+    "onView:rust-sidebar"
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "rust-sidebar-view",
+          "title": "Rust Graph Viewer",
+          "icon": "media/RustLogo.svg"
+        }
+      ]
+    },
+    "views": {
+      "rust-sidebar-view" : [
+        {
+          "type": "webview",
+          "id": "rust-sidebar",
+          "name" : "Rust Graph",
+          "icon" : "media/RustLogo.svg",
+          "contextualTitle": "RustGraph"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "rust-code-visualizer.helloWorld",

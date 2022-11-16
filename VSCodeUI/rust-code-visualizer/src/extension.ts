@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import * as util from "./utilities";
 import {Panel} from "./panel";
+import { SidebarProvider } from "./sidebar";
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -23,6 +24,15 @@ export function activate(context: vscode.ExtensionContext) {
       }
     )
   );
+
+  const sidebarProvider = new SidebarProvider(context.extensionUri);
+
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider(
+      "rust-sidebar",
+      sidebarProvider
+    )
+  )
 }
 
 export function deactivate() {}
