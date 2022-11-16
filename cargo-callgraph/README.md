@@ -11,6 +11,12 @@ Note 2: if there is a `rust-toolchain` file, then it will overwrite whatever ver
 
 
 ## Current error fixes:
+### Error: linker 'cc' not found
+
+You are likely missing some C++ development components that Rust relies on.
+
+Install them with: `sudo apt install build-essential` then try again
+
 ### Error\[E0554\]
 Use the +nightly keyword in the `cargo` command to enable experimental features.
 
