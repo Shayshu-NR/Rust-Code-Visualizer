@@ -95,11 +95,14 @@ class Panel {
     }
     _getHtmlForWebview(webview) {
         // Specify where to grab the script that is generated from react...
-        const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "out/compiled", "Panel.js"));
+        const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "main.865a89d0.js"));
+        const mainCSS = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "main.5e90d8e1.css"));
+        const outputCSS = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "output.css"));
         // Specify where to grab the css for the panel
         const stylesResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "reset.css"));
         // More css to add to the panel
         const stylesMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "vscode.css"));
+        const manifestUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "manifest.json"));
         const nonce = (0, utilities_1.getNonce)();
         return `
     <!DOCTYPE html>
@@ -110,14 +113,15 @@ class Panel {
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <link href="${stylesResetUri}" rel="stylesheet">
           <link href="${stylesMainUri}" rel="stylesheet">
+          <link href="${mainCSS}" rel="stylesheet">
+          <link href="${outputCSS}" rel="stylesheet">
+          <link rel="manifest" href="${manifestUri}" />
           <script nonce="${nonce}">
           </script>
       </head>
 
       <body>
-        <h1>
-          Rust Code Graph!
-        </h1>
+        <div id="root"></div>
       </body>
       <script src="${scriptUri}" nonce="${nonce}">
     </html>
