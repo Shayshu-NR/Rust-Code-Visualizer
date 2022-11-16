@@ -1,7 +1,7 @@
 use rustc_ast as ast;
 use rustc_data_structures::fx::FxHashMap;
 use rustc_data_structures::sync::Lrc;
-use rustc_errors::{ColorConfig, ErrorReported};
+use rustc_errors::{ColorConfig, ErrorGuaranteed};
 use rustc_hir as hir;
 use rustc_hir::intravisit;
 use rustc_hir::{HirId, CRATE_HIR_ID};
@@ -41,7 +41,7 @@ pub(crate) struct TestOptions {
     pub(crate) attrs: Vec<String>,
 }
 
-pub(crate) fn run(options: Options) -> Result<(), ErrorReported> {
+pub(crate) fn run(options: Options) -> Result<(), ErrorGuaranteed> {
     let input = config::Input::File(options.input.clone());
 
     let invalid_codeblock_attributes_name = rustc_lint::builtin::INVALID_CODEBLOCK_ATTRIBUTES.name;
@@ -144,13 +144,13 @@ pub(crate) fn run(options: Options) -> Result<(), ErrorReported> {
             });
             compiler.session().abort_if_errors();
 
-            let ret: Result<_, ErrorReported> = Ok(collector.tests);
+            let ret: Result<_, ErrorGuaranteed> = Ok(collector.tests);
             ret
         })
     });
     let tests = match tests {
         Ok(tests) => tests,
-        Err(ErrorReported) => return Err(ErrorReported),
+        Err(ErrorGuaranteed) => return Err(ErrorGuaranteed),
     };
 
     test_args.insert(0, "rustdoctest".to_string());
@@ -520,7 +520,7 @@ pub(crate) fn make_test(
     });
     let (already_has_main, already_has_extern_crate, found_macro) = match result {
         Ok(result) => result,
-        Err(ErrorReported) => {
+        Err(ErrorGuaranteed) => {
             // If the parser panicked due to a fatal error, pass the test code through unchanged.
             // The error will be reported during compilation.
             return (s.to_owned(), 0, false);
