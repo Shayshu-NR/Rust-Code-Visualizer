@@ -76,7 +76,7 @@ pub(crate) fn krate(mut cx: &mut DocContext<'_>) -> Crate {
         }));
     }
 
-    crate {
+    Crate {
         name,
         version: None,
         src,
