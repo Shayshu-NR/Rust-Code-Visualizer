@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 
 use rustc_data_structures::fx::{FxHashMap, FxHashSet};
 use rustc_hir::def_id::{CrateNum, DefId, CRATE_DEF_INDEX};
-use rustc_middle::middle::privacy::AccessLevels;
+use rustc_middle::middle::privacy::EffectiveVisibilities;
 use rustc_middle::ty::TyCtxt;
 use rustc_span::source_map::FileName;
 use rustc_span::Symbol;
@@ -80,7 +80,7 @@ pub(crate) struct Cache {
     // Note that external items for which `doc(hidden)` applies to are shown as
     // non-reachable while local items aren't. This is because we're reusing
     // the access levels from the privacy check pass.
-    pub(crate) access_levels: AccessLevels<DefId>,
+    pub(crate) access_levels: EffectiveVisibilities<DefId>,
 
     /// The version of the crate being documented, if given from the `--crate-version` flag.
     pub(crate) crate_version: Option<String>,

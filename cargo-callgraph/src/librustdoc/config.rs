@@ -6,7 +6,7 @@ use std::path::PathBuf;
 
 use rustc_data_structures::fx::{FxHashMap, FxHashSet};
 use rustc_hir::def_id::DefId;
-use rustc_middle::middle::privacy::AccessLevels;
+use rustc_middle::middle::privacy::EffectiveVisibilities;
 use rustc_session::config::{self, parse_crate_types_from_list, parse_externs, CrateType};
 use rustc_session::config::{
     build_codegen_options, build_debugging_options, get_cmd_lint_options, host_triple,
@@ -275,7 +275,7 @@ pub(crate) struct RenderInfo {
     pub(crate) inlined: FxHashSet<DefId>,
     pub(crate) external_paths: crate::core::ExternalPaths,
     pub(crate) exact_paths: FxHashMap<DefId, Vec<String>>,
-    pub(crate) access_levels: AccessLevels<DefId>,
+    pub(crate) access_levels: EffectiveVisibilities<DefId>,
     pub(crate) deref_trait_did: Option<DefId>,
     pub(crate) deref_mut_trait_did: Option<DefId>,
     pub(crate) owned_box_did: Option<DefId>,

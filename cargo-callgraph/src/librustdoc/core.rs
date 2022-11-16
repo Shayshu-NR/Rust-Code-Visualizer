@@ -13,7 +13,7 @@ use rustc_hir::{
 };
 use rustc_interface::{interface, Queries};
 use rustc_middle::hir::map::Map;
-use rustc_middle::middle::privacy::AccessLevels;
+use rustc_middle::middle::privacy::EffectiveVisibilities;
 use rustc_middle::ty::{ParamEnv, Ty, TyCtxt};
 use rustc_resolve as resolve;
 use rustc_session::config::{self, CrateType, ErrorOutputType};
@@ -497,7 +497,7 @@ pub(crate) fn run_global_ctxt(
     let access_levels = tcx.privacy_access_levels(LOCAL_CRATE);
     // Convert from a HirId set to a DefId set since we don't always have easy access
     // to the map from defid -> hirid
-    let access_levels = AccessLevels {
+    let access_levels = EffectiveVisibilities {
         map: access_levels
             .map
             .iter()

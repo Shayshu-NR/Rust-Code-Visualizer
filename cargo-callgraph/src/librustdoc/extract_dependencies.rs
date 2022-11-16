@@ -13,7 +13,7 @@ use rustc_hir::def_id::{DefId, LocalDefId, LOCAL_CRATE};
 use rustc_hir::intravisit::Visitor;
 use rustc_index::vec::IndexVec;
 use rustc_interface::interface;
-use rustc_middle::middle::privacy::AccessLevels;
+use rustc_middle::middle::privacy::EffectiveVisibilities;
 use rustc_middle::mir;
 use rustc_middle::mir::terminator::*;
 use rustc_middle::ty;
@@ -179,7 +179,7 @@ pub(crate) fn run_core(options: RustdocOptions) {
                 let access_levels = tcx.privacy_access_levels(LOCAL_CRATE);
                 // Convert from a HirId set to a DefId set since we don't always have easy access
                 // to the map from defid -> hirid
-                let access_levels = AccessLevels {
+                let access_levels = EffectiveVisibilities {
                     map: access_levels
                         .map
                         .iter()

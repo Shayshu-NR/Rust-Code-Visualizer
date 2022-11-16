@@ -1,7 +1,7 @@
 use rustc_data_structures::fx::FxHashSet;
 use rustc_hir::def::{DefKind, Res};
 use rustc_hir::def_id::{CrateNum, DefId, CRATE_DEF_INDEX};
-use rustc_middle::middle::privacy::{AccessLevel, AccessLevels};
+use rustc_middle::middle::privacy::{Level, EffectiveVisibilities};
 use rustc_middle::ty::{TyCtxt, Visibility};
 use rustc_span::symbol::sym;
 
@@ -14,9 +14,9 @@ use crate::clean::{AttributesExt, NestedAttributesExt};
 pub(crate) struct LibEmbargoVisitor<'a, 'tcx> {
     tcx: TyCtxt<'tcx>,
     // Accessibility levels for reachable nodes
-    access_levels: &'a mut AccessLevels<DefId>,
+    access_levels: &'a mut EffectiveVisibilities<DefId>,
     // Previous accessibility level, None means unreachable
-    prev_level: Option<AccessLevel>,
+    prev_level: Option<Level>,
     // Keeps track of already visited modules, in case a module re-exports its parent
     visited_mods: FxHashSet<DefId>,
 }
@@ -26,19 +26,19 @@ impl<'a, 'tcx> LibEmbargoVisitor<'a, 'tcx> {
         LibEmbargoVisitor {
             tcx: cx.tcx,
             access_levels: &mut cx.renderinfo.get_mut().access_levels,
-            prev_level: Some(AccessLevel::Public),
+            prev_level: Some(Level::Direct),
             visited_mods: FxHashSet::default(),
         }
     }
 
     pub(crate) fn visit_lib(&mut self, cnum: CrateNum) {
         let did = DefId { krate: cnum, index: CRATE_DEF_INDEX };
-        self.update(did, Some(AccessLevel::Public));
+        self.update(did, Some(Level::Direct));
         self.visit_mod(did);
     }
 
     // Updates node level and returns the updated level
-    fn update(&mut self, did: DefId, level: Option<AccessLevel>) -> Option<AccessLevel> {
+    fn update(&mut self, did: DefId, level: Option<Level>) -> Option<Level> {
         let is_hidden = self.tcx.get_attrs(did).lists(sym::doc).has_word(sym::hidden);
 
         let old_level = self.access_levels.map.get(&did).cloned();

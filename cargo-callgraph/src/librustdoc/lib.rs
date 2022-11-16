@@ -53,14 +53,14 @@ extern crate rustc_lexer;
 extern crate rustc_lint;
 extern crate rustc_metadata;
 extern crate rustc_middle;
-//extern crate rustc_mir;
+extern crate rustc_mir;
 extern crate rustc_parse;
 extern crate rustc_resolve;
 extern crate rustc_session;
 extern crate rustc_span as rustc_span;
 extern crate rustc_target;
 extern crate rustc_trait_selection;
-//extern crate rustc_typeck;
+extern crate rustc_typeck;
 extern crate test as testing;
 
 use std::default::Default;

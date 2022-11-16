@@ -1,5 +1,5 @@
 use rustc_hir::def_id::{DefId, DefIdSet};
-use rustc_middle::middle::privacy::AccessLevels;
+use rustc_middle::middle::privacy::EffectiveVisibilities;
 use std::mem;
 
 use crate::clean::{self, GetDefId, Item};
@@ -7,7 +7,7 @@ use crate::fold::{DocFolder, StripItem};
 
 pub(crate) struct Stripper<'a> {
     pub(crate) retained: &'a mut DefIdSet,
-    pub(crate) access_levels: &'a AccessLevels<DefId>,
+    pub(crate) access_levels: &'a EffectiveVisibilities<DefId>,
     pub(crate) update_retained: bool,
 }
 
