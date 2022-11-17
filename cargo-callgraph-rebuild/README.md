@@ -6,7 +6,7 @@ In the parent directory are two more directories: baseline-rust, cargo-callgraph
 
 ### baseline-rust
 This directory holds the version of rust that is the closest I could identify to the latest version of cargo-callgraph.
-The commit ID on the Rust Github repo is 583563d86d88c1ab39c271d640d29a6c2a17a2dd
+The commit ID on the Rust Github repo is f1c47c79fe8438ed241630f885797eebef3a6cab
 
 ### cargo-callgraph
 This directory holds a copy of the most recent version of cargo-callgraph (From Feb. 11th, 2021).
