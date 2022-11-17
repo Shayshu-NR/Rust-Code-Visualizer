@@ -961,7 +961,7 @@ impl<'a> Clean<Arguments> for (&'a [hir::Ty<'a>], hir::BodyId) {
                 .iter()
                 .enumerate()
                 .map(|(i, ty)| Argument {
-                    name: Symbol::intern(&rustc_hir_pretty::param_to_string(&body.params[i])),
+                    name: name_from_pat(&body.params[i].pat),
                     type_: ty.clean(cx),
                 })
                 .collect(),
@@ -1269,7 +1269,7 @@ impl Clean<Item> for ty::AssocItem {
 
                     AssocTypeItem(bounds, ty.clean(cx))
                 } else {
-                    // FIXME: when could this happen? ASsociated items in inherent impls?
+                    // FIXME: when could this happen? Associated items in inherent impls?
                     let type_ = cx.tcx.type_of(self.def_id).clean(cx);
                     TypedefItem(
                         Typedef {
@@ -2161,18 +2161,20 @@ fn clean_use_statement(
         return Vec::new();
     }
 
-    let (doc_meta_item, please_inline) = import.attrs.lists(sym::doc).get_word_attr(sym::inline);
+    let inline_attr = import.attrs.lists(sym::doc).get_word_attr(sym::inline);
     let pub_underscore = import.vis.node.is_pub() && name == kw::Underscore;
 
-    if pub_underscore && please_inline {
-        rustc_errors::struct_span_err!(
-            cx.tcx.sess,
-            doc_meta_item.unwrap().span(),
-            E0780,
-            "anonymous imports cannot be inlined"
-        )
-        .span_label(import.span, "anonymous import")
-        .emit();
+    if pub_underscore {
+        if let Some(ref inline) = inline_attr {
+            rustc_errors::struct_span_err!(
+                cx.tcx.sess,
+                inline.span(),
+                E0780,
+                "anonymous imports cannot be inlined"
+            )
+            .span_label(import.span, "anonymous import")
+            .emit();
+        }
     }
 
     // We consider inlining the documentation of `pub use` statements, but we
@@ -2205,7 +2207,7 @@ fn clean_use_statement(
         }
         Import::new_glob(resolve_use_source(cx, path), true)
     } else {
-        if !please_inline {
+        if inline_attr.is_none() {
             if let Res::Def(DefKind::Mod, did) = path.res {
                 if !did.is_local() && did.index == CRATE_DEF_INDEX {
                     // if we're `pub use`ing an extern crate root, don't inline it unless we
