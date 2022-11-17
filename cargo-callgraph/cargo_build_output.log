@@ -1,0 +1,1075 @@
+   Compiling cargo-callgraph v0.0.0 (/mnt/c/Users/Matt/Documents/ECE496/Rust-Code-Visualizer/cargo-callgraph)
+error[E0432]: unresolved import `std::lazy`
+ --> src/librustdoc/clean/types.rs:6:10
+  |
+6 | use std::lazy::SyncOnceCell as OnceCell;
+  |          ^^^^ could not find `lazy` in `std`
+
+error[E0432]: unresolved imports `rustc_session::config::build_codegen_options`, `rustc_session::config::build_debugging_options`
+  --> src/librustdoc/config.rs:12:5
+   |
+12 |     build_codegen_options, build_debugging_options, get_cmd_lint_options, host_triple,
+   |     ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^ no `build_debugging_options` in `config`
+   |     |
+   |     no `build_codegen_options` in `config`
+   |
+help: a similar name exists in the module
+   |
+12 |     build_session_options, build_debugging_options, get_cmd_lint_options, host_triple,
+   |     ~~~~~~~~~~~~~~~~~~~~~
+help: a similar name exists in the module
+   |
+12 |     build_codegen_options, build_session_options, get_cmd_lint_options, host_triple,
+   |                            ~~~~~~~~~~~~~~~~~~~~~
+
+error[E0432]: unresolved import `rustc_session::config::DebuggingOptions`
+  --> src/librustdoc/config.rs:15:45
+   |
+15 | use rustc_session::config::{CodegenOptions, DebuggingOptions, ErrorOutputType, Externs};
+   |                                             ^^^^^^^^^^^^^^^^ no `DebuggingOptions` in `config`
+
+error[E0432]: unresolved import `rustc_hir::intravisit::NestedVisitorMap`
+  --> src/librustdoc/core.rs:11:24
+   |
+11 |     intravisit::{self, NestedVisitorMap, Visitor},
+   |                        ^^^^^^^^^^^^^^^^ no `NestedVisitorMap` in `intravisit`
+
+error[E0432]: unresolved import `rustc_session::DiagnosticOutput`
+  --> src/librustdoc/core.rs:21:5
+   |
+21 | use rustc_session::DiagnosticOutput;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no `DiagnosticOutput` in the root
+
+error[E0432]: unresolved import `rustc_session::config::DebuggingOptions`
+  --> src/librustdoc/core.rs:42:40
+   |
+42 | pub(crate) use rustc_session::config::{DebuggingOptions, Input, Options};
+   |                                        ^^^^^^^^^^^^^^^^ no `DebuggingOptions` in `config`
+
+error[E0432]: unresolved import `rustc_session::DiagnosticOutput`
+  --> src/librustdoc/extract_dependencies.rs:22:5
+   |
+22 | use rustc_session::DiagnosticOutput;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no `DiagnosticOutput` in the root
+
+error[E0432]: unresolved import `rustc_session::DiagnosticOutput`
+  --> src/librustdoc/doctest.rs:12:27
+   |
+12 | use rustc_session::{lint, DiagnosticOutput, Session};
+   |                           ^^^^^^^^^^^^^^^^ no `DiagnosticOutput` in the root
+
+error[E0432]: unresolved import `rustc_span::with_default_session_globals`
+  --> src/librustdoc/html/highlight.rs:16:5
+   |
+16 | use rustc_span::with_default_session_globals;
+   |     ^^^^^^^^^^^^----------------------------
+   |     |           |
+   |     |           help: a similar name exists in the module: `with_session_globals`
+   |     no `with_default_session_globals` in the root
+
+error[E0432]: unresolved import `rustc_data_structures::stable_set`
+ --> src/librustdoc/passes/collect_intra_doc_links.rs:6:44
+  |
+6 | use rustc_data_structures::{fx::FxHashMap, stable_set::FxHashSet};
+  |                                            ^^^^^^^^^^ could not find `stable_set` in `rustc_data_structures`
+
+error[E0432]: unresolved imports `rustc_session::lint::builtin::BROKEN_INTRA_DOC_LINKS`, `rustc_session::lint::builtin::PRIVATE_INTRA_DOC_LINKS`
+  --> src/librustdoc/passes/collect_intra_doc_links.rs:20:15
+   |
+20 |     builtin::{BROKEN_INTRA_DOC_LINKS, PRIVATE_INTRA_DOC_LINKS},
+   |               ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^ no `PRIVATE_INTRA_DOC_LINKS` in `builtin`
+   |               |
+   |               no `BROKEN_INTRA_DOC_LINKS` in `builtin`
+
+error[E0432]: unresolved import `rustc_middle::middle::privacy::AccessLevel`
+ --> src/librustdoc/visit_ast.rs:9:5
+  |
+9 | use rustc_middle::middle::privacy::AccessLevel;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no `AccessLevel` in `middle::privacy`
+
+error[E0432]: unresolved import `rustc_span::symbol::SymbolStr`
+  --> src/librustdoc/clean/types.rs:28:50
+   |
+28 | use rustc_span::symbol::{kw, sym, Ident, Symbol, SymbolStr};
+   |                                                  ^^^^^^^^^
+   |                                                  |
+   |                                                  no `SymbolStr` in `symbol`
+   |                                                  help: a similar name exists in the module: `Symbol`
+
+error[E0261]: use of undeclared lifetime name `'tcx`
+   --> src/librustdoc/clean/utils.rs:302:52
+    |
+302 | pub(crate) fn print_const(cx: &DocContext<'_>, n: &'tcx ty::Const<'_>) -> String {
+    |                          -                         ^^^^ undeclared lifetime
+    |                          |
+    |                          help: consider introducing lifetime `'tcx` here: `<'tcx>`
+
+error[E0261]: use of undeclared lifetime name `'tcx`
+   --> src/librustdoc/clean/utils.rs:357:67
+    |
+357 | fn print_const_with_custom_print_scalar(cx: &DocContext<'_>, ct: &'tcx ty::Const<'tcx>) -> String {
+    |                                        -                          ^^^^ undeclared lifetime
+    |                                        |
+    |                                        help: consider introducing lifetime `'tcx` here: `<'tcx>`
+
+error[E0261]: use of undeclared lifetime name `'tcx`
+   --> src/librustdoc/clean/utils.rs:357:82
+    |
+357 | fn print_const_with_custom_print_scalar(cx: &DocContext<'_>, ct: &'tcx ty::Const<'tcx>) -> String {
+    |                                        -                                         ^^^^ undeclared lifetime
+    |                                        |
+    |                                        help: consider introducing lifetime `'tcx` here: `<'tcx>`
+
+error[E0261]: use of undeclared lifetime name `'tcx`
+   --> src/librustdoc/clean/utils.rs:429:21
+    |
+428 | pub(crate) fn get_auto_trait_and_blanket_impls(
+    |                                               - help: consider introducing lifetime `'tcx` here: `<'tcx>`
+429 |     cx: &DocContext<'tcx>,
+    |                     ^^^^ undeclared lifetime
+
+error[E0261]: use of undeclared lifetime name `'tcx`
+   --> src/librustdoc/clean/utils.rs:430:12
+    |
+428 | pub(crate) fn get_auto_trait_and_blanket_impls(
+    |                                               - help: consider introducing lifetime `'tcx` here: `<'tcx>`
+429 |     cx: &DocContext<'tcx>,
+430 |     ty: Ty<'tcx>,
+    |            ^^^^ undeclared lifetime
+
+error[E0726]: implicit elided lifetime not allowed here
+   --> src/librustdoc/clean/mod.rs:424:34
+    |
+424 | impl Clean<Option<Lifetime>> for ty::RegionKind {
+    |                                  ^^^^^^^^^^^^^^ expected lifetime parameter
+    |
+    = note: assuming a `'static` lifetime...
+help: indicate the anonymous lifetime
+    |
+424 | impl Clean<Option<Lifetime>> for ty::RegionKind<'_> {
+    |                                                ++++
+
+error[E0433]: failed to resolve: could not find `SyntheticTyParamKind` in `hir`
+   --> src/librustdoc/clean/mod.rs:631:44
+    |
+631 |                     synthetic == Some(hir::SyntheticTyParamKind::ImplTrait)
+    |                                            ^^^^^^^^^^^^^^^^^^^^ could not find `SyntheticTyParamKind` in `hir`
+
+error[E0433]: failed to resolve: could not find `SyntheticTyParamKind` in `hir`
+   --> src/librustdoc/clean/mod.rs:727:47
+    |
+727 |                     if synthetic == Some(hir::SyntheticTyParamKind::ImplTrait) {
+    |                                               ^^^^^^^^^^^^^^^^^^^^ could not find `SyntheticTyParamKind` in `hir`
+
+error[E0261]: use of undeclared lifetime name `'a`
+   --> src/librustdoc/clean/mod.rs:869:11
+    |
+867 | fn clean_fn_or_proc_macro(
+    |                          - help: consider introducing lifetime `'a` here: `<'a>`
+868 |     item: &hir::Item<'_>,
+869 |     sig: &'a hir::FnSig<'a>,
+    |           ^^ undeclared lifetime
+
+error[E0261]: use of undeclared lifetime name `'a`
+   --> src/librustdoc/clean/mod.rs:869:25
+    |
+867 | fn clean_fn_or_proc_macro(
+    |                          - help: consider introducing lifetime `'a` here: `<'a>`
+868 |     item: &hir::Item<'_>,
+869 |     sig: &'a hir::FnSig<'a>,
+    |                         ^^ undeclared lifetime
+
+error[E0261]: use of undeclared lifetime name `'a`
+   --> src/librustdoc/clean/mod.rs:870:16
+    |
+867 | fn clean_fn_or_proc_macro(
+    |                          - help: consider introducing lifetime `'a` here: `<'a>`
+...
+870 |     generics: &'a hir::Generics<'a>,
+    |                ^^ undeclared lifetime
+
+error[E0261]: use of undeclared lifetime name `'a`
+   --> src/librustdoc/clean/mod.rs:870:33
+    |
+867 | fn clean_fn_or_proc_macro(
+    |                          - help: consider introducing lifetime `'a` here: `<'a>`
+...
+870 |     generics: &'a hir::Generics<'a>,
+    |                                 ^^ undeclared lifetime
+
+error[E0261]: use of undeclared lifetime name `'tcx`
+    --> src/librustdoc/clean/mod.rs:1514:30
+     |
+1514 | fn normalize(cx: &DocContext<'tcx>, ty: Ty<'_>) -> Option<Ty<'tcx>> {
+     |             -                ^^^^ undeclared lifetime
+     |             |
+     |             help: consider introducing lifetime `'tcx` here: `<'tcx>`
+
+error[E0261]: use of undeclared lifetime name `'tcx`
+    --> src/librustdoc/clean/mod.rs:1514:62
+     |
+1514 | fn normalize(cx: &DocContext<'tcx>, ty: Ty<'_>) -> Option<Ty<'tcx>> {
+     |             -                                                ^^^^ undeclared lifetime
+     |             |
+     |             help: consider introducing lifetime `'tcx` here: `<'tcx>`
+
+error[E0433]: failed to resolve: could not find `VisibilityKind` in `hir`
+    --> src/librustdoc/clean/mod.rs:1792:18
+     |
+1792 |             hir::VisibilityKind::Public => Visibility::Public,
+     |                  ^^^^^^^^^^^^^^ could not find `VisibilityKind` in `hir`
+
+error[E0433]: failed to resolve: could not find `VisibilityKind` in `hir`
+    --> src/librustdoc/clean/mod.rs:1793:18
+     |
+1793 |             hir::VisibilityKind::Inherited => Visibility::Inherited,
+     |                  ^^^^^^^^^^^^^^ could not find `VisibilityKind` in `hir`
+
+error[E0433]: failed to resolve: could not find `VisibilityKind` in `hir`
+    --> src/librustdoc/clean/mod.rs:1794:18
+     |
+1794 |             hir::VisibilityKind::Crate(_) => {
+     |                  ^^^^^^^^^^^^^^ could not find `VisibilityKind` in `hir`
+
+error[E0433]: failed to resolve: could not find `VisibilityKind` in `hir`
+    --> src/librustdoc/clean/mod.rs:1798:18
+     |
+1798 |             hir::VisibilityKind::Restricted { ref path, .. } => {
+     |                  ^^^^^^^^^^^^^^ could not find `VisibilityKind` in `hir`
+
+error[E0261]: use of undeclared lifetime name `'hir`
+  --> src/librustdoc/doctree.rs:20:13
+   |
+20 | impl Module<'hir> {
+   |     -       ^^^^ undeclared lifetime
+   |     |
+   |     help: consider introducing lifetime `'hir` here: `<'hir>`
+
+error[E0261]: use of undeclared lifetime name `'hir`
+  --> src/librustdoc/doctree.rs:21:55
+   |
+21 |     pub(crate) fn new(name: Option<Symbol>) -> Module<'hir> {
+   |                                                       ^^^^ undeclared lifetime
+   |
+help: consider introducing lifetime `'hir` here
+   |
+21 |     pub(crate) fn new<'hir>(name: Option<Symbol>) -> Module<'hir> {
+   |                      ++++++
+help: consider introducing lifetime `'hir` here
+   |
+20 | impl<'hir> Module<'hir> {
+   |     ++++++
+
+error[E0433]: failed to resolve: use of undeclared type `TerminatorKind`
+   --> src/librustdoc/extract_dependencies.rs:650:20
+    |
+650 |             if let TerminatorKind::Call {
+    |                    ^^^^^^^^^^^^^^ use of undeclared type `TerminatorKind`
+
+error[E0433]: failed to resolve: could not find `NestedVisitorMap` in `intravisit`
+    --> src/librustdoc/doctest.rs:1043:21
+     |
+1043 |         intravisit::NestedVisitorMap::All(self.map)
+     |                     ^^^^^^^^^^^^^^^^ could not find `NestedVisitorMap` in `intravisit`
+
+error[E0407]: method `visit_struct_field` is not a member of trait `intravisit::Visitor`
+    --> src/librustdoc/doctest.rs:1087:5
+     |
+1087 |       fn visit_struct_field(&mut self, f: &'hir hir::StructField<'_>) {
+     |       ^  ------------------ help: there is an associated function with a similar name: `visit_pat_field`
+     |  _____|
+     | |
+1088 | |         self.visit_testable(f.ident.to_string(), &f.attrs, f.hir_id, f.span, |this| {
+1089 | |             intravisit::walk_struct_field(this, f);
+1090 | |         });
+1091 | |     }
+     | |_____^ not a member of trait `intravisit::Visitor`
+
+error[E0407]: method `visit_macro_def` is not a member of trait `intravisit::Visitor`
+    --> src/librustdoc/doctest.rs:1093:5
+     |
+1093 |       fn visit_macro_def(&mut self, macro_def: &'hir hir::MacroDef<'_>) {
+     |       ^  --------------- help: there is an associated function with a similar name: `visit_field_def`
+     |  _____|
+     | |
+1094 | |         self.visit_testable(
+1095 | |             macro_def.ident.to_string(),
+1096 | |             &macro_def.attrs,
+...    |
+1100 | |         );
+1101 | |     }
+     | |_____^ not a member of trait `intravisit::Visitor`
+
+error[E0261]: use of undeclared lifetime name `'a`
+   --> src/librustdoc/html/highlight.rs:126:29
+    |
+126 | impl Iterator for TokenIter<'a> {
+    |     -                       ^^ undeclared lifetime
+    |     |
+    |     help: consider introducing lifetime `'a` here: `<'a>`
+
+error[E0261]: use of undeclared lifetime name `'a`
+   --> src/librustdoc/html/highlight.rs:127:30
+    |
+127 |     type Item = (TokenKind, &'a str);
+    |                              ^^ undeclared lifetime
+    |
+help: consider introducing lifetime `'a` here
+    |
+127 |     type Item<'a> = (TokenKind, &'a str);
+    |              ++++
+help: consider introducing lifetime `'a` here
+    |
+126 | impl<'a> Iterator for TokenIter<'a> {
+    |     ++++
+
+error[E0261]: use of undeclared lifetime name `'a`
+   --> src/librustdoc/html/highlight.rs:128:47
+    |
+128 |     fn next(&mut self) -> Option<(TokenKind, &'a str)> {
+    |                                               ^^ undeclared lifetime
+    |
+help: consider introducing lifetime `'a` here
+    |
+128 |     fn next<'a>(&mut self) -> Option<(TokenKind, &'a str)> {
+    |            ++++
+help: consider introducing lifetime `'a` here
+    |
+126 | impl<'a> Iterator for TokenIter<'a> {
+    |     ++++
+
+error[E0261]: use of undeclared lifetime name `'a`
+   --> src/librustdoc/passes/collect_intra_doc_links.rs:207:24
+    |
+207 | impl ResolutionFailure<'a> {
+    |     -                  ^^ undeclared lifetime
+    |     |
+    |     help: consider introducing lifetime `'a` here: `<'a>`
+
+error[E0261]: use of undeclared lifetime name `'path`
+   --> src/librustdoc/passes/collect_intra_doc_links.rs:293:20
+    |
+293 |         path_str: &'path str,
+    |                    ^^^^^ undeclared lifetime
+    |
+help: consider introducing lifetime `'path` here
+    |
+291 |     fn variant_field<'path>(
+    |                     +++++++
+help: consider introducing lifetime `'path` here
+    |
+275 | impl<'path, 'a, 'tcx> LinkCollector<'a, 'tcx> {
+    |      ++++++
+
+error[E0261]: use of undeclared lifetime name `'path`
+   --> src/librustdoc/passes/collect_intra_doc_links.rs:295:50
+    |
+295 |     ) -> Result<(Res, Option<String>), ErrorKind<'path>> {
+    |                                                  ^^^^^ undeclared lifetime
+    |
+help: consider introducing lifetime `'path` here
+    |
+291 |     fn variant_field<'path>(
+    |                     +++++++
+help: consider introducing lifetime `'path` here
+    |
+275 | impl<'path, 'a, 'tcx> LinkCollector<'a, 'tcx> {
+    |      ++++++
+
+error[E0261]: use of undeclared lifetime name `'path`
+   --> src/librustdoc/passes/collect_intra_doc_links.rs:381:20
+    |
+381 |         item_str: &'path str,
+    |                    ^^^^^ undeclared lifetime
+    |
+help: consider introducing lifetime `'path` here
+    |
+375 |     fn resolve_primitive_associated_item<'path>(
+    |                                         +++++++
+help: consider introducing lifetime `'path` here
+    |
+275 | impl<'path, 'a, 'tcx> LinkCollector<'a, 'tcx> {
+    |      ++++++
+
+error[E0261]: use of undeclared lifetime name `'path`
+   --> src/librustdoc/passes/collect_intra_doc_links.rs:382:50
+    |
+382 |     ) -> Result<(Res, Option<String>), ErrorKind<'path>> {
+    |                                                  ^^^^^ undeclared lifetime
+    |
+help: consider introducing lifetime `'path` here
+    |
+375 |     fn resolve_primitive_associated_item<'path>(
+    |                                         +++++++
+help: consider introducing lifetime `'path` here
+    |
+275 | impl<'path, 'a, 'tcx> LinkCollector<'a, 'tcx> {
+    |      ++++++
+
+error[E0530]: match bindings cannot shadow tuple variants
+    --> src/librustdoc/passes/collect_intra_doc_links.rs:1869:31
+     |
+1764 |                     use DefKind::*;
+     |                         ---------- the tuple variant `Static` is imported here
+...
+1869 |                             | Static => "associated item",
+     |                               ^^^^^^
+     |                               |
+     |                               cannot be named the same as a tuple variant
+     |                               help: try specify the pattern arguments: `Static(..)`
+
+error[E0408]: variable `Static` is not bound in all patterns
+    --> src/librustdoc/passes/collect_intra_doc_links.rs:1868:29
+     |
+1868 | ...                   Trait | TyAlias | ForeignTy | OpaqueTy | TraitAlias | TyParam
+     |                       ^^^^^   ^^^^^^^   ^^^^^^^^^   ^^^^^^^^   ^^^^^^^^^^   ^^^^^^^ pattern doesn't bind `Static`
+     |                       |       |         |           |          |
+     |                       |       |         |           |          pattern doesn't bind `Static`
+     |                       |       |         |           pattern doesn't bind `Static`
+     |                       |       |         pattern doesn't bind `Static`
+     |                       |       pattern doesn't bind `Static`
+     |                       pattern doesn't bind `Static`
+1869 | ...                   | Static => "associated item",
+     |                         ------ variable not in all patterns
+     |
+help: if you meant to match on items, use the full path in the pattern
+     |
+1869 |                             | crate::clean::TypeKind::Static => "associated item",
+     |                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1869 |                             | crate::formats::item_type::ItemType::Static => "associated item",
+     |                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1869 |                             | crate::passes::collect_intra_doc_links::hir::LifetimeName::Static => "associated item",
+     |                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1869 |                             | crate::passes::collect_intra_doc_links::hir::Movability::Static => "associated item",
+     |                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       and 14 other candidates
+
+error[E0433]: failed to resolve: could not find `VisibilityKind` in `hir`
+  --> src/librustdoc/visit_ast.rs:66:63
+   |
+66 |             &Spanned { span: rustc_span::DUMMY_SP, node: hir::VisibilityKind::Public },
+   |                                                               ^^^^^^^^^^^^^^ could not find `VisibilityKind` in `hir`
+
+error[E0532]: expected unit struct, unit variant or constant, found enum `traits::OverflowError`
+  --> src/librustdoc/clean/blanket_impl.rs:81:37
+   |
+81 | ...                   Err(traits::OverflowError) => {}
+   |                           ^^^^^^^^^^^^^^^^^^^^^ not a unit struct, unit variant or constant
+
+error[E0532]: expected unit struct, unit variant or constant, found tuple variant `DefKind::Static`
+  --> src/librustdoc/clean/inline.rs:99:18
+   |
+99 |         Res::Def(DefKind::Static, did) => {
+   |                  ^^^^^^^^^^^^^^^
+   |
+help: use the tuple variant pattern syntax instead
+   |
+99 |         Res::Def(DefKind::Static(/* fields */), did) => {
+   |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+help: consider importing one of these items instead
+   |
+3  | use crate::clean::TypeKind::Static;
+   |
+3  | use crate::clean::hir::LifetimeName::Static;
+   |
+3  | use crate::clean::hir::Movability::Static;
+   |
+3  | use crate::clean::hir::Target::Static;
+   |
+     and 17 other candidates
+help: if you import `Static`, refer to it directly
+   |
+99 -         Res::Def(DefKind::Static, did) => {
+99 +         Res::Def(Static, did) => {
+   |
+
+error[E0425]: cannot find value `contents` in module `sym`
+   --> src/librustdoc/clean/types.rs:620:56
+    |
+620 |   ...                   } else if it.has_name(sym::contents) {
+    |                                                    ^^^^^^^^ help: a constant with a similar name exists: `context`
+
+error[E0412]: cannot find type `SyntheticTyParamKind` in crate `hir`
+    --> src/librustdoc/clean/types.rs:1020:32
+     |
+1020 |         synthetic: Option<hir::SyntheticTyParamKind>,
+     |                                ^^^^^^^^^^^^^^^^^^^^ not found in `hir`
+
+error[E0532]: expected unit struct, unit variant or constant, found tuple variant `hir::def::DefKind::Static`
+    --> src/librustdoc/clean/types.rs:1309:13
+     |
+1309 |             hir::def::DefKind::Static => Self::Static,
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: use the tuple variant pattern syntax instead
+     |
+1309 |             hir::def::DefKind::Static(/* fields */) => Self::Static,
+     |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+help: consider importing one of these items instead
+     |
+1    | use crate::clean::TypeKind::Static;
+     |
+1    | use crate::clean::hir::LifetimeName::Static;
+     |
+1    | use crate::clean::hir::Movability::Static;
+     |
+1    | use crate::clean::hir::Target::Static;
+     |
+       and 17 other candidates
+help: if you import `Static`, refer to it directly
+     |
+1309 -             hir::def::DefKind::Static => Self::Static,
+1309 +             Static => Self::Static,
+     |
+
+error[E0532]: expected unit struct, unit variant or constant, found tuple variant `DefKind::Static`
+   --> src/librustdoc/clean/utils.rs:462:18
+    |
+462 |         Res::Def(DefKind::Static, i) => (i, TypeKind::Static),
+    |                  ^^^^^^^^^^^^^^^
+    |
+help: use the tuple variant pattern syntax instead
+    |
+462 |         Res::Def(DefKind::Static(/* fields */), i) => (i, TypeKind::Static),
+    |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+help: consider importing one of these items instead
+    |
+1   | use crate::clean::TypeKind::Static;
+    |
+1   | use crate::clean::hir::LifetimeName::Static;
+    |
+1   | use crate::clean::hir::Movability::Static;
+    |
+1   | use crate::clean::hir::Target::Static;
+    |
+      and 17 other candidates
+help: if you import `Static`, refer to it directly
+    |
+462 -         Res::Def(DefKind::Static, i) => (i, TypeKind::Static),
+462 +         Res::Def(Static, i) => (i, TypeKind::Static),
+    |
+
+error[E0531]: cannot find tuple struct or tuple variant `ReEmpty` in module `ty`
+   --> src/librustdoc/clean/mod.rs:437:19
+    |
+437 |             | ty::ReEmpty(_)
+    |                   ^^^^^^^ not found in `ty`
+
+error[E0531]: cannot find tuple struct or tuple variant `ReEmpty` in module `ty`
+   --> src/librustdoc/clean/mod.rs:502:21
+    |
+502 |         if let (ty::ReEmpty(_), ty::ReEmpty(_)) = (a, b) {
+    |                     ^^^^^^^ not found in `ty`
+
+error[E0531]: cannot find tuple struct or tuple variant `ReEmpty` in module `ty`
+   --> src/librustdoc/clean/mod.rs:502:37
+    |
+502 |         if let (ty::ReEmpty(_), ty::ReEmpty(_)) = (a, b) {
+    |                                     ^^^^^^^ not found in `ty`
+
+error[E0531]: cannot find tuple struct or tuple variant `ReEmpty` in module `ty`
+   --> src/librustdoc/clean/mod.rs:517:20
+    |
+517 |         if let ty::ReEmpty(_) = lt {
+    |                    ^^^^^^^ not found in `ty`
+
+error[E0532]: expected tuple struct or tuple variant, found unit variant `ty::ImplContainer`
+    --> src/librustdoc/clean/mod.rs:1160:25
+     |
+1160 |                         ty::ImplContainer(def_id) => cx.tcx.type_of(def_id),
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^^^ help: use this syntax instead: `ty::ImplContainer`
+
+error[E0532]: expected tuple struct or tuple variant, found unit variant `ty::TraitContainer`
+    --> src/librustdoc/clean/mod.rs:1161:25
+     |
+1161 |                         ty::TraitContainer(_) => cx.tcx.types.self_param,
+     |                         ^^^^^^^^^^^^^^^^^^^^^ help: use this syntax instead: `ty::TraitContainer`
+
+error[E0532]: expected tuple struct or tuple variant, found unit variant `ty::ImplContainer`
+    --> src/librustdoc/clean/mod.rs:1179:21
+     |
+1179 |                     ty::ImplContainer(_) => true,
+     |                     ^^^^^^^^^^^^^^^^^^^^ help: use this syntax instead: `ty::ImplContainer`
+
+error[E0532]: expected tuple struct or tuple variant, found unit variant `ty::TraitContainer`
+    --> src/librustdoc/clean/mod.rs:1180:21
+     |
+1180 |                     ty::TraitContainer(_) => self.defaultness.has_value(),
+     |                     ^^^^^^^^^^^^^^^^^^^^^ help: use this syntax instead: `ty::TraitContainer`
+
+error[E0532]: expected tuple struct or tuple variant, found unit variant `ty::ImplContainer`
+    --> src/librustdoc/clean/mod.rs:1190:25
+     |
+1190 |                         ty::ImplContainer(_) => Some(self.defaultness),
+     |                         ^^^^^^^^^^^^^^^^^^^^ help: use this syntax instead: `ty::ImplContainer`
+
+error[E0532]: expected tuple struct or tuple variant, found unit variant `ty::TraitContainer`
+    --> src/librustdoc/clean/mod.rs:1191:25
+     |
+1191 |                         ty::TraitContainer(_) => None,
+     |                         ^^^^^^^^^^^^^^^^^^^^^ help: use this syntax instead: `ty::TraitContainer`
+
+error[E0532]: expected tuple struct or tuple variant, found unit variant `ty::TraitContainer`
+    --> src/librustdoc/clean/mod.rs:1222:24
+     |
+1222 |                 if let ty::TraitContainer(_) = self.container {
+     |                        ^^^^^^^^^^^^^^^^^^^^^ help: use this syntax instead: `ty::TraitContainer`
+
+error[E0532]: expected tuple struct or tuple variant, found unit variant `ParamName::Fresh`
+    --> src/librustdoc/clean/mod.rs:1457:75
+     |
+1457 |                     l.is_elided() || matches!(l.name, LifetimeName::Param(ParamName::Fresh(_)));
+     |                                                                           ^^^^^^^^^^^^^^^^^^^
+     |
+help: use this syntax instead
+     |
+1457 |                     l.is_elided() || matches!(l.name, LifetimeName::Param(ParamName::Fresh));
+     |                                                                           ~~~~~~~~~~~~~~~~
+help: consider importing one of these items instead
+     |
+12   | use crate::clean::ty::InferConst::Fresh;
+     |
+12   | use rustc_middle::ty::InferConst::Fresh;
+     |
+help: if you import `Fresh`, refer to it directly
+     |
+1457 -                     l.is_elided() || matches!(l.name, LifetimeName::Param(ParamName::Fresh(_)));
+1457 +                     l.is_elided() || matches!(l.name, LifetimeName::Param(Fresh(_)));
+     |
+
+error[E0412]: cannot find type `StructField` in crate `hir`
+    --> src/librustdoc/clean/mod.rs:1763:27
+     |
+1763 | impl Clean<Item> for hir::StructField<'_> {
+     |                           ^^^^^^^^^^^ not found in `hir`
+     |
+help: there is an enum variant `crate::formats::item_type::ItemType::StructField` and 1 other; try using the variant's enum
+     |
+1763 | impl Clean<Item> for crate::formats::item_type::ItemType {
+     |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1763 | impl Clean<Item> for rustdoc_json_types::ItemKind {
+     |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+error[E0412]: cannot find type `Visibility` in crate `hir`
+    --> src/librustdoc/clean/mod.rs:1789:33
+     |
+1789 | impl Clean<Visibility> for hir::Visibility<'_> {
+     |                                 ^^^^^^^^^^ not found in `hir`
+     |
+help: consider importing one of these items
+     |
+12   | use crate::clean::ast::Visibility;
+     |
+12   | use crate::clean::ty::Visibility;
+     |
+12   | use crate::clean::types::Visibility;
+     |
+12   | use rustc_ast::Visibility;
+     |
+       and 3 other candidates
+help: if you import `Visibility`, refer to it directly
+     |
+1789 - impl Clean<Visibility> for hir::Visibility<'_> {
+1789 + impl Clean<Visibility> for Visibility<'_> {
+     |
+
+error[E0412]: cannot find type `MacroDef` in crate `hir`
+    --> src/librustdoc/clean/mod.rs:2282:29
+     |
+2282 | impl Clean<Item> for (&hir::MacroDef<'_>, Option<Symbol>) {
+     |                             ^^^^^^^^ not found in `hir`
+     |
+help: consider importing one of these items
+     |
+12   | use crate::clean::ast::MacroDef;
+     |
+12   | use rustc_ast::MacroDef;
+     |
+help: if you import `MacroDef`, refer to it directly
+     |
+2282 - impl Clean<Item> for (&hir::MacroDef<'_>, Option<Symbol>) {
+2282 + impl Clean<Item> for (&MacroDef<'_>, Option<Symbol>) {
+     |
+
+error[E0423]: expected function, found macro `rustc_driver::version`
+   --> src/librustdoc/config.rs:296:13
+    |
+296 |             rustc_driver::version("rustdoc", &matches);
+    |             ^^^^^^^^^^^^^^^^^^^^^ not a function
+    |
+help: use `!` to invoke the macro
+    |
+296 |             rustc_driver::version!("rustdoc", &matches);
+    |                                  +
+help: consider importing this constant instead
+    |
+1   | use rustc_span::sym::version;
+    |
+help: if you import `version`, refer to it directly
+    |
+296 -             rustc_driver::version("rustdoc", &matches);
+296 +             version("rustdoc", &matches);
+    |
+
+error[E0425]: cannot find value `BROKEN_INTRA_DOC_LINKS` in module `lint::builtin`
+   --> src/librustdoc/core.rs:317:49
+    |
+317 |     let broken_intra_doc_links = lint::builtin::BROKEN_INTRA_DOC_LINKS.name;
+    |                                                 ^^^^^^^^^^^^^^^^^^^^^^ not found in `lint::builtin`
+
+error[E0425]: cannot find value `PRIVATE_INTRA_DOC_LINKS` in module `lint::builtin`
+   --> src/librustdoc/core.rs:318:50
+    |
+318 |     let private_intra_doc_links = lint::builtin::PRIVATE_INTRA_DOC_LINKS.name;
+    |                                                  ^^^^^^^^^^^^^^^^^^^^^^^ not found in `lint::builtin`
+
+error[E0425]: cannot find value `MISSING_DOC_CODE_EXAMPLES` in module `rustc_lint::builtin`
+   --> src/librustdoc/core.rs:320:52
+    |
+320 |     let missing_doc_example = rustc_lint::builtin::MISSING_DOC_CODE_EXAMPLES.name;
+    |                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^ not found in `rustc_lint::builtin`
+
+error[E0425]: cannot find value `PRIVATE_DOC_TESTS` in module `rustc_lint::builtin`
+   --> src/librustdoc/core.rs:321:50
+    |
+321 |     let private_doc_tests = rustc_lint::builtin::PRIVATE_DOC_TESTS.name;
+    |                                                  ^^^^^^^^^^^^^^^^^ not found in `rustc_lint::builtin`
+
+error[E0425]: cannot find value `MISSING_CRATE_LEVEL_DOCS` in module `rustc_lint::builtin`
+   --> src/librustdoc/core.rs:322:52
+    |
+322 |     let no_crate_level_docs = rustc_lint::builtin::MISSING_CRATE_LEVEL_DOCS.name;
+    |                                                    ^^^^^^^^^^^^^^^^^^^^^^^^ not found in `rustc_lint::builtin`
+
+error[E0425]: cannot find value `INVALID_CODEBLOCK_ATTRIBUTES` in module `rustc_lint::builtin`
+   --> src/librustdoc/core.rs:323:66
+    |
+323 |       let invalid_codeblock_attributes_name = rustc_lint::builtin::INVALID_CODEBLOCK_ATTRIBUTES.name;
+    |                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: a static with a similar name exists: `INVALID_DOC_ATTRIBUTES`
+
+error[E0425]: cannot find value `INVALID_HTML_TAGS` in module `rustc_lint::builtin`
+   --> src/librustdoc/core.rs:324:50
+    |
+324 |     let invalid_html_tags = rustc_lint::builtin::INVALID_HTML_TAGS.name;
+    |                                                  ^^^^^^^^^^^^^^^^^ not found in `rustc_lint::builtin`
+
+error[E0425]: cannot find value `NON_AUTOLINKS` in module `rustc_lint::builtin`
+   --> src/librustdoc/core.rs:326:46
+    |
+326 |     let non_autolinks = rustc_lint::builtin::NON_AUTOLINKS.name;
+    |                                              ^^^^^^^^^^^^^ not found in `rustc_lint::builtin`
+
+error[E0425]: cannot find value `MISSING_CRATE_LEVEL_DOCS` in module `rustc_lint::builtin`
+   --> src/librustdoc/core.rs:544:38
+    |
+544 |                 rustc_lint::builtin::MISSING_CRATE_LEVEL_DOCS,
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^ not found in `rustc_lint::builtin`
+
+error[E0412]: cannot find type `MacroDef` in crate `hir`
+  --> src/librustdoc/doctree.rs:16:40
+   |
+16 |     pub(crate) macros: Vec<(&'hir hir::MacroDef<'hir>, Option<Symbol>)>,
+   |                                        ^^^^^^^^ not found in `hir`
+   |
+help: consider importing this struct
+   |
+3  | use rustc_ast::MacroDef;
+   |
+help: if you import `MacroDef`, refer to it directly
+   |
+16 -     pub(crate) macros: Vec<(&'hir hir::MacroDef<'hir>, Option<Symbol>)>,
+16 +     pub(crate) macros: Vec<(&'hir MacroDef<'hir>, Option<Symbol>)>,
+   |
+
+error[E0425]: cannot find value `BROKEN_INTRA_DOC_LINKS` in module `lint::builtin`
+  --> src/librustdoc/extract_dependencies.rs:61:49
+   |
+61 |     let broken_intra_doc_links = lint::builtin::BROKEN_INTRA_DOC_LINKS.name;
+   |                                                 ^^^^^^^^^^^^^^^^^^^^^^ not found in `lint::builtin`
+
+error[E0425]: cannot find value `PRIVATE_INTRA_DOC_LINKS` in module `lint::builtin`
+  --> src/librustdoc/extract_dependencies.rs:62:50
+   |
+62 |     let private_intra_doc_links = lint::builtin::PRIVATE_INTRA_DOC_LINKS.name;
+   |                                                  ^^^^^^^^^^^^^^^^^^^^^^^ not found in `lint::builtin`
+
+error[E0425]: cannot find value `MISSING_DOC_CODE_EXAMPLES` in module `rustc_lint::builtin`
+  --> src/librustdoc/extract_dependencies.rs:64:52
+   |
+64 |     let missing_doc_example = rustc_lint::builtin::MISSING_DOC_CODE_EXAMPLES.name;
+   |                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^ not found in `rustc_lint::builtin`
+
+error[E0425]: cannot find value `PRIVATE_DOC_TESTS` in module `rustc_lint::builtin`
+  --> src/librustdoc/extract_dependencies.rs:65:50
+   |
+65 |     let private_doc_tests = rustc_lint::builtin::PRIVATE_DOC_TESTS.name;
+   |                                                  ^^^^^^^^^^^^^^^^^ not found in `rustc_lint::builtin`
+
+error[E0425]: cannot find value `MISSING_CRATE_LEVEL_DOCS` in module `rustc_lint::builtin`
+  --> src/librustdoc/extract_dependencies.rs:66:52
+   |
+66 |     let no_crate_level_docs = rustc_lint::builtin::MISSING_CRATE_LEVEL_DOCS.name;
+   |                                                    ^^^^^^^^^^^^^^^^^^^^^^^^ not found in `rustc_lint::builtin`
+
+error[E0425]: cannot find value `INVALID_CODEBLOCK_ATTRIBUTES` in module `rustc_lint::builtin`
+  --> src/librustdoc/extract_dependencies.rs:67:66
+   |
+67 |       let invalid_codeblock_attributes_name = rustc_lint::builtin::INVALID_CODEBLOCK_ATTRIBUTES.name;
+   |                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: a static with a similar name exists: `INVALID_DOC_ATTRIBUTES`
+
+error[E0425]: cannot find value `INVALID_HTML_TAGS` in module `rustc_lint::builtin`
+  --> src/librustdoc/extract_dependencies.rs:68:50
+   |
+68 |     let invalid_html_tags = rustc_lint::builtin::INVALID_HTML_TAGS.name;
+   |                                                  ^^^^^^^^^^^^^^^^^ not found in `rustc_lint::builtin`
+
+error[E0425]: cannot find value `NON_AUTOLINKS` in module `rustc_lint::builtin`
+  --> src/librustdoc/extract_dependencies.rs:70:46
+   |
+70 |     let non_autolinks = rustc_lint::builtin::NON_AUTOLINKS.name;
+   |                                              ^^^^^^^^^^^^^ not found in `rustc_lint::builtin`
+
+error[E0425]: cannot find function `create_compiler_and_run` in module `interface`
+   --> src/librustdoc/extract_dependencies.rs:168:16
+    |
+168 |     interface::create_compiler_and_run(config, |compiler| {
+    |                ^^^^^^^^^^^^^^^^^^^^^^^ not found in `interface`
+
+error[E0425]: cannot find value `INVALID_CODEBLOCK_ATTRIBUTES` in module `rustc_lint::builtin`
+  --> src/librustdoc/doctest.rs:47:66
+   |
+47 |       let invalid_codeblock_attributes_name = rustc_lint::builtin::INVALID_CODEBLOCK_ATTRIBUTES.name;
+   |                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: a static with a similar name exists: `INVALID_DOC_ATTRIBUTES`
+
+error[E0422]: cannot find struct, variant or union type `DebuggingOptions` in module `config`
+  --> src/librustdoc/doctest.rs:74:33
+   |
+74 |         debugging_opts: config::DebuggingOptions { ..config::basic_debugging_options() },
+   |                                 ^^^^^^^^^^^^^^^^ not found in `config`
+
+error[E0425]: cannot find function `basic_debugging_options` in module `config`
+  --> src/librustdoc/doctest.rs:74:62
+   |
+74 |         debugging_opts: config::DebuggingOptions { ..config::basic_debugging_options() },
+   |                                                              ^^^^^^^^^^^^^^^^^^^^^^^ not found in `config`
+
+error[E0425]: cannot find function `walk_crate` in module `intravisit`
+   --> src/librustdoc/doctest.rs:141:37
+    |
+141 |                         intravisit::walk_crate(this, krate);
+    |                                     ^^^^^^^^^^
+    |
+help: a function with a similar name exists
+    |
+141 |                         intravisit::walk_pat(this, krate);
+    |                                     ~~~~~~~~
+help: consider importing one of these items
+    |
+1   | use crate::doctest::ast::visit::walk_crate;
+    |
+1   | use rustc_ast::visit::walk_crate;
+    |
+help: if you import `walk_crate`, refer to it directly
+    |
+141 -                         intravisit::walk_crate(this, krate);
+141 +                         walk_crate(this, krate);
+    |
+
+error[E0412]: cannot find type `NestedVisitorMap` in module `intravisit`
+    --> src/librustdoc/doctest.rs:1042:51
+     |
+1042 |     fn nested_visit_map(&mut self) -> intravisit::NestedVisitorMap<Self::Map> {
+     |                                                   ^^^^^^^^^^^^^^^^ not found in `intravisit`
+
+error[E0412]: cannot find type `StructField` in crate `hir`
+    --> src/librustdoc/doctest.rs:1087:52
+     |
+1087 |     fn visit_struct_field(&mut self, f: &'hir hir::StructField<'_>) {
+     |                                                    ^^^^^^^^^^^ not found in `hir`
+     |
+help: there is an enum variant `crate::formats::item_type::ItemType::StructField` and 1 other; try using the variant's enum
+     |
+1087 |     fn visit_struct_field(&mut self, f: &'hir crate::formats::item_type::ItemType) {
+     |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1087 |     fn visit_struct_field(&mut self, f: &'hir rustdoc_json_types::ItemKind) {
+     |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+error[E0425]: cannot find function `walk_struct_field` in module `intravisit`
+    --> src/librustdoc/doctest.rs:1089:25
+     |
+1089 |               intravisit::walk_struct_field(this, f);
+     |                           ^^^^^^^^^^^^^^^^^ help: a function with a similar name exists: `walk_struct_def`
+
+error[E0412]: cannot find type `MacroDef` in crate `hir`
+    --> src/librustdoc/doctest.rs:1093:57
+     |
+1093 |     fn visit_macro_def(&mut self, macro_def: &'hir hir::MacroDef<'_>) {
+     |                                                         ^^^^^^^^ not found in `hir`
+     |
+help: consider importing one of these items
+     |
+1    | use crate::doctest::ast::MacroDef;
+     |
+1    | use rustc_ast::MacroDef;
+     |
+help: if you import `MacroDef`, refer to it directly
+     |
+1093 -     fn visit_macro_def(&mut self, macro_def: &'hir hir::MacroDef<'_>) {
+1093 +     fn visit_macro_def(&mut self, macro_def: &'hir MacroDef<'_>) {
+     |
+
+error[E0425]: cannot find function `first_token` in crate `rustc_lexer`
+   --> src/librustdoc/html/highlight.rs:132:34
+    |
+132 |         let token = rustc_lexer::first_token(self.src);
+    |                                  ^^^^^^^^^^^ not found in `rustc_lexer`
+
+error[E0425]: cannot find value `INVALID_CODEBLOCK_ATTRIBUTES` in module `lint::builtin`
+   --> src/librustdoc/html/markdown.rs:723:28
+    |
+723 |               lint::builtin::INVALID_CODEBLOCK_ATTRIBUTES,
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: a static with a similar name exists: `INVALID_DOC_ATTRIBUTES`
+
+error[E0425]: cannot find value `NON_AUTOLINKS` in module `lint::builtin`
+  --> src/librustdoc/passes/non_autolinks.rs:80:60
+   |
+80 |                 cx.tcx.struct_span_lint_hir(lint::builtin::NON_AUTOLINKS, hir_id, sp, |lint| {
+   |                                                            ^^^^^^^^^^^^^ not found in `lint::builtin`
+
+error[E0532]: expected unit struct, unit variant or constant, found tuple variant `DefKind::Static`
+    --> src/librustdoc/passes/collect_intra_doc_links.rs:1582:13
+     |
+1582 |             DefKind::Static => "static",
+     |             ^^^^^^^^^^^^^^^
+     |
+help: use the tuple variant pattern syntax instead
+     |
+1582 |             DefKind::Static(/* fields */) => "static",
+     |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+help: consider importing one of these items instead
+     |
+5    | use crate::clean::TypeKind::Static;
+     |
+5    | use crate::formats::item_type::ItemType::Static;
+     |
+5    | use crate::passes::collect_intra_doc_links::hir::LifetimeName::Static;
+     |
+5    | use crate::passes::collect_intra_doc_links::hir::Movability::Static;
+     |
+       and 14 other candidates
+help: if you import `Static`, refer to it directly
+     |
+1582 -             DefKind::Static => "static",
+1582 +             Static => "static",
+     |
+
+error[E0425]: cannot find value `MISSING_DOC_CODE_EXAMPLES` in module `lint::builtin`
+  --> src/librustdoc/passes/doc_test_lints.rs:79:50
+   |
+79 |         cx.tcx.lint_level_at_node(lint::builtin::MISSING_DOC_CODE_EXAMPLES, hir_id);
+   |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^ not found in `lint::builtin`
+
+error[E0425]: cannot find value `MISSING_DOC_CODE_EXAMPLES` in module `lint::builtin`
+   --> src/librustdoc/passes/doc_test_lints.rs:101:32
+    |
+101 |                 lint::builtin::MISSING_DOC_CODE_EXAMPLES,
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^ not found in `lint::builtin`
+
+error[E0425]: cannot find value `PRIVATE_DOC_TESTS` in module `lint::builtin`
+   --> src/librustdoc/passes/doc_test_lints.rs:110:28
+    |
+110 |             lint::builtin::PRIVATE_DOC_TESTS,
+    |                            ^^^^^^^^^^^^^^^^^ not found in `lint::builtin`
+
+error[E0425]: cannot find value `INVALID_HTML_TAGS` in module `lint::builtin`
+   --> src/librustdoc/passes/html_tags.rs:192:60
+    |
+192 |                 cx.tcx.struct_span_lint_hir(lint::builtin::INVALID_HTML_TAGS, hir_id, sp, |lint| {
+    |                                                            ^^^^^^^^^^^^^^^^^ not found in `lint::builtin`
+
+error[E0412]: cannot find type `Visibility` in crate `hir`
+   --> src/librustdoc/visit_ast.rs:123:25
+    |
+123 |         vis: &'tcx hir::Visibility<'_>,
+    |                         ^^^^^^^^^^ not found in `hir`
+    |
+help: consider importing one of these items
+    |
+4   | use crate::clean::Visibility;
+    |
+4   | use rustc_ast::Visibility;
+    |
+4   | use rustc_middle::mir::mono::Visibility;
+    |
+4   | use rustc_middle::ty::Visibility;
+    |
+      and 1 other candidate
+help: if you import `Visibility`, refer to it directly
+    |
+123 -         vis: &'tcx hir::Visibility<'_>,
+123 +         vis: &'tcx Visibility<'_>,
+    |
+
+error[E0425]: cannot find function `set_sigpipe_handler` in crate `rustc_driver`
+  --> src/librustdoc/lib.rs:99:19
+   |
+99 |     rustc_driver::set_sigpipe_handler();
+   |                   ^^^^^^^^^^^^^^^^^^^ not found in `rustc_driver`
+
+error[E0423]: expected value, found struct `ErrorGuaranteed`
+   --> src/librustdoc/lib.rs:104:18
+    |
+104 |         _ => Err(ErrorGuaranteed),
+    |                  ^^^^^^^^^^^^^^^ constructor is not visible here due to private fields
+
+error[E0423]: expected value, found struct `ErrorGuaranteed`
+   --> src/librustdoc/lib.rs:511:64
+    |
+511 |         Err(code) => return if code == 0 { Ok(()) } else { Err(ErrorGuaranteed) },
+    |                                                                ^^^^^^^^^^^^^^^ constructor is not visible here due to private fields
+
+error[E0425]: cannot find function `setup_callbacks_and_run_in_thread_pool_with_globals` in module `rustc_interface::util`
+   --> src/librustdoc/lib.rs:513:28
+    |
+513 |     rustc_interface::util::setup_callbacks_and_run_in_thread_pool_with_globals(
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in `rustc_interface::util`
+
+error[E0423]: expected value, found struct `ErrorGuaranteed`
+   --> src/librustdoc/lib.rs:526:17
+    |
+526 |             Err(ErrorGuaranteed)
+    |                 ^^^^^^^^^^^^^^^ constructor is not visible here due to private fields
+
+error[E0603]: struct `TyS` is private
+   --> src/librustdoc/extract_dependencies.rs:714:25
+    |
+714 | fn is_callable(ty: &ty::TyS) -> bool {
+    |                         ^^^ private struct
+    |
+note: the struct `TyS` is defined here
+
+error[E0107]: this struct takes 1 generic argument but 0 generic arguments were supplied
+    --> src/librustdoc/passes/collect_intra_doc_links.rs:1673:32
+     |
+1673 |     decorate: impl FnOnce(&mut DiagnosticBuilder<'_>, Option<rustc_span::Span>),
+     |                                ^^^^^^^^^^^^^^^^^ expected 1 generic argument
+     |
+help: add missing generic argument
+     |
+1673 |     decorate: impl FnOnce(&mut DiagnosticBuilder<'_, G>, Option<rustc_span::Span>),
+     |                                                    +++
+
+error[E0107]: this struct takes 1 generic argument but 0 generic arguments were supplied
+    --> src/librustdoc/passes/collect_intra_doc_links.rs:2024:16
+     |
+2024 |     diag: &mut DiagnosticBuilder<'_>,
+     |                ^^^^^^^^^^^^^^^^^ expected 1 generic argument
+     |
+help: add missing generic argument
+     |
+2024 |     diag: &mut DiagnosticBuilder<'_, G>,
+     |                                    +++
+
+Some errors have detailed explanations: E0107, E0261, E0407, E0408, E0412, E0422, E0423, E0425, E0432...
+For more information about an error, try `rustc --explain E0107`.
+error: could not compile `cargo-callgraph` due to 114 previous errors
