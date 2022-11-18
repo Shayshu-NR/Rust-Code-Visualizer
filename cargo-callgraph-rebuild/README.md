@@ -20,5 +20,5 @@ Log the differences between the two directories and apply the differences manual
 ## How to compile the rebuild
 1. use rust stable 1.65
 2. `export RUSTC_BOOTSTRAP=1`
-3. ???
-4. Profit
+3. `export DOC_RUST_LANG_ORG_CHANNEL=1`
+4. cargo build
