@@ -17,3 +17,8 @@ I recomment using BeyondCompare: https://www.scootersoftware.com/download.php
 
 Log the differences between the two directories and apply the differences manually to the cargo-callgraph-rebuild directory.
 
+## How to compile the rebuild
+1. use rust stable 1.65
+2. `export RUSTC_BOOTSTRAP=1`
+3. `export DOC_RUST_LANG_ORG_CHANNEL=1`
+4. cargo build
