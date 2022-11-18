@@ -1283,6 +1283,25 @@ impl Attributes {
     }
 }
 
+#[derive(Clone, PartialEq, Eq, Hash, Copy, Debug)]
+pub(crate) enum TypeKind {
+    Enum,
+    Function,
+    Module,
+    Const,
+    Static,
+    Struct,
+    Union,
+    Trait,
+    Typedef,
+    Foreign,
+    Macro,
+    Attr,
+    Derive,
+    TraitAlias,
+    Primitive,
+}
+
 impl PartialEq for Attributes {
     fn eq(&self, rhs: &Self) -> bool {
         self.doc_strings == rhs.doc_strings

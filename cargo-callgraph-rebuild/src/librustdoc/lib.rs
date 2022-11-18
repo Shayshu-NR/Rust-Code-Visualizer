@@ -16,6 +16,7 @@
 #![feature(type_ascription)]
 #![feature(iter_intersperse)]
 #![feature(type_alias_impl_trait)]
+#![feature(default_free_fn)]
 #![cfg_attr(bootstrap, feature(generic_associated_types))]
 #![recursion_limit = "256"]
 #![warn(rustc::internal)]
@@ -109,6 +110,7 @@ mod core;
 mod docfs;
 mod doctest;
 mod error;
+mod extract_dependencies;
 mod externalfiles;
 mod fold;
 mod formats;
@@ -178,6 +180,39 @@ pub fn main() {
     process::exit(exit_code);
 }
 
+/// Taken from
+/// https://github.com/rust-lang/miri/blob/master/src/bin/miri.rs
+/// Returns the "default sysroot" that will be used if no `--sysroot` flag is set.
+/// Should be a compile-time constant.
+fn compile_time_sysroot() -> Option<String> {
+    if option_env!("RUSTC_STAGE").is_some() {
+        // This is being built as part of rustc, and gets shipped with rustup.
+        // We can rely on the sysroot computation in librustc_session.
+        return None;
+    }
+    // For builds outside rustc, we need to ensure that we got a sysroot
+    // that gets used as a default.  The sysroot computation in librustc_session would
+    // end up somewhere in the build dir (see `get_or_default_sysroot`).
+    // Taken from PR <https://github.com/Manishearth/rust-clippy/pull/911>.
+    if option_env!("RUSTC_STAGE").is_some() {
+        // This is being built as part of rustc, and gets shipped with rustup.
+        // We can rely on the sysroot computation in librustc_session.
+        return None;
+    }
+    // For builds outside rustc, we need to ensure that we got a sysroot
+    // that gets used as a default.  The sysroot computation in librustc_session would
+    // end up somewhere in the build dir (see `get_or_default_sysroot`).
+    // Taken from PR <https://github.com/Manishearth/rust-clippy/pull/911>.
+    let home = option_env!("RUSTUP_HOME").or(option_env!("MULTIRUST_HOME"));
+    let toolchain = option_env!("RUSTUP_TOOLCHAIN").or(option_env!("MULTIRUST_TOOLCHAIN"));
+    Some(match (home, toolchain) {
+        (Some(home), Some(toolchain)) => format!("{}/toolchains/{}", home, toolchain),
+        _ => option_env!("RUST_SYSROOT")
+            .expect("To build cargo-callgraph without rustup, set the `RUST_SYSROOT` env var at build time")
+            .to_owned(),
+    })
+}
+
 fn init_logging() {
     let color_logs = match std::env::var("RUSTDOC_LOG_COLOR").as_deref() {
         Ok("always") => true,
@@ -226,7 +261,25 @@ fn get_args() -> Option<Vec<String>> {
                 })
                 .ok()
         })
-        .collect()
+        .collect::<Option<_>>()
+        .map(|mut args: Vec<String>| {
+            // Make sure we use the right default sysroot. The default sysroot is wrong,
+            // because `get_or_default_sysroot` in `librustc_session` bases that on `current_exe`.
+            //
+            // Make sure we always call `compile_time_sysroot` as that also does some sanity-checks
+            // of the environment we were built in.
+            // FIXME: Ideally we'd turn a bad build env into a compile-time error via CTFE or so.
+            if let Some(sysroot) = compile_time_sysroot() {
+                let sysroot_flag = "--sysroot";
+                if !args.iter().any(|e| e == sysroot_flag) {
+                    // We need to overwrite the default that librustc_session would compute.
+                    args.push(sysroot_flag.to_owned());
+                    args.push(sysroot);
+                }
+            }
+
+            args
+        })
 }
 
 fn opts() -> Vec<RustcOptGroup> {
@@ -759,110 +812,115 @@ fn main_options(options: config::Options) -> MainResult {
         (false, false) => {}
     }
 
-    // need to move these items separately because we lose them by the time the closure is called,
-    // but we can't create the Handler ahead of time because it's not Send
-    let show_coverage = options.show_coverage;
-    let run_check = options.run_check;
+    extract_dependencies::run_core(options);
+    Ok(())
 
-    // First, parse the crate and extract all relevant information.
-    info!("starting to run rustc");
+    // // need to move these items separately because we lose them by the time the closure is called,
+    // // but we can't create the Handler ahead of time because it's not Send
+    // let show_coverage = options.show_coverage;
+    // let run_check = options.run_check;
 
-    // Interpret the input file as a rust source file, passing it through the
-    // compiler all the way through the analysis passes. The rustdoc output is
-    // then generated from the cleaned AST of the crate. This runs all the
-    // plug/cleaning passes.
-    let crate_version = options.crate_version.clone();
+    // // First, parse the crate and extract all relevant information.
+    // info!("starting to run rustc");
 
-    let output_format = options.output_format;
-    // FIXME: fix this clone (especially render_options)
-    let externs = options.externs.clone();
-    let render_options = options.render_options.clone();
-    let scrape_examples_options = options.scrape_examples_options.clone();
-    let document_private = options.render_options.document_private;
-    let config = core::create_config(options);
+    // // Interpret the input file as a rust source file, passing it through the
+    // // compiler all the way through the analysis passes. The rustdoc output is
+    // // then generated from the cleaned AST of the crate. This runs all the
+    // // plug/cleaning passes.
+    // let crate_version = options.crate_version.clone();
 
-    interface::create_compiler_and_run(config, |compiler| {
-        let sess = compiler.session();
+    // let output_format = options.output_format;
+    // // FIXME: fix this clone (especially render_options)
+    // let externs = options.externs.clone();
+    // let render_options = options.render_options.clone();
+    // let scrape_examples_options = options.scrape_examples_options.clone();
+    // let document_private = options.render_options.document_private;
+    // let config = core::create_config(options);
 
-        if sess.opts.describe_lints {
-            let mut lint_store = rustc_lint::new_lint_store(
-                sess.opts.unstable_opts.no_interleave_lints,
-                sess.enable_internal_lints(),
-            );
-            let registered_lints = if let Some(register_lints) = compiler.register_lints() {
-                register_lints(sess, &mut lint_store);
-                true
-            } else {
-                false
-            };
-            rustc_driver::describe_lints(sess, &lint_store, registered_lints);
-            return Ok(());
-        }
 
-        compiler.enter(|queries| {
-            // We need to hold on to the complete resolver, so we cause everything to be
-            // cloned for the analysis passes to use. Suboptimal, but necessary in the
-            // current architecture.
-            // FIXME(#83761): Resolver cloning can lead to inconsistencies between data in the
-            // two copies because one of the copies can be modified after `TyCtxt` construction.
-            let (resolver, resolver_caches) = {
-                let (krate, resolver, _) = &*abort_on_err(queries.expansion(), sess).peek();
-                let resolver_caches = resolver.borrow_mut().access(|resolver| {
-                    collect_intra_doc_links::early_resolve_intra_doc_links(
-                        resolver,
-                        sess,
-                        krate,
-                        externs,
-                        document_private,
-                    )
-                });
-                (resolver.clone(), resolver_caches)
-            };
 
-            if sess.diagnostic().has_errors_or_lint_errors().is_some() {
-                sess.fatal("Compilation failed, aborting rustdoc");
-            }
+    // interface::create_compiler_and_run(config, |compiler| {
+    //     let sess = compiler.session();
 
-            let mut global_ctxt = abort_on_err(queries.global_ctxt(), sess).peek_mut();
+    //     if sess.opts.describe_lints {
+    //         let mut lint_store = rustc_lint::new_lint_store(
+    //             sess.opts.unstable_opts.no_interleave_lints,
+    //             sess.enable_internal_lints(),
+    //         );
+    //         let registered_lints = if let Some(register_lints) = compiler.register_lints() {
+    //             register_lints(sess, &mut lint_store);
+    //             true
+    //         } else {
+    //             false
+    //         };
+    //         rustc_driver::describe_lints(sess, &lint_store, registered_lints);
+    //         return Ok(());
+    //     }
 
-            global_ctxt.enter(|tcx| {
-                let (krate, render_opts, mut cache) = sess.time("run_global_ctxt", || {
-                    core::run_global_ctxt(
-                        tcx,
-                        resolver,
-                        resolver_caches,
-                        show_coverage,
-                        render_options,
-                        output_format,
-                    )
-                });
-                info!("finished with rustc");
+    //     compiler.enter(|queries| {
+    //         // We need to hold on to the complete resolver, so we cause everything to be
+    //         // cloned for the analysis passes to use. Suboptimal, but necessary in the
+    //         // current architecture.
+    //         // FIXME(#83761): Resolver cloning can lead to inconsistencies between data in the
+    //         // two copies because one of the copies can be modified after `TyCtxt` construction.
+    //         let (resolver, resolver_caches) = {
+    //             let (krate, resolver, _) = &*abort_on_err(queries.expansion(), sess).peek();
+    //             let resolver_caches = resolver.borrow_mut().access(|resolver| {
+    //                 collect_intra_doc_links::early_resolve_intra_doc_links(
+    //                     resolver,
+    //                     sess,
+    //                     krate,
+    //                     externs,
+    //                     document_private,
+    //                 )
+    //             });
+    //             (resolver.clone(), resolver_caches)
+    //         };
 
-                if let Some(options) = scrape_examples_options {
-                    return scrape_examples::run(krate, render_opts, cache, tcx, options);
-                }
+    //         if sess.diagnostic().has_errors_or_lint_errors().is_some() {
+    //             sess.fatal("Compilation failed, aborting rustdoc");
+    //         }
 
-                cache.crate_version = crate_version;
+    //         let mut global_ctxt = abort_on_err(queries.global_ctxt(), sess).peek_mut();
 
-                if show_coverage {
-                    // if we ran coverage, bail early, we don't need to also generate docs at this point
-                    // (also we didn't load in any of the useful passes)
-                    return Ok(());
-                } else if run_check {
-                    // Since we're in "check" mode, no need to generate anything beyond this point.
-                    return Ok(());
-                }
+    //         global_ctxt.enter(|tcx| {
+    //             let (krate, render_opts, mut cache) = sess.time("run_global_ctxt", || {
+    //                 core::run_global_ctxt(
+    //                     tcx,
+    //                     resolver,
+    //                     resolver_caches,
+    //                     show_coverage,
+    //                     render_options,
+    //                     output_format,
+    //                 )
+    //             });
+    //             info!("finished with rustc");
 
-                info!("going to format");
-                match output_format {
-                    config::OutputFormat::Html => sess.time("render_html", || {
-                        run_renderer::<html::render::Context<'_>>(krate, render_opts, cache, tcx)
-                    }),
-                    config::OutputFormat::Json => sess.time("render_json", || {
-                        run_renderer::<json::JsonRenderer<'_>>(krate, render_opts, cache, tcx)
-                    }),
-                }
-            })
-        })
-    })
+    //             if let Some(options) = scrape_examples_options {
+    //                 return scrape_examples::run(krate, render_opts, cache, tcx, options);
+    //             }
+
+    //             cache.crate_version = crate_version;
+
+    //             if show_coverage {
+    //                 // if we ran coverage, bail early, we don't need to also generate docs at this point
+    //                 // (also we didn't load in any of the useful passes)
+    //                 return Ok(());
+    //             } else if run_check {
+    //                 // Since we're in "check" mode, no need to generate anything beyond this point.
+    //                 return Ok(());
+    //             }
+
+    //             info!("going to format");
+    //             match output_format {
+    //                 config::OutputFormat::Html => sess.time("render_html", || {
+    //                     run_renderer::<html::render::Context<'_>>(krate, render_opts, cache, tcx)
+    //                 }),
+    //                 config::OutputFormat::Json => sess.time("render_json", || {
+    //                     run_renderer::<json::JsonRenderer<'_>>(krate, render_opts, cache, tcx)
+    //                 }),
+    //             }
+    //         })
+    //     })
+    // })
 }

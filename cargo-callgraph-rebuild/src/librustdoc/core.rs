@@ -28,11 +28,13 @@ use std::sync::LazyLock;
 use crate::clean::inline::build_external_trait;
 use crate::clean::{self, ItemId, TraitWithExtraInfo};
 use crate::config::{Options as RustdocOptions, OutputFormat, RenderOptions};
+use crate::extract_dependencies::{extract_dependencies, render_dependencies};
 use crate::formats::cache::Cache;
 use crate::passes::collect_intra_doc_links::PreprocessedMarkdownLink;
 use crate::passes::{self, Condition::*};
 
 pub(crate) use rustc_session::config::{Input, Options, UnstableOptions};
+pub(crate) type ExternalPaths = FxHashMap<DefId, (Vec<String>, clean::TypeKind)>;
 
 pub(crate) struct ResolverCaches {
     pub(crate) markdown_links: Option<FxHashMap<String, Vec<PreprocessedMarkdownLink>>>,
@@ -202,6 +204,64 @@ pub(crate) fn new_handler(
         emitter,
         unstable_opts.diagnostic_handler_flags(true),
     )
+}
+
+/// This function is used to setup the lint initialization. By default, in rustdoc, everything
+/// is "allowed". Depending if we run in test mode or not, we want some of them to be at their
+/// default level. For example, the "INVALID_CODEBLOCK_ATTRIBUTES" lint is activated in both
+/// modes.
+///
+/// A little detail easy to forget is that there is a way to set the lint level for all lints
+/// through the "WARNINGS" lint. To prevent this to happen, we set it back to its "normal" level
+/// inside this function.
+///
+/// It returns a tuple containing:
+///  * Vector of tuples of lints' name and their associated "max" level
+///  * HashMap of lint id with their associated "max" level
+pub(crate) fn init_lints<F>(
+    mut allowed_lints: Vec<String>,
+    lint_opts: Vec<(String, lint::Level)>,
+    filter_call: F,
+) -> (Vec<(String, lint::Level)>, FxHashMap<lint::LintId, lint::Level>)
+where
+    F: Fn(&lint::Lint) -> Option<(String, lint::Level)>,
+{
+    let warnings_lint_name = lint::builtin::WARNINGS.name;
+
+    allowed_lints.push(warnings_lint_name.to_owned());
+    allowed_lints.extend(lint_opts.iter().map(|(lint, _)| lint).cloned());
+
+    let lints = || {
+        lint::builtin::HardwiredLints::get_lints()
+            .into_iter()
+            .chain(rustc_lint::SoftLints::get_lints().into_iter())
+    };
+
+    let lint_opts = lints()
+        .filter_map(|lint| {
+            // Permit feature-gated lints to avoid feature errors when trying to
+            // allow all lints.
+            if lint.feature_gate.is_some() || allowed_lints.iter().any(|l| lint.name == l) {
+                None
+            } else {
+                filter_call(lint)
+            }
+        })
+        .chain(lint_opts.into_iter())
+        .collect::<Vec<_>>();
+
+    let lint_caps = lints()
+        .filter_map(|lint| {
+            // We don't want to allow *all* lints so let's ignore
+            // those ones.
+            if allowed_lints.iter().any(|l| lint.name == l) {
+                None
+            } else {
+                Some((lint::LintId::of(lint), lint::Allow))
+            }
+        })
+        .collect();
+    (lint_opts, lint_caps)
 }
 
 /// Parse, resolve, and typecheck the given crate.
@@ -493,7 +553,7 @@ pub(crate) fn run_global_ctxt(
 /// the name resolution pass may find errors that are never emitted.
 /// If typeck is called after this happens, then we'll get an ICE:
 /// 'Res::Error found but not reported'. To avoid this, emit the errors now.
-struct EmitIgnoredResolutionErrors<'tcx> {
+pub(crate) struct EmitIgnoredResolutionErrors<'tcx> {
     tcx: TyCtxt<'tcx>,
 }
 

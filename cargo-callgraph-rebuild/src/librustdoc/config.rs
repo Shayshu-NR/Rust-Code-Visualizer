@@ -5,7 +5,9 @@ use std::fmt;
 use std::path::PathBuf;
 use std::str::FromStr;
 
-use rustc_data_structures::fx::FxHashMap;
+use rustc_data_structures::fx::{FxHashMap, FxHashSet};
+use rustc_hir::def_id::DefId;
+use rustc_middle::middle::privacy::AccessLevels;
 use rustc_driver::print_flag_list;
 use rustc_session::config::{
     self, parse_crate_types_from_list, parse_externs, parse_target_triple, CrateType,
@@ -308,6 +310,20 @@ impl RenderOptions {
     pub(crate) fn should_emit_crate(&self) -> bool {
         self.emit.is_empty() || self.emit.contains(&EmitType::InvocationSpecific)
     }
+}
+
+/// Temporary storage for data obtained during `RustdocVisitor::clean()`.
+/// Later on moved into `cache`.
+#[derive(Default, Clone)]
+pub(crate) struct RenderInfo {
+    pub(crate) inlined: FxHashSet<DefId>,
+    pub(crate) external_paths: crate::core::ExternalPaths,
+    pub(crate) exact_paths: FxHashMap<DefId, Vec<String>>,
+    pub(crate) access_levels: AccessLevels<DefId>,
+    pub(crate) deref_trait_did: Option<DefId>,
+    pub(crate) deref_mut_trait_did: Option<DefId>,
+    pub(crate) owned_box_did: Option<DefId>,
+    pub(crate) output_format: OutputFormat,
 }
 
 impl Options {

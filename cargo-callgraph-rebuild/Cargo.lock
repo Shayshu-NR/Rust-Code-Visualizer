@@ -103,6 +103,7 @@ dependencies = [
  "expect-test",
  "html-escape",
  "itertools",
+ "lazy_static",
  "minifier",
  "once_cell",
  "pulldown-cmark",
