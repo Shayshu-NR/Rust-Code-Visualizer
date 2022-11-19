@@ -174,7 +174,7 @@ pub(crate) fn run_core(options: RustdocOptions) {
         compiler.enter(|queries| {
             let sess = compiler.session();
 
-            if sess.has_errors() {
+            if sess.has_errors().is_some() {
                 sess.fatal("Compilation failed, aborting cargo-callgraph");
             }
 
@@ -662,7 +662,7 @@ fn extract_function_call<'tcx>(
                 use mir::Operand::*;
                 let function = match func {
                     Constant(cst) => {
-                        if let ty::TyKind::FnDef(def_id, _) = cst.literal.ty.kind() {
+                        if let ty::TyKind::FnDef(def_id, _) = cst.literal.ty().kind() {
                             let def_id = *def_id;
 
                             use def::DefKind::*;
@@ -789,7 +789,7 @@ pub fn extract_dependencies<'tcx>(tcx: ty::TyCtxt<'tcx>) -> AllDependencies<'tcx
                                  .flatten()
                         },
                         Constant(cst) =>
-                            if is_callable(cst.ty) {
+                            if is_callable(&cst.ty()) {
                                 Some(Source::FunctionId(cst))
                             } else {
                                 None
@@ -812,7 +812,7 @@ pub fn extract_dependencies<'tcx>(tcx: ty::TyCtxt<'tcx>) -> AllDependencies<'tcx
                         }
                     }
                     Constant(cst) => {
-                        if is_callable(cst.literal.ty) {
+                        if is_callable(&cst.literal.ty()) {
                             sources.push(Source::FunctionId(*cst.literal));
                         }
                     }
@@ -968,7 +968,7 @@ pub fn render_dependencies<'tcx, W: std::io::Write>(
                         }
                     }
                     Argument(arg) => {
-                        if is_callable(function.arguments[arg.as_usize() - 1].ty) {
+                        if is_callable(&function.arguments[arg.as_usize() - 1].ty) {
                             writeln!(output, "    \"{}\" -> \"{}\":{} [ color=black arrowhead=empty style=solid ]", caller_name, caller_name, arg.as_usize())?;
                         }
                     }
@@ -1021,7 +1021,7 @@ pub fn render_dependencies<'tcx, W: std::io::Write>(
                                 )?;
                             }
                             Argument(arg) => {
-                                if is_callable(function.arguments[arg.as_usize() - 1].ty) {
+                                if is_callable(&function.arguments[arg.as_usize() - 1].ty) {
                                     writeln!(output, "    \"{}\" -> \"{}\":{} [ color=black arrowhead=empty style=solid ]", caller_name, caller_name, arg.as_usize())?;
                                 }
                             }
