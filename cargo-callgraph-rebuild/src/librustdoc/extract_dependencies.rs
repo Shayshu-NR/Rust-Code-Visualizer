@@ -716,7 +716,7 @@ fn extract_arguments<'tcx>(function: &mir::Body<'tcx>) -> Vec<SymbolAndType<'tcx
 }
 
 /// Test if a type is the type of a callable object
-fn is_callable(ty: &ty::TyS) -> bool {
+fn is_callable(ty: &ty::Ty) -> bool {
     ty.is_fn() || ty.is_fn_ptr() || ty.is_closure()
 }
 
