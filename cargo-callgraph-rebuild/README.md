@@ -22,3 +22,9 @@ Log the differences between the two directories and apply the differences manual
 2. `export RUSTC_BOOTSTRAP=1`
 3. `export DOC_RUST_LANG_ORG_CHANNEL=1`
 4. cargo build
+
+
+# Notes
+
+1. E0603 rust struct is private for TyS Struct
+TyS has been made private and we can use Ty which is just an alias
