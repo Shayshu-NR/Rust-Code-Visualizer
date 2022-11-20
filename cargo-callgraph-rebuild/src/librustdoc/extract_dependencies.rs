@@ -44,6 +44,7 @@ pub(crate) fn run_core(options: RustdocOptions) {
         libs,
         externs,
         mut cfgs,
+        check_cfgs,
         codegen_options,
         unstable_opts,
         target,
@@ -128,14 +129,15 @@ pub(crate) fn run_core(options: RustdocOptions) {
     let config = interface::Config {
         opts: sessopts,
         crate_cfg: interface::parse_cfgspecs(cfgs),
+        crate_check_cfg: interface::parse_check_cfg(check_cfgs),
         input,
         input_path: cpath,
         output_file: None,
         output_dir: None,
         file_loader: None,
         diagnostic_output: DiagnosticOutput::Default,
-        stderr: None,
         lint_caps,
+        parse_sess_created: None,
         register_lints: None,
         override_queries: Some(|_sess, providers, _external_providers| {
             // Most lints will require typechecking, so just don't run them.
