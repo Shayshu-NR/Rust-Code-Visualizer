@@ -69,7 +69,7 @@ pub(crate) fn run_core(options: RustdocOptions) {
     let private_doc_tests = RUSTDOC_LINTS[3].name;
     let no_crate_level_docs = RUSTDOC_LINTS[8].name;
     let invalid_codeblock_attributes_name = RUSTDOC_LINTS[4].name;
-    let invalid_html_tags = RUSTDOC_LINTS.INVALID_HTML_TAGS.name;
+    let invalid_html_tags = RUSTDOC_LINTS[6].name;
     let renamed_and_removed_lints = lint::builtin::RENAMED_AND_REMOVED_LINTS.name;
     let non_autolinks = RUSTDOC_LINTS[7].name;
     let unknown_lints = rustc_lint::builtin::UNKNOWN_LINTS.name;
@@ -348,7 +348,7 @@ impl<'tcx> Dependencies<'tcx> {
                     ThreadLocalRef(_) => {
                         () // TODO:add support to threadlocal
                     }
-                    BinaryOp(_, op1, op2) | CheckedBinaryOp(_, op1, op2) => {
+                    BinaryOp(op1, op2) | CheckedBinaryOp(op1, op2) => {
                         dependencies[lvalue].set(get_id(op1), true);
                         dependencies[lvalue].set(get_id(op2), true);
                     }
@@ -615,7 +615,7 @@ fn extract_constant<'tcx>(function: &mir::Body<'tcx>) -> HashSet<ty::Const<'tcx>
     }
     impl<'tcx> Visitor<'tcx> for Constants<'tcx> {
         fn visit_constant(&mut self, constant: &mir::Constant<'tcx>, _: mir::Location) {
-            self.constants.insert(*constant.literal);
+            self.constants.insert(constant.literal);
         }
     }
 

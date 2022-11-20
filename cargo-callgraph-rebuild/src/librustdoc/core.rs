@@ -558,7 +558,7 @@ pub(crate) struct EmitIgnoredResolutionErrors<'tcx> {
 }
 
 impl<'tcx> EmitIgnoredResolutionErrors<'tcx> {
-    fn new(tcx: TyCtxt<'tcx>) -> Self {
+    pub(crate) fn new(tcx: TyCtxt<'tcx>) -> Self {
         Self { tcx }
     }
 }

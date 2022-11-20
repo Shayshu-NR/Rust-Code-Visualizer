@@ -146,6 +146,7 @@ pub(crate) struct Options {
     pub(crate) crate_version: Option<String>,
     /// Collected options specific to outputting final pages.
     pub(crate) render_options: RenderOptions,
+    pub(crate) display_warnings: bool,
     /// The format that we output when rendering.
     ///
     /// Currently used only for the `--show-coverage` option.
@@ -713,6 +714,7 @@ impl Options {
         let generate_link_to_definition = matches.opt_present("generate-link-to-definition");
         let extern_html_root_takes_precedence =
             matches.opt_present("extern-html-root-takes-precedence");
+        let display_warnings = matches.opt_present("display-warnings");
 
         if generate_link_to_definition && (show_coverage || output_format != OutputFormat::Html) {
             diag.struct_err(
@@ -792,6 +794,7 @@ impl Options {
                 no_emit_shared: false,
             },
             crate_name,
+            display_warnings,
             output_format,
             json_unused_externs,
             scrape_examples_options,
