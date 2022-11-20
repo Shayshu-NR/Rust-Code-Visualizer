@@ -32,7 +32,6 @@ use lazy_static::lazy_static;
 
 use crate::lint::RUSTDOC_LINTS;
 
-
 pub(crate) fn run_core(options: RustdocOptions) {
     // Parse, resolve, and typecheck the given crate.
 
@@ -64,16 +63,16 @@ pub(crate) fn run_core(options: RustdocOptions) {
     let cpath = Some(input.clone());
     let input = Input::File(input);
 
-    let broken_intra_doc_links = RUSTDOC_LINTS.BROKEN_INTRA_DOC_LINKS.name;
-    let private_intra_doc_links = RUSTDOC_LINTS.PRIVATE_INTRA_DOC_LINKS.name;
+    let broken_intra_doc_links = RUSTDOC_LINTS[0].name;
+    let private_intra_doc_links = RUSTDOC_LINTS[1].name;
     let missing_docs = rustc_lint::builtin::MISSING_DOCS.name;
-    let missing_doc_example = RUSTDOC_LINTS.MISSING_DOC_CODE_EXAMPLES.name;
-    let private_doc_tests = RUSTDOC_LINTS.PRIVATE_DOC_TESTS.name;
-    let no_crate_level_docs = RUSTDOC_LINTS.MISSING_CRATE_LEVEL_DOCS.name;
-    let invalid_codeblock_attributes_name = RUSTDOC_LINTS.INVALID_CODEBLOCK_ATTRIBUTES.name;
+    let missing_doc_example = RUSTDOC_LINTS[2].name;
+    let private_doc_tests = RUSTDOC_LINTS[3].name;
+    let no_crate_level_docs = RUSTDOC_LINTS[8].name;
+    let invalid_codeblock_attributes_name = RUSTDOC_LINTS[4].name;
     let invalid_html_tags = RUSTDOC_LINTS.INVALID_HTML_TAGS.name;
     let renamed_and_removed_lints = lint::builtin::RENAMED_AND_REMOVED_LINTS.name;
-    let non_autolinks = RUSTDOC_LINTS.BARE_URLS.name;
+    let non_autolinks = RUSTDOC_LINTS[7].name;
     let unknown_lints = rustc_lint::builtin::UNKNOWN_LINTS.name;
 
     // In addition to those specific lints, we also need to allow those given through
