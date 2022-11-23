@@ -189,7 +189,7 @@ pub(crate) fn run_core(options: RustdocOptions) {
                     map: access_levels
                         .map
                         .iter()
-                        .map(|(&k, &v)| (tcx.hir().local_def_id(k).to_def_id(), v))
+                        .map(|(&k, &v)| (k.to_def_id(), v))
                         .collect(),
                 };
 
