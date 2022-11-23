@@ -350,9 +350,9 @@ impl<'tcx> Dependencies<'tcx> {
                     ThreadLocalRef(_) => {
                         () // TODO:add support to threadlocal
                     }
-                    BinaryOp(op1, op2) | CheckedBinaryOp(op1, op2) => {
-                        dependencies[lvalue].set(get_id(op1), true);
-                        dependencies[lvalue].set(get_id(op2), true);
+                    BinaryOp(_, op_box) | CheckedBinaryOp(_, op_box) => {
+                        dependencies[lvalue].set(get_id(&op_box.0), true);
+                        dependencies[lvalue].set(get_id(&op_box.1), true);
                     }
                     NullaryOp(_, _) => {
                         () // no dependencies
