@@ -9,7 +9,7 @@ use rustc_data_structures::fx::FxHashSet;
 use rustc_driver::abort_on_err;
 use rustc_feature::UnstableFeatures;
 use rustc_hir::def;
-use rustc_hir::def_id::{DefId, LocalDefId, LOCAL_CRATE};
+use rustc_hir::def_id::{DefId, LocalDefId};
 use rustc_hir::intravisit::Visitor;
 use rustc_index::vec::IndexVec;
 use rustc_interface::interface;
@@ -182,7 +182,7 @@ pub(crate) fn run_core(options: RustdocOptions) {
             let mut global_ctxt = abort_on_err(queries.global_ctxt(), sess).take();
 
             global_ctxt.enter(|tcx| {
-                let access_levels = tcx.privacy_access_levels(LOCAL_CRATE);
+                let access_levels = tcx.privacy_access_levels(());
                 // Convert from a HirId set to a DefId set since we don't always have easy access
                 // to the map from defid -> hirid
                 let access_levels = AccessLevels {
