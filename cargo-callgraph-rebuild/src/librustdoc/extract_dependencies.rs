@@ -258,7 +258,7 @@ pub(crate) fn run_core(options: RustdocOptions) {
 #[derive(Debug, Clone)]
 pub struct Dependencies<'tcx> {
     dependencies: IndexVec<mir::Local, BitVec>,
-    constants: Vec<ty::Const<'tcx>>,
+    constants: Vec<mir::ConstantKind<'tcx>>,
     arg_count: usize,
 }
 
@@ -267,7 +267,7 @@ pub enum DependencyType<'tcx> {
     Return,
     Argument(mir::Local),
     Local(mir::Local),
-    Constant(ty::Const<'tcx>),
+    Constant(mir::ConstantKind<'tcx>),
 }
 
 impl<'tcx> Dependencies<'tcx> {
@@ -288,7 +288,7 @@ impl<'tcx> Dependencies<'tcx> {
         // The index of a dependency to a constant is its index in `constants` shifted by
         // `locals_count`.
         let locals_count = function.local_decls.len();
-        let constants: Vec<ty::Const<'_>> = extract_constant(function).into_iter().collect();
+        let constants: Vec<mir::ConstantKind<'tcx>> = extract_constant(function).into_iter().collect();
         let mut dependencies = IndexVec::from_elem_n(
             BitVec::from_elem(locals_count + constants.len(), false),
             locals_count,
@@ -296,13 +296,13 @@ impl<'tcx> Dependencies<'tcx> {
 
         struct Assignments<'tcx, 'local> {
             locals_count: usize,
-            constants: &'local Vec<ty::Const<'tcx>>,
+            constants: &'local Vec<mir::ConstantKind<'tcx>>,
             dependencies: &'local mut IndexVec<mir::Local, BitVec>,
         }
         impl<'tcx, 'local> Assignments<'tcx, 'local> {
             fn new(
                 locals_count: usize,
-                constants: &'local Vec<ty::Const<'tcx>>,
+                constants: &'local Vec<mir::ConstantKind<'tcx>>,
                 dependencies: &'local mut IndexVec<mir::Local, BitVec>,
             ) -> Self {
                 Assignments {
@@ -333,7 +333,7 @@ impl<'tcx> Dependencies<'tcx> {
                             locals_count
                                 + constants
                                     .iter()
-                                    .position(|cst| cst == constant.literal)
+                                    .position(|cst| cst == &constant.literal)
                                     .unwrap()
                         }
                     }
@@ -566,7 +566,7 @@ pub struct SymbolAndType<'tcx> {
 #[derive(Debug, Clone)]
 pub enum Source<'tcx> {
     /// a reference to another function
-    FunctionId(ty::Const<'tcx>),
+    FunctionId(mir::ConstantKind<'tcx>),
 
     /// argument of the caller
     Argument(mir::Local),
@@ -608,12 +608,12 @@ pub struct AllDependencies<'tcx> {
 }
 
 /// Extract all constants being used in a given function
-fn extract_constant<'tcx>(function: &mir::Body<'tcx>) -> HashSet<ty::Const<'tcx>> {
+fn extract_constant<'tcx>(function: &mir::Body<'tcx>) -> HashSet<mir::ConstantKind<'tcx>> {
     use mir::visit::Visitor;
 
     #[derive(Default)]
     struct Constants<'tcx> {
-        constants: HashSet<ty::Const<'tcx>>,
+        constants: HashSet<mir::ConstantKind<'tcx>>,
     }
     impl<'tcx> Visitor<'tcx> for Constants<'tcx> {
         fn visit_constant(&mut self, constant: &mir::Constant<'tcx>, _: mir::Location) {
