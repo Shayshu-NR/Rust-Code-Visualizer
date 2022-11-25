@@ -726,7 +726,7 @@ fn is_callable(ty: &ty::Ty) -> bool {
 pub fn extract_dependencies<'tcx>(tcx: ty::TyCtxt<'tcx>) -> AllDependencies<'tcx> {
     let mut all_dependencies: HashMap<DefId, Function<'_>> = HashMap::new();
 
-    for function in tcx.body_owners() {
+    for function in tcx.hir().body_owners() {
         match tcx.def_kind(function) {
             def::DefKind::Fn
             | def::DefKind::AssocFn
@@ -814,7 +814,7 @@ pub fn extract_dependencies<'tcx>(tcx: ty::TyCtxt<'tcx>) -> AllDependencies<'tcx
                     }
                     Constant(cst) => {
                         if is_callable(&cst.literal.ty()) {
-                            sources.push(Source::FunctionId(*cst.literal));
+                            sources.push(Source::FunctionId(cst.literal));
                         }
                     }
                 }
@@ -947,7 +947,7 @@ pub fn render_dependencies<'tcx, W: std::io::Write>(
     for (caller, function) in all_dependencies.functions.iter() {
         let mut caller = *caller;
         if tcx.is_closure(caller) {
-            caller = tcx.closure_base_def_id(caller);
+            caller = tcx.typeck_root_def_id(caller);
         }
 
         let caller_name = tcx.def_path_str(caller);
@@ -960,7 +960,7 @@ pub fn render_dependencies<'tcx, W: std::io::Write>(
                         if !indirect_dependencies.contains(&(source, caller)) {
                             indirect_dependencies.insert((source, caller));
 
-                            let source_name = tcx.mk_const(*source);
+                            let source_name = tcx.mk_const(ty::ConstS{ty : source.ty(), kind : *source});
                             writeln!(
                                 output,
                                 "    \"{}\":function -> \"{}\"  [ color=blue arrowtail=empty ]",
