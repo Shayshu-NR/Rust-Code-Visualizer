@@ -24,7 +24,8 @@ In the `.toml` file of your crate make sure the following is added:
 lto = 'fat'
 ```
 ## Compile 
-Build the crate you want to get a call stack for using `cargo build`.
+Build the crate you want to get a call stack for using `cargo build --target ` and then the tool chain you want .
+Ex: `cargo build --target x86_64-unknown-linux-gnu`
 
 ## Run
 Now run cargo-call-stack so that it targets the active toolchain and the associated binary: `cargo call-stack --bin example --target x86_64-unknown-linux-gnu > cg.dot`
