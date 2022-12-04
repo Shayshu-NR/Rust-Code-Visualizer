@@ -9,7 +9,7 @@ run:
 
 ## Configure unstable mode
 run:
-1. `export RUSTC_BOOSTRAP=1`
+1. `export RUSTC_BOOTSTRAP=1`
 
 ## Find target 
 run:
