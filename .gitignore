@@ -1,0 +1,7 @@
+cargo-call-stack/example/target/*
+
+cargo-call-stack/example/target/debug/*
+
+cargo-call-stack/example/target/release/*
+
+cargo-call-stack/target/*

@@ -1,0 +1,7 @@
+./example/target/*
+
+./example/target/debug/*
+
+./example/target/release/*
+
+./target/*
