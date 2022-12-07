@@ -9,7 +9,7 @@ import {
   Legend,
   LineElement,
 } from 'chart.js';
-import { Bar, Scatter } from 'react-chartjs-2';
+import { Bar, Scatter, Pie } from 'react-chartjs-2';
 import { faker } from '@faker-js/faker';
 
 ChartJS.register(
@@ -104,33 +104,33 @@ function StatsBody({ collapseState }) {
     <div className={containerCollapseClass}>
       <div className="flex flex-row">
         <div className="basis-1/2">
-          <Bar options={options} data={data} style={{ display: collapseState ? 'none' : ''}} className='!w-full text-white'/>
+          <Bar options={options} data={data} style={{ display: collapseState ? 'none' : '' }} className='!w-full text-white' />
         </div>
         <div className="basis-1/2">
-          <Scatter options={scatterOptions} data={scatterData} style={{ display: collapseState ? 'none' : ''}} className='!w-full !text-white'/>
+          <Scatter options={scatterOptions} data={scatterData} style={{ display: collapseState ? 'none' : '' }} className='!w-full !text-white' />
         </div>
       </div>
       <div className='flex flex-row'>
         <div className='text-white basis-full'>
-          <table className='table-auto w-full'>
+          <table className='table-auto w-full border-collapse border border-slate-600 rounded-md p-5'>
             <thead>
-              <tr>
-                <th>Col1</th>
-                <th>Col2</th>
-                <th>Col3</th>
-                <th>Col4</th>
-                <th>Col5</th>
+              <tr className='justify-start'>
+                <th className='border border-slate-600 font-semibold p-4 text-left bg-slate-500'>Col1</th>
+                <th className='border border-slate-600 font-semibold p-4 text-left bg-slate-500'>Col2</th>
+                <th className='border border-slate-600 font-semibold p-4 text-left bg-slate-500'>Col3</th>
+                <th className='border border-slate-600 font-semibold p-4 text-left bg-slate-500'>Col4</th>
+                <th className='border border-slate-600 font-semibold p-4 text-left bg-slate-500'>Col5</th>
               </tr>
             </thead>
             <tbody>
               {tableData.data.map((row) =>
               (
                 <tr>
-                  <td>{row.colData1}</td>
-                  <td>{row.colData2}</td>
-                  <td>{row.colData3}</td>
-                  <td>{row.colData4}</td>
-                  <td>{row.colData5}</td>
+                  <td className='border border-slate-600 p-4'>{row.colData1}</td>
+                  <td className='border border-slate-600 p-4'>{row.colData2}</td>
+                  <td className='border border-slate-600 p-4'>{row.colData3}</td>
+                  <td className='border border-slate-600 p-4'>{row.colData4}</td>
+                  <td className='border border-slate-600 p-4'>{row.colData5}</td>
                 </tr>
               )
               )}

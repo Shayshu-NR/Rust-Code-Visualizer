@@ -18,9 +18,9 @@ function GraphBody({ collapseState }) {
 
     const elements = CytoscapeComponent.normalizeElements({
         nodes: [
-            { data: { id: 'one', label: 'Node 1' }, position: { x: 0, y: 50 } },
-            { data: { id: 'two', label: 'Node 2' }, position: { x: 100, y: 50 } },
-            { data: { id: 'three', label: 'Node 3' }, position: { x: 120, y: 60 }}
+            { data: { id: 'one', label: 'Main()' }, position: { x: 0, y: 50 } },
+            { data: { id: 'two', label: 'Fizz()' }, position: { x: 100, y: 30 } },
+            { data: { id: 'three', label: 'Buzz()' }, position: { x: 120, y: 60 }}
         ],
         edges: [
             {
@@ -48,7 +48,10 @@ function GraphBody({ collapseState }) {
         {
             selector: 'edge',
             style: {
-                width: 5
+                'width': 5,
+                'target-arrow-shape': 'triangle',
+                'target-arrow-color': '#ccc',
+                'curve-style': 'bezier'
             }
         }
     ];
