@@ -164,10 +164,12 @@ exports.getNonce = getNonce;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SidebarProvider = void 0;
 const vscode = __webpack_require__(1);
+const path = __webpack_require__(6);
 const utilities_1 = __webpack_require__(3);
 class SidebarProvider {
-    constructor(_extensionUri) {
+    constructor(_extensionUri, _extensionPath) {
         this._extensionUri = _extensionUri;
+        this._extensionPath = _extensionPath;
     }
     resolveWebviewView(webviewView) {
         this._view = webviewView;
@@ -200,42 +202,66 @@ class SidebarProvider {
         this._view = panel;
     }
     _getHtmlForWebview(webview) {
+        console.log("getHTML");
         // Specify where to grab the script that is generated from react...
-        const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "main.865a89d0.js"));
-        const mainCSS = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "main.5e90d8e1.css"));
-        const outputCSS = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "output.css"));
-        // Specify where to grab the css for the panel
-        const stylesResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "reset.css"));
-        // More css to add to the panel
-        const stylesMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "vscode.css"));
-        const manifestUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "media", "manifest.json"));
-        const nonce = (0, utilities_1.getNonce)();
-        return `
-    <!DOCTYPE html>
-    <html lang="en">
-      <head>
-          <meta charset="UTF-8">
-          <meta http-equiv="Content-Security-Policy" content="img-src https: data:; style-src 'unsafe-inline' ${webview.cspSource}; script-src 'nonce-${nonce}';">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <link href="${stylesResetUri}" rel="stylesheet">
-          <link href="${stylesMainUri}" rel="stylesheet">
-          <link href="${mainCSS}" rel="stylesheet">
-          <link href="${outputCSS}" rel="stylesheet">
-          <link rel="manifest" href="${manifestUri}" />
-          <script nonce="${nonce}">
-          </script>
-      </head>
-
-      <body>
-        <div id="root"></div>
-      </body>
-      <script src="${scriptUri}" nonce="${nonce}">
-    </html>
-    `;
+        try {
+            var fs = __webpack_require__(7);
+            const manifest = JSON.parse(fs.readFileSync(path.join(this._extensionPath, "build", "asset-manifest.json")));
+            const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "build", manifest["files"]["main.js"]));
+            const mainCSS = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "build", manifest["files"]["main.css"]));
+            const nonce = (0, utilities_1.getNonce)();
+            return `
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="Content-Security-Policy" content="img-src https: data:; style-src 'unsafe-inline' ${webview.cspSource}; script-src 'nonce-${nonce}';">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link href="${mainCSS}" rel="stylesheet">
+            <script nonce="${nonce}">
+            </script>
+        </head>
+  
+        <body>
+          <div id="root"></div>
+        </body>
+        <script src="${scriptUri}" nonce="${nonce}">
+      </html>
+      `;
+        }
+        catch (err) {
+            console.log(err);
+            return `
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+  
+        <body>
+          <div id="root">Extension failed to load</div>
+        </body>
+      </html>
+      `;
+        }
     }
 }
 exports.SidebarProvider = SidebarProvider;
 
+
+/***/ }),
+/* 5 */,
+/* 6 */
+/***/ ((module) => {
+
+module.exports = require("path");
+
+/***/ }),
+/* 7 */
+/***/ ((module) => {
+
+module.exports = require("fs");
 
 /***/ })
 /******/ 	]);
@@ -283,7 +309,7 @@ function activate(context) {
     context.subscriptions.push(vscode.commands.registerCommand("rust-code-visualizer.Graph", () => {
         panel_1.Panel.createOrShow(context.extensionUri);
     }));
-    const sidebarProvider = new sidebar_1.SidebarProvider(context.extensionUri);
+    const sidebarProvider = new sidebar_1.SidebarProvider(context.extensionUri, context.extensionPath);
     context.subscriptions.push(vscode.window.registerWebviewViewProvider("rust-sidebar", sidebarProvider));
 }
 exports.activate = activate;

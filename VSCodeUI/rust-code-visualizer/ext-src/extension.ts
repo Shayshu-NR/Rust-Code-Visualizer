@@ -16,7 +16,6 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
-    
     vscode.commands.registerCommand(
       "rust-code-visualizer.Graph", 
       () => {
@@ -25,14 +24,14 @@ export function activate(context: vscode.ExtensionContext) {
     )
   );
 
-  const sidebarProvider = new SidebarProvider(context.extensionUri);
+  const sidebarProvider = new SidebarProvider(context.extensionUri, context.extensionPath);
 
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(
       "rust-sidebar",
       sidebarProvider
     )
-  )
+  );
 }
 
 export function deactivate() {}

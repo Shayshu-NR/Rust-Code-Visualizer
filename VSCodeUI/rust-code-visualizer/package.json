@@ -1,7 +1,7 @@
 {
   "name": "rust-code-visualizer",
   "displayName": "Rust-Code-Visualizer",
-  "description": "VScode extension that helps developpers visualize Rust code and view performance metrics",
+  "description": "VScode extension that helps developers visualize Rust code and view performance metrics",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.72.0"
@@ -26,12 +26,12 @@
       ]
     },
     "views": {
-      "rust-sidebar-view" : [
+      "rust-sidebar-view": [
         {
           "type": "webview",
           "id": "rust-sidebar",
-          "name" : "Rust Graph",
-          "icon" : "media/RustLogo.svg",
+          "name": "Rust Graph",
+          "icon": "media/RustLogo.svg",
           "contextualTitle": "RustGraph"
         }
       ]
@@ -55,9 +55,11 @@
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
-    "lint": "eslint src --ext ts"
+    "lint": "eslint src --ext ts",
+    "build": "react-scripts build"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@types/glob": "^8.0.0",
     "@types/mocha": "^10.0.0",
     "@types/node": "16.x",
@@ -75,7 +77,29 @@
   },
   "dependencies": {
     "bootstrap-icons": "^1.9.1",
+    "chart.js": "^3.9.1",
+    "classnames": "^2.3.2",
     "cytoscape": "^3.23.0",
-    "tailwind": "^4.0.0"
+    "faker": "^6.6.6",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^4.3.1",
+    "react-cytoscapejs": "^2.0.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "tailwind": "^4.0.0",
+    "tailwindcss": "^3.2.1",
+    "web-vitals": "^2.1.4"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

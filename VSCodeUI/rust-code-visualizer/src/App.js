@@ -1,4 +1,5 @@
-import './App.css';
+import 'tailwindcss/tailwind.css';
+
 import CustomNode from './components/customNode';
 import GraphContainer from './components/graphContainer';
 import StatsContainer from './components/statsContainer';
