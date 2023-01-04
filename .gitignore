@@ -5,3 +5,8 @@ cargo-call-stack/example/target/debug/*
 cargo-call-stack/example/target/release/*
 
 cargo-call-stack/target/*
+
+VSCodeUI/rust-code-visualizer/node_modules/*
+VSCodeUI/rust-code-visualizer/node_modules/.bin/*
+**/node_modules
+node_modules
