@@ -2,6 +2,9 @@
 
 # How to use cargo-call-stack
 Guide to getting cargo call stack to work
+1. Does not work on Ubuntu 22.0X
+2. Works on Ubuntu 20.04.05 LTS
+3. Use other OSes at your own risk
 
 ## Install dependencies
 run:
@@ -23,6 +26,13 @@ In the `.toml` file of your crate make sure the following is added:
 [profile.release]
 lto = 'fat'
 ```
+
+## Format code
+In all your `.rs` files, make sure you add `#[inline(never)]` above functions you want to show up on the call graph.
+
+### NOTE:
+Functions that do nothing will be optimized away and will not show up on the call graph. See example `cargo-call-stack/examples/example` for details.
+
 ## Compile 
 Build the crate you want to get a call stack for using `cargo build --target ` and then the tool chain you want .
 Ex: `cargo build --target x86_64-unknown-linux-gnu`
