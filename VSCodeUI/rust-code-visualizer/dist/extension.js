@@ -185,6 +185,10 @@ class SidebarProvider {
                     if (!data.value) {
                         return;
                     }
+                    webviewView.webview.postMessage({
+                        type: "infoReceived",
+                        value: "Received message: " + data.value,
+                    });
                     vscode.window.showInformationMessage(data.value);
                     break;
                 }
@@ -206,6 +210,14 @@ class SidebarProvider {
         // Specify where to grab the script that is generated from react...
         try {
             var fs = __webpack_require__(7);
+            var cp = __webpack_require__(5);
+            cp.exec(`python ${path.join(this._extensionPath, "ext-src", "main.py")}`, (err, stdout, stderr) => {
+                console.log('stdout: ' + stdout);
+                console.log('stderr: ' + stderr);
+                if (err) {
+                    console.log('error: ' + err);
+                }
+            });
             const manifest = JSON.parse(fs.readFileSync(path.join(this._extensionPath, "build", "asset-manifest.json")));
             const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "build", manifest["files"]["main.js"]));
             const mainCSS = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "build", manifest["files"]["main.css"]));
@@ -219,6 +231,7 @@ class SidebarProvider {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <link href="${mainCSS}" rel="stylesheet">
             <script nonce="${nonce}">
+              const vscode = acquireVsCodeApi();
             </script>
         </head>
   
@@ -251,7 +264,12 @@ exports.SidebarProvider = SidebarProvider;
 
 
 /***/ }),
-/* 5 */,
+/* 5 */
+/***/ ((module) => {
+
+module.exports = require("child_process");
+
+/***/ }),
 /* 6 */
 /***/ ((module) => {
 

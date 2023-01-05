@@ -30,6 +30,10 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           if (!data.value) {
             return;
           }
+          webviewView.webview.postMessage({
+            type: "infoReceived",
+            value: "Received message: " + data.value,
+          });
           vscode.window.showInformationMessage(data.value);
           break;
         }
@@ -53,6 +57,16 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
     // Specify where to grab the script that is generated from react...
     try {
       var fs = require("fs");
+      var cp = require("child_process");
+
+      cp.exec(`python ${path.join(this._extensionPath, "ext-src", "main.py")}`, (err: any, stdout: any, stderr: any) => {
+        console.log('stdout: ' + stdout);
+        console.log('stderr: ' + stderr);
+        if (err) {
+            console.log('error: ' + err);
+        }
+      });
+
       const manifest = JSON.parse(
         fs.readFileSync(
           path.join(this._extensionPath, "build", "asset-manifest.json")
@@ -77,6 +91,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <link href="${mainCSS}" rel="stylesheet">
             <script nonce="${nonce}">
+              const vscode = acquireVsCodeApi();
             </script>
         </head>
   

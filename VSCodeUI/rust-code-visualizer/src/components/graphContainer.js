@@ -13,7 +13,6 @@ function GraphContainer() {
         setContainerCollapse(containerCollapse => !containerCollapse);
     };
 
-
     return (
         <div className="container mx-auto rounded-lg bg-gray-700 border-slate-600 font-mono">
             {/* Header */}
@@ -25,7 +24,7 @@ function GraphContainer() {
             {/* Footer */}
              <GraphFooter collapseState={containerCollapse}></GraphFooter>
         </div>
-    )
+    );
 }
 
 export default GraphContainer;

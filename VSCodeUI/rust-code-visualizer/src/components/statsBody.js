@@ -11,6 +11,7 @@ import {
 } from 'chart.js';
 import { Bar, Scatter, Pie } from 'react-chartjs-2';
 import { faker } from '@faker-js/faker';
+import { useEffect } from 'react';
 
 ChartJS.register(
   CategoryScale,
@@ -26,6 +27,18 @@ ChartJS.register(
 
 
 function StatsBody({ collapseState }) {
+  useEffect(() => {
+    console.log("Mounted");
+    window.addEventListener('message', event => {
+      const message = event.data;
+      console.log(message);
+    });
+    
+    vscode.postMessage({ type: 'onInfo', value: 'Hello from statsBody.js' });
+
+
+  }, []);
+
   let classNames = require('classnames');
 
   let containerCollapseClass = classNames({
@@ -139,7 +152,7 @@ function StatsBody({ collapseState }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default StatsBody;
