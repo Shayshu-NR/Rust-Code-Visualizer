@@ -199,6 +199,44 @@ class SidebarProvider {
                     vscode.window.showErrorMessage(data.value);
                     break;
                 }
+                case "reqProfileData":
+                    if (!data.value) {
+                        return;
+                    }
+                    var cp = __webpack_require__(5);
+                    cp.exec(`python ${path.join(this._extensionPath, "ext-src", "main.py")}`, (err, stdout, stderr) => {
+                        try {
+                            var data = stdout; //JSON.parse(stdout);
+                            webviewView.webview.postMessage({
+                                type: "profileDataResults",
+                                value: data,
+                            });
+                        }
+                        catch (err) {
+                            console.log(err);
+                            return;
+                        }
+                    });
+                    break;
+                case "reqFiles":
+                    if (!data.value) {
+                        return;
+                    }
+                    if (vscode.workspace.workspaceFolders !== undefined) {
+                        var fs = __webpack_require__(7);
+                        let rustFiles = [];
+                        fs.readdirSync(vscode.workspace.workspaceFolders[0].uri.fsPath).forEach((file) => {
+                            if (file.endsWith(".rs")) {
+                                rustFiles.push(file);
+                            }
+                        });
+                        console.log(rustFiles);
+                        webviewView.webview.postMessage({
+                            type: "filesResults",
+                            value: rustFiles,
+                        });
+                    }
+                    break;
             }
         });
     }
@@ -212,10 +250,10 @@ class SidebarProvider {
             var fs = __webpack_require__(7);
             var cp = __webpack_require__(5);
             cp.exec(`python ${path.join(this._extensionPath, "ext-src", "main.py")}`, (err, stdout, stderr) => {
-                console.log('stdout: ' + stdout);
-                console.log('stderr: ' + stderr);
+                console.log("stdout: " + stdout);
+                console.log("stderr: " + stderr);
                 if (err) {
-                    console.log('error: ' + err);
+                    console.log("error: " + err);
                 }
             });
             const manifest = JSON.parse(fs.readFileSync(path.join(this._extensionPath, "build", "asset-manifest.json")));

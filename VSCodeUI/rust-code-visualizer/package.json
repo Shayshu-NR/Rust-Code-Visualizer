@@ -56,7 +56,8 @@
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "start": "react-scripts start"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",

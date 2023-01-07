@@ -44,6 +44,53 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           vscode.window.showErrorMessage(data.value);
           break;
         }
+        case "reqProfileData":
+          if (!data.value) {
+            return;
+          }
+          var cp = require("child_process");
+
+          cp.exec(
+            `python ${path.join(this._extensionPath, "ext-src", "main.py")}`,
+            (err: any, stdout: any, stderr: any) => {
+              try {
+                var data = stdout; //JSON.parse(stdout);
+                webviewView.webview.postMessage({
+                  type: "profileDataResults",
+                  value: data,
+                });
+              } catch (err) {
+                console.log(err);
+                return;
+              }
+            }
+          );
+
+          break;
+        case "reqFiles":
+          if (!data.value) {
+            return;
+          }
+          if (vscode.workspace.workspaceFolders !== undefined) {
+            var fs = require("fs");
+            let rustFiles: string[] = [];
+
+            fs.readdirSync(
+              vscode.workspace.workspaceFolders[0].uri.fsPath
+            ).forEach((file: string) => {
+              if (file.endsWith(".rs")) {
+                rustFiles.push(file);
+              }
+            });
+            console.log(rustFiles);
+
+            webviewView.webview.postMessage({
+              type: "filesResults",
+              value: rustFiles,
+            });
+          }
+
+          break;
       }
     });
   }
@@ -59,13 +106,16 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
       var fs = require("fs");
       var cp = require("child_process");
 
-      cp.exec(`python ${path.join(this._extensionPath, "ext-src", "main.py")}`, (err: any, stdout: any, stderr: any) => {
-        console.log('stdout: ' + stdout);
-        console.log('stderr: ' + stderr);
-        if (err) {
-            console.log('error: ' + err);
+      cp.exec(
+        `python ${path.join(this._extensionPath, "ext-src", "main.py")}`,
+        (err: any, stdout: any, stderr: any) => {
+          console.log("stdout: " + stdout);
+          console.log("stderr: " + stderr);
+          if (err) {
+            console.log("error: " + err);
+          }
         }
-      });
+      );
 
       const manifest = JSON.parse(
         fs.readFileSync(
@@ -74,10 +124,18 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
       );
 
       const scriptUri = webview.asWebviewUri(
-        vscode.Uri.joinPath(this._extensionUri, "build", manifest["files"]["main.js"])
+        vscode.Uri.joinPath(
+          this._extensionUri,
+          "build",
+          manifest["files"]["main.js"]
+        )
       );
       const mainCSS = webview.asWebviewUri(
-        vscode.Uri.joinPath(this._extensionUri, "build", manifest["files"]["main.css"])
+        vscode.Uri.joinPath(
+          this._extensionUri,
+          "build",
+          manifest["files"]["main.css"]
+        )
       );
 
       const nonce = getNonce();
