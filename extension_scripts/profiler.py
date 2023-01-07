@@ -22,6 +22,7 @@ class profiler:
         self.__run_profilers()
         self.__extract_data()
         self.__create_json()
+        
     
     # Runs the callgrind profiler and the executable
     def __run_profilers(self):
@@ -31,6 +32,7 @@ class profiler:
         for file in os.listdir(self.__executable_path):
             if file not in self.__orig_file_list and "callgrind.out" in file:
                 callgrind_out = file
+                break
 
         if callgrind_out == None:
             raise Exception("Please make sure valgrind is installed before proceeding!")
@@ -94,7 +96,7 @@ class profiler:
     def __fill_data_dict(self, data_list):
         data_dict = {}
         data_keys = ["Instruction Count","Data Reads", "Data Writes", "First level I cache misses", "First level data cache read misses", "First level data cache write misses", \
-                    "Last level instruction cache misses", "Last level data cache read misses", "Last level data cache write misses", "Total branches", "Branch misredictions", \
+                    "Last level instruction cache misses", "Last level data cache read misses", "Last level data cache write misses", "Total branches", "Branch mispredictions", \
                     "Total indirect jumps", "Indirect jump address mispredictions"]
         for i in range(0,len(data_keys)):
             data_dict[data_keys[i]] = data_list[i]
@@ -103,8 +105,45 @@ class profiler:
 
     # Creates a JSON file and writes the data into it
     def __create_json(self):
+        graph_data = ["L1 Data Cache Misses", "LL Data Cache Misses", "Instruction Count", "Branch mispredictions"]
+        func_labels = list(self.__func_dict.keys())[1:]
+        graph_dict = {}
+        for dataset in graph_data:
+            graph_dict[dataset] = {}
+            graph_dict[dataset]["labels"] = func_labels
+            graph_dict[dataset]["datasets"] = []
+            graph_dict[dataset]["datasets"].append({})
+            graph_dict[dataset]["datasets"][0]["label"] = dataset
+            graph_data_list = []
+            if dataset == "L1 Data Cache Misses":
+                for func in func_labels:
+                    graph_data_list.append(int(self.__func_dict[func]["First level data cache read misses"]) + int(self.__func_dict[func]["First level data cache write misses"])) 
+            elif dataset == "LL Data Cache Misses":
+                for func in func_labels:
+                    graph_data_list.append(int(self.__func_dict[func]["Last level data cache read misses"]) + int(self.__func_dict[func]["Last level data cache write misses"]))
+            else:
+                for func in func_labels:
+                    graph_data_list.append(int(self.__func_dict[func][dataset]))
+        
+            graph_dict[dataset]["datasets"][0]["data"] = graph_data_list
+
+        with open('profiler_graphs.json', 'w') as f:
+            json.dump(graph_dict, f,indent = 4,)
+
         with open('profiling_data.json', 'w') as f:
             json.dump(self.__func_dict, f,indent = 4,)
+
+    def __print_info(self):
+        for key in self.__func_dict.keys():
+            print("---------------------------------------------------------------------------------")
+            if key == "Totals":
+                print("Data collected for the execution of the entire program:")
+            else:
+                print("Collected data for function " + key + ":")
+            for data_key in self.__func_dict[key].keys(): 
+                    print(data_key + ": " + self.__func_dict[key][data_key] +  " (" + str(int(int(self.__func_dict[key][data_key])*100/int(self.__func_dict["Totals"][data_key]))) + "%)")
+
+
 
 
 
