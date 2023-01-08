@@ -1,3 +1,0 @@
-cargo:rustc-link-search=/mnt/c/Users/Matt/Documents/ECE496/Rust-Code-Visualizer/cargo-call-stack/examples/microcontroller/target/x86_64-unknown-linux-gnu/release/build/cortex-m-rt-af7dab8051df24eb/out
-cargo:rerun-if-changed=build.rs
-cargo:rerun-if-changed=link.x.in
