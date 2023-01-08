@@ -4,15 +4,23 @@ import pygraphviz as pgv
 import json
 import os
 
-def filter_graph(agraph):
+def process_label(label):
+    """Convert label from cargo call stack into format identifying the function
+    """
+    return label.split('\n')[0]
 
-    # Get list of all node names (number) : agraph.nodes()
+def filter_graph(agraph, graph_functions):
+"""Remove nodes from the call graph that do not correspond to relevant functions.
 
-    # Delete a node by name (number) : agraph.delete_node(n)
-
-    # Get node by name (number) : agraph.get_node(n)
-
-    # get node label : node.attr["label"]
+Relevant pygraphviz functions:
+    Get list of all node names (numbers) : agraph.nodes()
+    Delete a node by name (number) : agraph.delete_node(n)
+    Get node by name (number) : agraph.get_node(n)
+    Get node label : node.attr["label"]
+"""
+    for node in agraph.nodes():
+        if process_label(agraph.get_node(node).attr["label"]) not in graph_functions:
+            agraph.delete_node(node)
 
     return agraph #pgv.AGraph
 
