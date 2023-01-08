@@ -1,0 +1,1 @@
+/mnt/c/Users/Matt/Documents/ECE496/Rust-Code-Visualizer/cargo-call-stack/examples/microcontroller/target/x86_64-unknown-linux-gnu/debug/microcontroller: /mnt/c/Users/Matt/Documents/ECE496/Rust-Code-Visualizer/cargo-call-stack/examples/microcontroller/microcontroller.rs
