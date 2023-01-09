@@ -24,8 +24,6 @@ ChartJS.register(
   Legend
 );
 
-
-
 function removeData(chart) {
   chart.data.labels.pop();
   chart.data.datasets.pop();
@@ -40,7 +38,7 @@ function addData(chart, label, data) {
   console.log(chart.data);
 }
 
-function StatsBody({ collapseState }) {
+function StatsBody({ collapseState, programTarget }) {
   let classNames = require('classnames');
   let l1Data = {
     labels: [],
@@ -63,6 +61,7 @@ function StatsBody({ collapseState }) {
   const instructionChartRef = useRef(null);
   const branchChartRef = useRef(null);
 
+  // On Mount
   useEffect(() => {
     const l1Chart = l1ChartRef.current;
     const llChart = llChartRef.current;
@@ -71,7 +70,8 @@ function StatsBody({ collapseState }) {
 
     window.addEventListener('message', event => {
       const message = event.data;
-      console.log(event);
+      console.log("StatsBody Event:", event);
+
       switch (message.type) {
         case "profileDataResults":
           let data = JSON.parse(message.value);
@@ -92,8 +92,14 @@ function StatsBody({ collapseState }) {
       }
     });
 
-    vscode.postMessage({ type: 'reqProfileData', value: 'Request for Profile chart and tabular data' });
+    vscode.postMessage({ type: 'reqProfileData', value: programTarget });
   }, []);
+
+  // On program target change
+  useEffect(() => {
+    console.log("Program target changed: ", programTarget);
+    vscode.postMessage({ type: 'reqProfileData', value: programTarget });
+  }, [programTarget]);
 
   let containerCollapseClass = classNames({
     'collapse': collapseState,

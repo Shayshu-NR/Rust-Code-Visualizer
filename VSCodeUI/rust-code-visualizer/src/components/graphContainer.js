@@ -1,12 +1,12 @@
 import '../input.css';
-import {useState} from 'react'
+import {useState} from 'react';
 import GraphFooter from './graphFooter.js';
 import GraphBody from './graphBody';
 import Header from './header';
 
 
 
-function GraphContainer() {
+function GraphContainer({filesResults}) {
     const [containerCollapse, setContainerCollapse] = useState(false);
 
     const handleCollapse = _ => {

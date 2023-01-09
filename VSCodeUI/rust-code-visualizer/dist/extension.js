@@ -164,7 +164,7 @@ exports.getNonce = getNonce;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SidebarProvider = void 0;
 const vscode = __webpack_require__(1);
-const path = __webpack_require__(6);
+const path = __webpack_require__(5);
 const utilities_1 = __webpack_require__(3);
 class SidebarProvider {
     constructor(_extensionUri, _extensionPath) {
@@ -199,12 +199,12 @@ class SidebarProvider {
                     vscode.window.showErrorMessage(data.value);
                     break;
                 }
-                case "reqProfileData":
+                case "reqProfileData": {
                     if (!data.value) {
                         return;
                     }
-                    var cp = __webpack_require__(5);
-                    cp.exec(`python ${path.join(this._extensionPath, "ext-src", "main.py")}`, (err, stdout, stderr) => {
+                    var cp = __webpack_require__(6);
+                    cp.exec(`python ${path.join(this._extensionPath, "ext-src", "scripts", "profilerChartData.py")}`, (err, stdout, stderr) => {
                         try {
                             var data = stdout; //JSON.parse(stdout);
                             webviewView.webview.postMessage({
@@ -218,7 +218,8 @@ class SidebarProvider {
                         }
                     });
                     break;
-                case "reqFiles":
+                }
+                case "reqFiles": {
                     if (!data.value) {
                         return;
                     }
@@ -237,6 +238,7 @@ class SidebarProvider {
                         });
                     }
                     break;
+                }
             }
         });
     }
@@ -248,14 +250,7 @@ class SidebarProvider {
         // Specify where to grab the script that is generated from react...
         try {
             var fs = __webpack_require__(7);
-            var cp = __webpack_require__(5);
-            cp.exec(`python ${path.join(this._extensionPath, "ext-src", "main.py")}`, (err, stdout, stderr) => {
-                console.log("stdout: " + stdout);
-                console.log("stderr: " + stderr);
-                if (err) {
-                    console.log("error: " + err);
-                }
-            });
+            var cp = __webpack_require__(6);
             const manifest = JSON.parse(fs.readFileSync(path.join(this._extensionPath, "build", "asset-manifest.json")));
             const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "build", manifest["files"]["main.js"]));
             const mainCSS = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "build", manifest["files"]["main.css"]));
@@ -305,13 +300,13 @@ exports.SidebarProvider = SidebarProvider;
 /* 5 */
 /***/ ((module) => {
 
-module.exports = require("child_process");
+module.exports = require("path");
 
 /***/ }),
 /* 6 */
 /***/ ((module) => {
 
-module.exports = require("path");
+module.exports = require("child_process");
 
 /***/ }),
 /* 7 */

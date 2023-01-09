@@ -1,0 +1,345 @@
+--------------------------------------------------------------------------------
+Profile data file 'callgrind.out.1431' (creator: callgrind-3.15.0)
+--------------------------------------------------------------------------------
+I1 cache: 32768 B, 64 B, 8-way associative
+D1 cache: 32768 B, 64 B, 8-way associative
+LL cache: 9437184 B, 64 B, 18-way associative
+Timerange: Basic block 0 - 664490
+Trigger: Program termination
+Profiled target:  ./addingafile (PID 1431, part 1)
+Events recorded:  Ir Dr Dw I1mr D1mr D1mw ILmr DLmr DLmw Bc Bcm Bi Bim
+Events shown:     Ir Dr Dw I1mr D1mr D1mw ILmr DLmr DLmw Bc Bcm Bi Bim
+Event sort order: Ir Dr Dw I1mr D1mr D1mw ILmr DLmr DLmw Bc Bcm Bi Bim
+Thresholds:       99 0 0 0 0 0 0 0 0 0 0 0 0
+Include dirs:     
+User annotated:   
+Auto-annotation:  off
+
+--------------------------------------------------------------------------------
+Ir        Dr      Dw      I1mr  D1mr  D1mw  ILmr  DLmr  DLmw Bc      Bcm   Bi     Bim 
+--------------------------------------------------------------------------------
+3,289,795 948,443 793,318 1,612 4,031 1,085 1,552 2,859  973 350,259 6,681 41,414 375  PROGRAM TOTALS
+
+--------------------------------------------------------------------------------
+Ir        Dr      Dw      I1mr  D1mr  D1mw  ILmr  DLmr  DLmw Bc      Bcm   Bi     Bim  file:function
+--------------------------------------------------------------------------------
+
+3,289,795 948,443 793,318 1,612 4,031 1,085 1,552 2,859  973 350,259 6,681 41,414 375  *  ???:0x0000000000001100 [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+3,050,878 887,334 769,044   707 1,538   119   657   955   59 310,692 3,301 40,806 147  >   ???:_start (1x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+  231,788  59,356  23,366   768 2,370   931   763 1,879  893  38,469 3,211    569 198  >   /build/glibc-SzIz7B/glibc-2.31/elf/rtld.c:_dl_start (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+    7,110   1,750     905   134   121    34   131    25   20   1,098   169     38  29  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-init.c:_dl_init (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+
+3,050,878 887,334 769,044   707 1,538   119   657   955   59 310,692 3,301 40,806 147  < ???:0x0000000000001100 (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+3,050,878 887,334 769,044   707 1,538   119   657   955   59 310,692 3,301 40,806 147  *  ???:_start [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+3,050,866 887,332 769,041   706 1,538   119   656   955   59 310,692 3,301 40,805 146  >   /build/glibc-SzIz7B/glibc-2.31/csu/../csu/libc-start.c:(below main) (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+
+3,050,866 887,332 769,041   706 1,538   119   656   955   59 310,692 3,301 40,805 146  < ???:_start (1x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+3,050,866 887,332 769,041   706 1,538   119   656   955   59 310,692 3,301 40,805 146  *  /build/glibc-SzIz7B/glibc-2.31/csu/../csu/libc-start.c:(below main) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+3,048,109 886,607 768,662   578 1,474   107   556   950   57 310,191 3,170 40,771 115  >   ???:main (1x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+    2,532     674     324   102    59     9    75     5    0     479   123     30  27  >   /build/glibc-SzIz7B/glibc-2.31/stdlib/exit.c:exit (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       68      15      16     7     2     2     7     0    1       8     2      .   .  >   /build/glibc-SzIz7B/glibc-2.31/stdlib/cxa_atexit.c:__cxa_atexit (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       64      13      11     8     1     1     8     0    1       5     3      2   2  >   ???:__libc_csu_init (1x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+       34       7      10     5     1     0     5     0    0       2     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/setjmp/../sysdeps/x86_64/bsd-_setjmp.S:_setjmp (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+
+3,048,109 886,607 768,662   578 1,474   107   556   950   57 310,191 3,170 40,771 115  < /build/glibc-SzIz7B/glibc-2.31/csu/../csu/libc-start.c:(below main) (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+3,048,109 886,607 768,662   578 1,474   107   556   950   57 310,191 3,170 40,771 115  *  ???:main [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+3,048,101 886,605 768,660   577 1,474   107   555   950   57 310,191 3,170 40,771 115  >   ???:std::rt::lang_start (1x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+3,048,101 886,605 768,660   577 1,474   107   555   950   57 310,191 3,170 40,771 115  < ???:main (1x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+3,048,101 886,605 768,660   577 1,474   107   555   950   57 310,191 3,170 40,771 115  *  ???:std::rt::lang_start [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+3,048,088 886,602 768,657   576 1,474   107   554   950   57 310,191 3,170 40,770 114  >   /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/rt.rs:std::rt::lang_start_internal (1x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+3,048,088 886,602 768,657   576 1,474   107   554   950   57 310,191 3,170 40,770 114  < ???:std::rt::lang_start (1x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+3,048,088 886,602 768,657   576 1,474   107   554   950   57 310,191 3,170 40,770 114  *  /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/rt.rs:std::rt::lang_start_internal [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+    1,230     384     226    27    23     0    22     0    0     180    36      8   7  >   /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/sys_common/thread_info.rs:std::sys_common::thread_info::set (1x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+2,840,440 840,088 750,084    61    14     1    59     2    1 270,068    66 40,007  14  *  /rustc/897e37553bba8b42751c67658967889d11ecd120/library/core/src/ops/function.rs:std::rt::lang_start_internal
+2,840,439 840,087 750,083    61    13     1    59     2    1 270,068    66 40,006  13  >   ???:std::rt::lang_start::{{closure}} (1x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+2,840,439 840,087 750,083    61    13     1    59     2    1 270,068    66 40,006  13  < /rustc/897e37553bba8b42751c67658967889d11ecd120/library/core/src/ops/function.rs:std::rt::lang_start_internal (1x)
+2,840,439 840,087 750,083    61    13     1    59     2    1 270,068    66 40,006  13  *  ???:std::rt::lang_start::{{closure}} [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+2,840,429 840,082 750,079    60    12     1    58     2    1 270,068    66 40,006  13  >   ???:std::sys_common::backtrace::__rust_begin_short_backtrace (1x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+        2       1       .     .     .     .     .     .    .       .     .      .   .  >   ???:<() as std::process::Termination>::report (1x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+2,840,429 840,082 750,079    60    12     1    58     2    1 270,068    66 40,006  13  < ???:std::rt::lang_start::{{closure}} (1x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+2,840,429 840,082 750,079    60    12     1    58     2    1 270,068    66 40,006  13  *  ???:std::sys_common::backtrace::__rust_begin_short_backtrace [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+2,840,425 840,081 750,078    59    12     1    57     2    1 270,068    66 40,006  13  >   ???:core::ops::function::FnOnce::call_once (1x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+2,840,425 840,081 750,078    59    12     1    57     2    1 270,068    66 40,006  13  < ???:std::sys_common::backtrace::__rust_begin_short_backtrace (1x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+2,840,425 840,081 750,078    59    12     1    57     2    1 270,068    66 40,006  13  *  ???:core::ops::function::FnOnce::call_once [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+2,840,421 840,079 750,076    58    12     1    56     2    1 270,068    66 40,005  12  >   ???:addingafile::main (1x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+2,840,421 840,079 750,076    58    12     1    56     2    1 270,068    66 40,005  12  < ???:core::ops::function::FnOnce::call_once (1x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+2,840,421 840,079 750,076    58    12     1    56     2    1 270,068    66 40,005  12  *  ???:addingafile::main [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+1,870,468 495,097 450,089    50    12     1    49     2    1 225,071    57 40,005  12  >   ???:addingafile::bar (5,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+  669,963 289,982 239,984     4     0     0     4     0    0  10,000     6      .   .  >   ???:core::iter::range::<impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>>::next (10,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+   44,991  14,997   9,998     0     0     0     0     0    0   4,999     .      .   .  >   ???:addingafile::foo (4,999x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+        3       1       .     .     .     .     .     .    .       .     .      .   .  >   ???:<I as core::iter::traits::collect::IntoIterator>::into_iter (1x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+1,870,468 495,097 450,089    50    12     1    49     2    1 225,071    57 40,005  12  < ???:addingafile::main (5,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+1,870,468 495,097 450,089    50    12     1    49     2    1 225,071    57 40,005  12  *  ???:addingafile::bar [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+1,590,468 415,097 360,089    45    11     1    44     2    1 210,071    57 35,005  11  >   /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/io/stdio.rs:std::io::stdio::_print (5,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+  180,000  60,000  70,000     3     0     0     3     0    0  10,000     .      .   .  >   ???:core::fmt::Arguments::new_v1 (5,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+1,590,468 415,097 360,089    45    11     1    44     2    1 210,071    57 35,005  11  < ???:addingafile::bar (5,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+1,590,468 415,097 360,089    45    11     1    44     2    1 210,071    57 35,005  11  *  /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/io/stdio.rs:std::io::stdio::_print [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+1,360,000 335,000 275,000    28     5     0    28     1    0 195,000    30 30,000   6  >   /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/io/stdio.rs:<&std::io::stdio::Stdout as std::io::Write>::write_fmt (5,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+1,360,000 335,000 275,000    28     5     0    28     1    0 195,000    30 30,000   6  < /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/io/stdio.rs:std::io::stdio::_print (5,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+1,360,000 335,000 275,000    28     5     0    28     1    0 195,000    30 30,000   6  *  /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/io/stdio.rs:<&std::io::stdio::Stdout as std::io::Write>::write_fmt [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+1,155,000 280,000 220,000    23     5     0    23     1    0 165,000    26 30,000   6  *  /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/io/mod.rs:<&std::io::stdio::Stdout as std::io::Write>::write_fmt
+1,075,000 255,000 190,000    22     4     0    22     1    0 160,000    24 25,000   5  >   /rustc/897e37553bba8b42751c67658967889d11ecd120/library/core/src/fmt/mod.rs:core::fmt::write (5,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+1,075,000 255,000 190,000    22     4     0    22     1    0 160,000    24 25,000   5  < /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/io/mod.rs:<&std::io::stdio::Stdout as std::io::Write>::write_fmt (5,000x)
+1,075,000 255,000 190,000    22     4     0    22     1    0 160,000    24 25,000   5  *  /rustc/897e37553bba8b42751c67658967889d11ecd120/library/core/src/fmt/mod.rs:core::fmt::write [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+  865,000 175,000 125,000    17     2     0    17     1    0 140,000    16 20,000   4  >   /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/io/mod.rs:<std::io::Write::write_fmt::Adapter<T> as core::fmt::Write>::write_str (5,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+  865,000 175,000 125,000    17     2     0    17     1    0 140,000    16 20,000   4  < /rustc/897e37553bba8b42751c67658967889d11ecd120/library/core/src/fmt/mod.rs:core::fmt::write (5,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+  865,000 175,000 125,000    17     2     0    17     1    0 140,000    16 20,000   4  *  /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/io/mod.rs:<std::io::Write::write_fmt::Adapter<T> as core::fmt::Write>::write_str [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+  770,000 135,000  95,000    15     2     0    15     1    0 135,000    14 15,000   3  >   /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/io/stdio.rs:<std::io::stdio::StdoutLock as std::io::Write>::write_all (5,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+  770,000 135,000  95,000    15     2     0    15     1    0 135,000    14 15,000   3  < /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/io/mod.rs:<std::io::Write::write_fmt::Adapter<T> as core::fmt::Write>::write_str (5,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+  770,000 135,000  95,000    15     2     0    15     1    0 135,000    14 15,000   3  *  /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/io/stdio.rs:<std::io::stdio::StdoutLock as std::io::Write>::write_all [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+   55,000  20,000  15,000     2     0     0     2     0    0   5,000     2      .   .  >   /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/io/stdio.rs:std::io::stdio::handle_ebadf (5,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+  669,963 289,982 239,984     4     0     0     4     0    0  10,000     6      .   .  < ???:addingafile::main (10,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+  669,963 289,982 239,984     4     0     0     4     0    0  10,000     6      .   .  *  ???:core::iter::range::<impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>>::next [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+  589,963 249,982 199,984     4     0     0     4     0    0  10,000     6      .   .  >   ???:<core::ops::range::Range<T> as core::iter::range::RangeIteratorImpl>::spec_next (10,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+  589,963 249,982 199,984     4     0     0     4     0    0  10,000     6      .   .  < ???:core::iter::range::<impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>>::next (10,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+  589,963 249,982 199,984     4     0     0     4     0    0  10,000     6      .   .  *  ???:<core::ops::range::Range<T> as core::iter::range::RangeIteratorImpl>::spec_next [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+  149,985  69,993  59,994     1     0     0     1     .    .       .     .      .   .  >   ???:core::mem::replace (9,999x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+   89,991  39,996  29,997     1     0     0     1     .    .       .     .      .   .  >   ???:<i32 as core::iter::range::Step>::forward_unchecked (9,999x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+   60,000  30,000       .     .     .     .     .     .    .       .     .      .   .  >   ???:core::cmp::impls::<impl core::cmp::PartialOrd for i32>::lt (10,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+   19,998  19,998       .     .     .     .     .     .    .       .     .      .   .  >   ???:core::clone::impls::<impl core::clone::Clone for i32>::clone (9,999x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+  231,788  59,356  23,366   768 2,370   931   763 1,879  893  38,469 3,211    569 198  < ???:0x0000000000001100 (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+  231,788  59,356  23,366   768 2,370   931   763 1,879  893  38,469 3,211    569 198  *  /build/glibc-SzIz7B/glibc-2.31/elf/rtld.c:_dl_start [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+  230,704  59,103  23,265   745 2,332   891   741 1,842  853  38,232 3,179    569 198  >   /build/glibc-SzIz7B/glibc-2.31/elf/../elf/dl-sysdep.c:_dl_sysdep_start (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+       24       7       6     3     1     1     3     1    1       2     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-lookup.c:_dl_setup_hash (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+
+  230,704  59,103  23,265   745 2,332   891   741 1,842  853  38,232 3,179    569 198  < /build/glibc-SzIz7B/glibc-2.31/elf/rtld.c:_dl_start (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+  230,704  59,103  23,265   745 2,332   891   741 1,842  853  38,232 3,179    569 198  *  /build/glibc-SzIz7B/glibc-2.31/elf/../elf/dl-sysdep.c:_dl_sysdep_start [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+  220,692  57,134  23,125   689 2,292   881   686 1,805  843  35,314 2,767    550 183  >   /build/glibc-SzIz7B/glibc-2.31/elf/rtld.c:dl_main (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+    9,223   1,812      27     6    21     2     6    21    2   2,787   366      .   .  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-tunables.c:__GI___tunables_init (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+       18       5       2     2     1     0     2     1    0       3     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/elf/../misc/sbrk.c:sbrk (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+       17       2       0     2     1     0     2     1    0       2     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/../strlen.S:strlen (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+
+  220,692  57,134  23,125   689 2,292   881   686 1,805  843  35,314 2,767    550 183  < /build/glibc-SzIz7B/glibc-2.31/elf/../elf/dl-sysdep.c:_dl_sysdep_start (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+  220,692  57,134  23,125   689 2,292   881   686 1,805  843  35,314 2,767    550 183  *  /build/glibc-SzIz7B/glibc-2.31/elf/rtld.c:dl_main [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+  169,263  45,632  17,879   151 1,992   498   150 1,557  462  26,502 1,221    309 109  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-reloc.c:_dl_relocate_object (7x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+   28,765   5,785   3,018   160   124   204   159   118  204   4,814   826    135  41  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-deps.c:_dl_map_object_deps (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+   14,535   3,949     941    37    70    41    36    64   39   2,341   245     62  14  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-error-skeleton.c:_dl_receive_error (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+    3,223     806     375   121    28    42   121    28   42     536   148     17   6  >   /build/glibc-SzIz7B/glibc-2.31/elf/rtld.c:handle_preload_list (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+    1,823     330     243    64     5    17    64     5   17     301   114      7   1  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-load.c:_dl_init_paths (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+      668      71     339    15     5    38    15     1   38     338    32      5   .  >   /build/glibc-SzIz7B/glibc-2.31/elf/rtld.c:init_tls (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+      231      27      53    21     2    13    21     2   13      36    18      2   2  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-object.c:_dl_new_object (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+      216      50      39     6     6     5     6     0    5      34     9      .   .  >   /build/glibc-SzIz7B/glibc-2.31/elf/../elf/dl-tls.c:_dl_allocate_tls_init (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+      161      58       2     2     0     0     2     0    0      52    24      .   .  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-environ.c:_dl_next_ld_env_entry (3x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+       80      12       4     6     1     1     6     1    1      15     8      .   .  >   /build/glibc-SzIz7B/glibc-2.31/elf/../sysdeps/unix/sysv/linux/dl-sysdep.c:_dl_discover_osversion (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+       56      18      12     2     6     0     2     0    0       4     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/elf/../elf/dl-tls.c:_dl_add_to_slotinfo (2x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+       35       9      10     4     0     1     4     0    1       1     1      2   2  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-object.c:_dl_add_to_namespace_list (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+       27       7       4     3     2     0     3     1    0       6     5      .   .  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-debug.c:_dl_debug_initialize (2x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+       25       7       0     3     1     0     3     1    0       3     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/strcmp.S:strcmp (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+       24       7       6     0     1     0     0     1    0       2     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-lookup.c:_dl_setup_hash (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+       17       4       2     2     1     0     2     0    0       2     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-cache.c:_dl_unload_cache (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+        9       1       1     1     0     0     1     0    0       1     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/io/../sysdeps/unix/sysv/linux/access.c:access (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+        6       3       0     1     0     0     1     0    0       1     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/elf/../elf/dl-tls.c:_dl_count_modids (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+        4       2       .     .     .     .     .     .    .       .     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-debug.c:_dl_debug_state (2x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+        2       1       0     1     0     0     1     .    .       .     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/elf/../elf/dl-sysdep.c:_dl_sysdep_start_cleanup (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+
+  205,000  15,000  10,000     5     1     0     5     1    0  35,000     6  5,000   1  *  /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/sys/unix/memchr.rs:<std::io::stdio::StdoutLock as std::io::Write>::write_all
+  155,000  10,000       0     4     1     0     4     1    0  25,000     6      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/memrchr-avx2.S:__memrchr_avx2 (5,000x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+
+  204,690  45,715  17,967   406 1,414   106   396   943   56  39,690 3,003    718  63  *  /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/sys/unix/thread.rs:std::rt::lang_start_internal
+  204,547  45,679  17,946   400 1,412   105   391   943   56  39,671 3,002    713  59  >   /build/glibc-SzIz7B/glibc-2.31/nptl/pthread_getattr_np.c:pthread_getattr_np (1x) [/usr/lib/x86_64-linux-gnu/libpthread-2.31.so]
+       91      26      12     1     0     0     1     0    0      14     1      1   .  >   /build/glibc-SzIz7B/glibc-2.31/nptl/pthread_attr_destroy.c:pthread_attr_destroy (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+        9       3       2     1     0     0     1     .    .       .     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/nptl/pthread_attr_getstack.c:pthread_attr_getstack (1x) [/usr/lib/x86_64-linux-gnu/libpthread-2.31.so]
+        3       2       0     1     0     0     1     .    .       .     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/nptl/pthread_self.c:pthread_self (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+
+  204,547  45,679  17,946   400 1,412   105   391   943   56  39,671 3,002    713  59  < /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/sys/unix/thread.rs:std::rt::lang_start_internal (1x)
+  204,547  45,679  17,946   400 1,412   105   391   943   56  39,671 3,002    713  59  *  /build/glibc-SzIz7B/glibc-2.31/nptl/pthread_getattr_np.c:pthread_getattr_np [/usr/lib/x86_64-linux-gnu/libpthread-2.31.so]
+  110,433  25,421  14,598    83    35     8    82    14    0  20,432   546    466   8  >   ???:0x0000000004860930 (58x) [???]
+   76,581  15,533     892   136 1,226    87   136   856   51  16,540 2,140     33  21  >   ???:0x00000000048609d0 (1x) [???]
+   11,079   2,737   1,466    91    88     5    91    68    5   1,718   213    191  13  >   ???:0x00000000048607f0 (58x) [???]
+    1,286     415     218    37    12     0    37     2    0     188    36      9   7  >   ???:0x00000000048606a0 (1x) [???]
+    1,144     346     197    21     3     0    20     0    0     168    34      3   2  >   ???:0x0000000004860960 (1x) [???]
+      859     295     149     7     9     0     2     1    0     116    11      4   3  >   ???:0x00000000048605c0 (1x) [???]
+      803     280     140     8    13     0     6     1    0     107     8      4   3  >   /build/glibc-SzIz7B/glibc-2.31/nptl/../sysdeps/unix/sysv/linux/pthread_getaffinity.c:pthread_getaffinity_np@@GLIBC_2.3.4 (1x) [/usr/lib/x86_64-linux-gnu/libpthread-2.31.so]
+      780     276     138     2    22     2     2     1    0     100     4      3   2  >   ???:0x0000000004860a70 (1x) [???]
+
+  180,000  60,000  70,000     3     0     0     3     0    0  10,000     .      .   .  < ???:addingafile::bar (5,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+  180,000  60,000  70,000     3     0     0     3     0    0  10,000     .      .   .  *  ???:core::fmt::Arguments::new_v1 [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+  169,263  45,632  17,879   151 1,992   498   150 1,557  462  26,502 1,221    309 109  < /build/glibc-SzIz7B/glibc-2.31/elf/rtld.c:dl_main (7x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+  169,263  45,632  17,879   151 1,992   498   150 1,557  462  26,502 1,221    309 109  *  /build/glibc-SzIz7B/glibc-2.31/elf/dl-reloc.c:_dl_relocate_object [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+       42       7       0     2     0     0     1     0    0       7     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/misc/../sysdeps/unix/syscall-template.S:mprotect (7x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+
+  155,000  10,000       0     4     1     0     4     1    0  25,000     6      .   .  < /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/sys/unix/memchr.rs:<std::io::stdio::StdoutLock as std::io::Write>::write_all (5,000x)
+  155,000  10,000       0     4     1     0     4     1    0  25,000     6      .   .  *  /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/memrchr-avx2.S:__memrchr_avx2 [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+
+  151,699  41,298  17,266   127 1,512   495   127 1,148  462  23,432 1,076    309 109  *  /build/glibc-SzIz7B/glibc-2.31/elf/../sysdeps/x86_64/dl-machine.h:_dl_relocate_object
+  119,772  33,738  13,588    42   828    17    42   512    5  16,445   991     66  56  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-lookup.c:_dl_lookup_symbol_x (177x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+       51      15       0     2     2     0     2     0    0       9     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/memmove.c:memmove (3x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       38      12       0     2     1     0     2     0    0       6     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/memset.c:memset (2x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       34      10       0     2     0     0     2     0    0       6     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/memcpy.c:memcpy@@GLIBC_2.14 (2x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       34       6       0     3     0     0     3     0    0       2     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/wcsmbs/../sysdeps/x86_64/multiarch/wmemset.c:wmemset (2x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       26      10       0     2     0     0     2     0    0       6     2      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/memcmp.c:bcmp (2x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       20       6       0     2     0     0     2     .    .       .     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/memrchr.c:memrchr (2x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       20       6       0     2     0     0     2     .    .       .     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strnlen.c:strnlen (2x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       20       6       0     2     0     0     2     .    .       .     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/wcsmbs/../sysdeps/x86_64/multiarch/wmemchr.c:wmemchr (2x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       20       6       0     1     2     0     1     .    .       .     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strlen.c:strlen (2x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       20       6       0     1     0     0     1     .    .       .     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/wcsmbs/../sysdeps/x86_64/multiarch/wcschr.c:wcschr (2x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       17       5       0     2     0     0     2     0    0       3     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/mempcpy.c:mempcpy (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       13       5       0     1     0     0     1     0    0       3     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/wcsmbs/../sysdeps/x86_64/multiarch/wmemcmp.c:wmemcmp (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       10       3       0     2     0     0     2     .    .       .     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/wcsmbs/../sysdeps/x86_64/multiarch/wcslen.c:wcslen (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       10       3       0     2     0     0     2     .    .       .     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/rawmemchr.c:rawmemchr (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       10       3       0     2     0     0     2     .    .       .     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/wcsmbs/../sysdeps/x86_64/multiarch/wcscmp.c:wcscmp (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       10       3       0     1     0     0     1     .    .       .     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/memchr.c:memchr (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       10       3       0     1     0     0     1     .    .       .     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strchrnul.c:strchrnul (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       10       3       0     1     0     0     1     .    .       .     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strrchr.c:rindex (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+        9       3       0     2     0     0     2     0    0       1     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strcat.c:strcat (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+        9       3       0     2     0     0     2     0    0       1     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strncmp.c:strncmp (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+        9       3       0     2     0     0     2     0    0       1     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/wcsmbs/../sysdeps/x86_64/multiarch/wcsnlen.c:wcsnlen (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+        9       3       0     2     0     0     2     0    0       1     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strcmp.c:strcmp (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+        9       3       0     2     0     0     2     0    0       1     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strncpy.c:strncpy (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+        9       3       0     2     0     0     2     0    0       1     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/stpcpy.c:stpcpy (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+        9       3       0     1     0     0     1     0    0       1     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/stpncpy.c:stpncpy (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+        9       3       0     1     0     0     1     0    0       1     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strcpy.c:strcpy (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+        9       3       0     1     0     0     1     0    0       1     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strchr.c:index (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+        7       3       0     2     0     0     2     .    .       .     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strcspn.c:strcspn (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+        7       3       0     2     0     0     2     .    .       .     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strspn.c:strspn (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+        7       3       0     1     0     0     1     .    .       .     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/wcsmbs/../sysdeps/x86_64/multiarch/wcscpy.c:wcscpy (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+        7       3       0     1     0     0     1     .    .       .     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strpbrk.c:strpbrk (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+        6       3       0     2     0     0     2     0    0       1     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strcasecmp.c:strcasecmp (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+        6       3       0     2     0     0     2     0    0       1     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strncase.c:strncasecmp (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+        6       3       0     1     0     0     1     0    0       1     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strcasecmp_l.c:strcasecmp_l (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+        6       3       0     1     0     0     1     0    0       1     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strncase_l.c:strncasecmp_l (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+
+  149,985  69,993  59,994     1     0     0     1     .    .       .     .      .   .  < ???:<core::ops::range::Range<T> as core::iter::range::RangeIteratorImpl>::spec_next (9,999x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+  149,985  69,993  59,994     1     0     0     1     .    .       .     .      .   .  *  ???:core::mem::replace [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+  145,000  20,000  10,000     0     0     0     0     0    0  40,000     4  5,000   1  *  /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/io/buffered/linewritershim.rs:<std::io::stdio::StdoutLock as std::io::Write>::write_all
+   70,000   5,000       0     0     0     0     0     0    0  30,000     2      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/memmove-vec-unaligned-erms.S:__memcpy_avx_unaligned_erms (5,000x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+
+  119,772  33,738  13,588    42   828    17    42   512    5  16,445   991     66  56  < /build/glibc-SzIz7B/glibc-2.31/elf/../sysdeps/x86_64/dl-machine.h:_dl_relocate_object (177x)
+   11,294   3,249   1,284     3   137    24     0    22    2   1,568    91      8   6  < /build/glibc-SzIz7B/glibc-2.31/elf/../elf/dl-runtime.c:_dl_fixup (16x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+  131,066  36,987  14,872    45   965    41    42   534    7  18,013 1,082     74  62  *  /build/glibc-SzIz7B/glibc-2.31/elf/dl-lookup.c:_dl_lookup_symbol_x [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+   89,840  29,026  10,625    35   813    27    32   412    6  13,108   817     74  62  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-lookup.c:do_lookup_x (193x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+
+  110,433  25,421  14,598    83    35     8    82    14    0  20,432   546    466   8  < /build/glibc-SzIz7B/glibc-2.31/nptl/pthread_getattr_np.c:pthread_getattr_np (58x) [/usr/lib/x86_64-linux-gnu/libpthread-2.31.so]
+  110,433  25,421  14,598    83    35     8    82    14    0  20,432   546    466   8  *  ???:0x0000000004860930 [???]
+  107,580  24,650  14,212     4     0     0     4     0    0  19,976   458    399   .  >   /build/glibc-SzIz7B/glibc-2.31/stdio-common/isoc99_sscanf.c:__isoc99_sscanf (57x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+    2,732     711     384    78    34     8    77    14    0     456    88      8   6  >   /build/glibc-SzIz7B/glibc-2.31/elf/../sysdeps/x86_64/dl-trampoline.h:_dl_runtime_resolve_xsave (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+
+  107,580  24,650  14,212     4     0     0     4     0    0  19,976   458    399   .  < ???:0x0000000004860930 (57x) [???]
+  107,580  24,650  14,212     4     0     0     4     0    0  19,976   458    399   .  *  /build/glibc-SzIz7B/glibc-2.31/stdio-common/isoc99_sscanf.c:__isoc99_sscanf [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+   98,357  23,106  11,386    66    17     8    66    11    0  19,568   475    348   4  >   /build/glibc-SzIz7B/glibc-2.31/stdio-common/vfscanf-internal.c:__vfscanf_internal (58x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+
+   98,357  23,106  11,386    66    17     8    66    11    0  19,568   475    348   4  < /build/glibc-SzIz7B/glibc-2.31/stdio-common/isoc99_sscanf.c:__isoc99_sscanf (58x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+   98,357  23,106  11,386    66    17     8    66    11    0  19,568   475    348   4  *  /build/glibc-SzIz7B/glibc-2.31/stdio-common/vfscanf-internal.c:__vfscanf_internal [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+   28,679   3,442   1,276    13     5     1    13     4    0   7,546   232      .   .  >   /build/glibc-SzIz7B/glibc-2.31/stdlib/../stdlib/strtol.c:__strtoul_internal (116x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+    4,408   1,392     928     2     0     1     2     0    0     464     4      .   .  >   /build/glibc-SzIz7B/glibc-2.31/libio/genops.c:_IO_sputbackc (232x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+      986     232     290     0     0     0     0     0    0      58     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/nptl/cleanup_defer_compat.c:_pthread_cleanup_push_defer (58x) [/usr/lib/x86_64-linux-gnu/libpthread-2.31.so]
+      580     232      58     0     0     0     0     0    0     116     2      .   .  >   /build/glibc-SzIz7B/glibc-2.31/nptl/cleanup_defer_compat.c:_pthread_cleanup_pop_restore (58x) [/usr/lib/x86_64-linux-gnu/libpthread-2.31.so]
+
+   76,574  15,530     890   134 1,225    87   134   856   51  16,540 2,140     31  20  < ???:0x00000000048609d0 (1x) [???]
+    2,732     711     384    78    34     8    77    14    0     456    88      8   6  < ???:0x0000000004860930 (1x) [???]
+    2,705     804     463    82    26     5    82     7    5     373    72     14  11  < ???:0x00000000048607f0 (1x) [???]
+    1,303     382     194     5    15     8     5     7    8     168    17      3   3  < ???:0x0000000004860940 (1x) [???]
+    1,279     412     216    35    11     0    35     2    0     188    36      7   6  < ???:0x00000000048606a0 (1x) [???]
+    1,137     343     195    19     2     0    19     0    0     168    34      1   1  < ???:0x0000000004860960 (1x) [???]
+    1,001     305     142     9    16     6     9     3    4     128     7      2   1  < ???:0x0000000004860a30 (1x) [???]
+      965     300     141     3     7     1     0     3    0     125    10      2   2  < ???:0x0000000004860a10 (1x) [???]
+      958     307     176     7     8     0     7     0    0     135    21      1   1  < ???:0x00000000048a5550 (1x) [???]
+      878     290     142     1    10     0     1     5    0     113     6      2   1  < ???:0x00000000048605d0 (1x) [???]
+      852     292     147     5     9     0     2     1    0     116    11      2   2  < ???:0x00000000048605c0 (1x) [???]
+      776     275     137     4    12     0     2     1    0     106     7      2   2  < ???:0x0000000004860740 (1x) [???]
+      773     273     136     0    20     2     0     1    0     100     4      1   1  < ???:0x0000000004860a70 (1x) [???]
+   91,933  20,224   3,363   382 1,395   117   373   900   68  18,716 2,453     76  57  *  /build/glibc-SzIz7B/glibc-2.31/elf/../sysdeps/x86_64/dl-trampoline.h:_dl_runtime_resolve_xsave [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+   10,132   3,001   1,119    10   131    10     5    29    2   1,392    77      8   6  >   /build/glibc-SzIz7B/glibc-2.31/elf/../elf/dl-runtime.c:_dl_fixup (13x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+
+   89,991  39,996  29,997     1     0     0     1     .    .       .     .      .   .  < ???:<core::ops::range::Range<T> as core::iter::range::RangeIteratorImpl>::spec_next (9,999x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+   89,991  39,996  29,997     1     0     0     1     .    .       .     .      .   .  *  ???:<i32 as core::iter::range::Step>::forward_unchecked [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+   89,840  29,026  10,625    35   813    27    32   412    6  13,108   817     74  62  < /build/glibc-SzIz7B/glibc-2.31/elf/dl-lookup.c:_dl_lookup_symbol_x (193x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+   89,840  29,026  10,625    35   813    27    32   412    6  13,108   817     74  62  *  /build/glibc-SzIz7B/glibc-2.31/elf/dl-lookup.c:do_lookup_x [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+   20,948   5,619   1,205    20   350     7    17   186    1   2,570   286     74  62  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-lookup.c:check_match (184x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+
+   75,733  15,228     708    91 1,206    78    91   848   48  16,446 2,144     23  12  < ???:0x00000000048a5310 (3x) [???]
+      763     144     126     3     0     0     2     0    0     125    35      .   .  < /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/sys/unix/alloc.rs:__rdl_alloc (3x)
+      364      66      53    18     0     0    18     0    0      67    28      .   .  < /build/glibc-SzIz7B/glibc-2.31/malloc/malloc.c:realloc (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+   76,860  15,438     887   112 1,206    78   111   848   48  16,638 2,207     23  12  *  /build/glibc-SzIz7B/glibc-2.31/malloc/malloc.c:malloc [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+   75,345  15,153     648    82 1,205    76    82   848   46  16,390 2,117     22  11  >   /build/glibc-SzIz7B/glibc-2.31/malloc/hooks.c:malloc_hook_ini (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+    1,221     208     212    24     0     2    23     0    2     188    69      .   .  >   /build/glibc-SzIz7B/glibc-2.31/malloc/malloc.c:_int_malloc (6x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+
+   76,581  15,533     892   136 1,226    87   136   856   51  16,540 2,140     33  21  < /build/glibc-SzIz7B/glibc-2.31/nptl/pthread_getattr_np.c:pthread_getattr_np (1x) [/usr/lib/x86_64-linux-gnu/libpthread-2.31.so]
+   76,581  15,533     892   136 1,226    87   136   856   51  16,540 2,140     33  21  *  ???:0x00000000048609d0 [???]
+   76,574  15,530     890   134 1,225    87   134   856   51  16,540 2,140     31  20  >   /build/glibc-SzIz7B/glibc-2.31/elf/../sysdeps/x86_64/dl-trampoline.h:_dl_runtime_resolve_xsave (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+
+   75,823  15,264     754   134 1,217    81   134   854   51  16,442 2,134     29  18  *  /build/glibc-SzIz7B/glibc-2.31/libio/iofopen.c:fopen@@GLIBC_2.2.5 [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+   75,361  15,160     651    85 1,206    76    85   848   46  16,391 2,118     24  13  >   ???:0x00000000048a5310 (1x) [???]
+      235      50      32    25     4     0    25     4    0      28     8      3   3  >   /build/glibc-SzIz7B/glibc-2.31/libio/fileops.c:_IO_file_fopen@@GLIBC_2.2.5 (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+      132      40      34    15     5     0    15     1    0      17     5      2   2  >   /build/glibc-SzIz7B/glibc-2.31/libio/fileops.c:_IO_new_file_init_internal (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+       53       8      27     5     1     4     5     1    4       3     1      .   .  >   /build/glibc-SzIz7B/glibc-2.31/libio/genops.c:_IO_no_init (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+
+   75,361  15,160     651    85 1,206    76    85   848   46  16,391 2,118     24  13  < /build/glibc-SzIz7B/glibc-2.31/libio/iofopen.c:fopen@@GLIBC_2.2.5 (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+      191      37      28     5     1     1     5     0    1      29    14      1   1  < /build/glibc-SzIz7B/glibc-2.31/libio/iogetdelim.c:getdelim (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+      187      34      29     2     0     1     2     0    1      26    12      1   .  < /build/glibc-SzIz7B/glibc-2.31/libio/filedoalloc.c:_IO_file_doallocate (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+   75,739  15,231     708    92 1,207    78    92   848   48  16,446 2,144     26  14  *  ???:0x00000000048a5310 [???]
+   75,733  15,228     708    91 1,206    78    91   848   48  16,446 2,144     23  12  >   /build/glibc-SzIz7B/glibc-2.31/malloc/malloc.c:malloc (3x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+
+   75,345  15,153     648    82 1,205    76    82   848   46  16,390 2,117     22  11  < /build/glibc-SzIz7B/glibc-2.31/malloc/malloc.c:malloc (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+   75,345  15,153     648    82 1,205    76    82   848   46  16,390 2,117     22  11  *  /build/glibc-SzIz7B/glibc-2.31/malloc/hooks.c:malloc_hook_ini [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+
+   74,677  15,034     473    36 1,196    64    36   847   34  16,220 2,079     20   9  *  /build/glibc-SzIz7B/glibc-2.31/malloc/arena.c:malloc_hook_ini
+   74,672  15,032     472    36 1,194    64    36   846   34  16,219 2,078     20   9  >   /build/glibc-SzIz7B/glibc-2.31/malloc/arena.c:ptmalloc_init.part.0 (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+
+   74,672  15,032     472    36 1,194    64    36   846   34  16,219 2,078     20   9  < /build/glibc-SzIz7B/glibc-2.31/malloc/arena.c:malloc_hook_ini (1x)
+   74,672  15,032     472    36 1,194    64    36   846   34  16,219 2,078     20   9  *  /build/glibc-SzIz7B/glibc-2.31/malloc/arena.c:ptmalloc_init.part.0 [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+   72,651  14,663     170    25 1,106     5    25   844    0  15,932 2,046      6   6  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-addr.c:_dl_addr (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+    1,170     358     154     2    83    22     2     1    0     155    20     14   3  >   ???:0x00000000048a5450 (12x) [???]
+
+   72,651  14,663     170    25 1,106     5    25   844    0  15,932 2,046      6   6  < /build/glibc-SzIz7B/glibc-2.31/malloc/arena.c:ptmalloc_init.part.0 (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+   72,651  14,663     170    25 1,106     5    25   844    0  15,932 2,046      6   6  *  /build/glibc-SzIz7B/glibc-2.31/elf/dl-addr.c:_dl_addr [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+    1,040     332     146     6    17     4     6     1    0     147    16      4   4  >   ???:0x00000000048a5510 (1x) [???]
+       35       8       5     5     0     0     5     0    0       7     2      .   .  >   /build/glibc-SzIz7B/glibc-2.31/nptl/../nptl/pthread_mutex_lock.c:pthread_mutex_lock (1x) [/usr/lib/x86_64-linux-gnu/libpthread-2.31.so]
+       31       7       4     4     2     0     4     0    0       8     3      .   .  >   /build/glibc-SzIz7B/glibc-2.31/nptl/pthread_mutex_unlock.c:pthread_mutex_unlock (1x) [/usr/lib/x86_64-linux-gnu/libpthread-2.31.so]
+
+   70,000   5,000       0     0     0     0     0     0    0  30,000     2      .   .  < /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/io/buffered/linewritershim.rs:<std::io::stdio::StdoutLock as std::io::Write>::write_all (5,000x)
+    1,229     306     246     7     1     2     7     1    2     249    25      .   .  < ???:0x00000000048a54d0 (60x) [???]
+       15       3       2     0     1     0     0     1    0       4     2      .   .  < /rustc/897e37553bba8b42751c67658967889d11ecd120/library/core/src/intrinsics.rs:<&str as alloc::ffi::c_str::CString::new::SpecNewImpl>::spec_new_impl (1x)
+   71,244   5,309     248     7     2     2     7     2    2  30,253    29      .   .  *  /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/memmove-vec-unaligned-erms.S:__memcpy_avx_unaligned_erms [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+
+   60,000  30,000       .     .     .     .     .     .    .       .     .      .   .  < ???:<core::ops::range::Range<T> as core::iter::range::RangeIteratorImpl>::spec_next (10,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+   60,000  30,000       .     .     .     .     .     .    .       .     .      .   .  *  ???:core::cmp::impls::<impl core::cmp::PartialOrd for i32>::lt [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+   60,000  15,000   5,000     2     1     0     2     0    0  10,000     0  5,000   1  *  /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/sys/unix/fd.rs:<std::io::stdio::StdoutLock as std::io::Write>::write_all
+   45,000  10,000       0     1     0     0     1     0    0  10,000     .      .   .  >   /build/glibc-SzIz7B/glibc-2.31/nptl/../sysdeps/unix/sysv/linux/write.c:write (5,000x) [/usr/lib/x86_64-linux-gnu/libpthread-2.31.so]
+
+   60,000   5,000   5,000     1     0     0     1     0    0  15,000     2      .   .  *  /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/io/mod.rs:<std::io::stdio::StdoutLock as std::io::Write>::write_all
+
+   55,000  20,000  15,000     2     0     0     2     0    0   5,000     2      .   .  < /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/io/stdio.rs:<std::io::stdio::StdoutLock as std::io::Write>::write_all (5,000x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+   55,000  20,000  15,000     2     0     0     2     0    0   5,000     2      .   .  *  /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/io/stdio.rs:std::io::stdio::handle_ebadf [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+   45,000  10,000  20,000     1     0     0     1     0    0   5,000     .      .   .  *  /rustc/897e37553bba8b42751c67658967889d11ecd120/library/core/src/sync/atomic.rs:<&std::io::stdio::Stdout as std::io::Write>::write_fmt
+
+   45,000  10,000       0     1     0     0     1     0    0  10,000     .      .   .  < /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/sys/unix/fd.rs:<std::io::stdio::StdoutLock as std::io::Write>::write_all (5,000x)
+   45,000  10,000       0     1     0     0     1     0    0  10,000     .      .   .  *  /build/glibc-SzIz7B/glibc-2.31/nptl/../sysdeps/unix/sysv/linux/write.c:write [/usr/lib/x86_64-linux-gnu/libpthread-2.31.so]
+
+   45,000   5,000  10,000     1     0     0     1     0    0  10,000     1      .   .  *  /rustc/897e37553bba8b42751c67658967889d11ecd120/library/std/src/sys_common/remutex.rs:<&std::io::stdio::Stdout as std::io::Write>::write_fmt
+
+   44,991  14,997   9,998     0     0     0     0     0    0   4,999     .      .   .  < ???:addingafile::main (4,999x) [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+   44,991  14,997   9,998     0     0     0     0     0    0   4,999     .      .   .  *  ???:addingafile::foo [/mnt/d/Capstone/Rust-Code-Visualizer/VSCodeUI/rust-code-visualizer/ext-src/scripts/addingafile]
+
+   35,000   5,000   5,000     0     0     0     0     0    0   5,000     .      .   .  *  /rustc/897e37553bba8b42751c67658967889d11ecd120/library/core/src/cell.rs:<std::io::stdio::StdoutLock as std::io::Write>::write_all
+
+   28,765   5,785   3,018   160   124   204   159   118  204   4,814   826    135  41  < /build/glibc-SzIz7B/glibc-2.31/elf/rtld.c:dl_main (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+   28,765   5,785   3,018   160   124   204   159   118  204   4,814   826    135  41  *  /build/glibc-SzIz7B/glibc-2.31/elf/dl-deps.c:_dl_map_object_deps [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+   24,885   5,013   2,600   116   106   191   115   106  191   4,025   689    129  41  >   ???:0x0000000004001090 (11x) [???]
+      668     147      46     9     0     0     9     0    0     142    44      .   .  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-sort-maps.c:_dl_sort_maps (1x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+      558     111      66     2    10     1     2    10    1      37     8      .   .  >   /build/glibc-SzIz7B/glibc-2.31/elf/dl-load.c:_dl_dst_count (11x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+      162      36      30     0     0     0     0     0    0      18     0      6   .  >   ???:0x00000000040010a0 (6x) [???]
+      129      35      24     0     0     1     0     0    1      24     7      .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/memmove-vec-unaligned-erms.S:memcpy (11x) [/usr/lib/x86_64-linux-gnu/ld-2.31.so]
+
