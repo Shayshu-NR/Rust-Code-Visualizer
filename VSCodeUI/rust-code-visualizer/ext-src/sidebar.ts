@@ -44,14 +44,19 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           vscode.window.showErrorMessage(data.value);
           break;
         }
-        case "reqProfileData":
+        case "reqProfileData": {
           if (!data.value) {
             return;
           }
           var cp = require("child_process");
 
           cp.exec(
-            `python ${path.join(this._extensionPath, "ext-src", "main.py")}`,
+            `python ${path.join(
+              this._extensionPath,
+              "ext-src",
+              "scripts",
+              "profilerChartData.py"
+            )}`,
             (err: any, stdout: any, stderr: any) => {
               try {
                 var data = stdout; //JSON.parse(stdout);
@@ -67,7 +72,8 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           );
 
           break;
-        case "reqFiles":
+        }
+        case "reqFiles": {
           if (!data.value) {
             return;
           }
@@ -91,6 +97,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           }
 
           break;
+        }
       }
     });
   }
@@ -105,17 +112,6 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
     try {
       var fs = require("fs");
       var cp = require("child_process");
-
-      cp.exec(
-        `python ${path.join(this._extensionPath, "ext-src", "main.py")}`,
-        (err: any, stdout: any, stderr: any) => {
-          console.log("stdout: " + stdout);
-          console.log("stderr: " + stderr);
-          if (err) {
-            console.log("error: " + err);
-          }
-        }
-      );
 
       const manifest = JSON.parse(
         fs.readFileSync(
