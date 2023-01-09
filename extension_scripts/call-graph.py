@@ -22,8 +22,8 @@ class RustFileDetails:
         with open(self.rust_file, 'r') as f:
             for line in f:
                 if 'fn' in line:
-                    regexPattern = "fn " + '(.+?)' + '\('
-                    func_name = re.search(regexPattern, line).group(1)
+                    regex_pattern = "fn " + '(.+?)' + '\('
+                    func_name = re.search(regex_pattern, line).group(1)
                     if func_name != 'main':
                         self.function_list.append(func_name)
 
@@ -33,7 +33,7 @@ class RustFileDetails:
 
 def generate_call_graph(rust_file):
     file_class = RustFileDetails(rust_file)
-    
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Script to generate the call graph of a Rust source code file.")
