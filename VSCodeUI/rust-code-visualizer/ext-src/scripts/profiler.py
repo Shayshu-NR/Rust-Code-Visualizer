@@ -25,7 +25,6 @@ class profiler:
         self.__extract_data()
         self.__create_json()
         
-    
     # Runs the callgrind profiler and the executable
     def __run_profilers(self):
         profiler_cmd = "valgrind --tool=callgrind --branch-sim=yes --cache-sim=yes ./" + self.__executable + " >/dev/null 2>&1"        
@@ -53,7 +52,6 @@ class profiler:
         FUNCTION_DATA = re.compile(r".*\*.*:" + re.escape(os.path.split(self.__current_path + "/" + self.__executable)[1]) + r".*\[" + re.escape(self.__current_path + "/" + self.__executable) + r"\].*") 
         FUNCTION_DATA_ALL = re.compile(r".*:" + re.escape(os.path.split(self.__current_path + "/" + self.__executable)[1]) + r".*\[" + re.escape(self.__current_path + "/" + self.__executable) + r"\].*") # Inclusive of caller/callees
         
-        print(self.__current_path + "/" + self.__executable)
         i = 0
         while i < len(lines):
             search =  TOTAL_DATA.match(lines[i])

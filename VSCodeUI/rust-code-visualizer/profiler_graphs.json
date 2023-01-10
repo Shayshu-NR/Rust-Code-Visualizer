@@ -1,0 +1,62 @@
+{
+    "L1 Data Cache Misses": {
+        "labels": [
+            "bar",
+            "foo"
+        ],
+        "datasets": [
+            {
+                "label": "L1 Data Cache Misses",
+                "data": [
+                    13,
+                    0
+                ]
+            }
+        ]
+    },
+    "LL Data Cache Misses": {
+        "labels": [
+            "bar",
+            "foo"
+        ],
+        "datasets": [
+            {
+                "label": "LL Data Cache Misses",
+                "data": [
+                    3,
+                    0
+                ]
+            }
+        ]
+    },
+    "Instruction Count": {
+        "labels": [
+            "bar",
+            "foo"
+        ],
+        "datasets": [
+            {
+                "label": "Instruction Count",
+                "data": [
+                    1870468,
+                    44991
+                ]
+            }
+        ]
+    },
+    "Branch mispredictions": {
+        "labels": [
+            "bar",
+            "foo"
+        ],
+        "datasets": [
+            {
+                "label": "Branch mispredictions",
+                "data": [
+                    58,
+                    0
+                ]
+            }
+        ]
+    }
+}

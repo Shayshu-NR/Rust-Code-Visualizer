@@ -2,6 +2,8 @@ import * as vscode from "vscode";
 import * as path from "path";
 import { getNonce } from "./utilities";
 import { read, readFile, readFileSync } from "fs";
+import { spawnSync } from "child_process";
+import { windowsToWslSync } from "wsl-path";
 
 export class SidebarProvider implements vscode.WebviewViewProvider {
   _view?: vscode.WebviewView;
@@ -49,27 +51,26 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
             return;
           }
           var cp = require("child_process");
+          var fs = require("fs");
 
-          cp.exec(
-            `python ${path.join(
+          if (vscode.workspace.workspaceFolders !== undefined) {
+            let cwd: string = path.join(
               this._extensionPath,
               "ext-src",
               "scripts",
               "profilerChartData.py"
-            )}`,
-            (err: any, stdout: any, stderr: any) => {
-              try {
-                var data = stdout; //JSON.parse(stdout);
-                webviewView.webview.postMessage({
-                  type: "profileDataResults",
-                  value: data,
-                });
-              } catch (err) {
-                console.log(err);
-                return;
-              }
-            }
-          );
+            );
+            let targetFile: string = path.join(
+              vscode.workspace.workspaceFolders[0].uri.fsPath,
+              data.value
+            );
+
+            let cmd: string = `python3 ${windowsToWslSync(cwd)} ${windowsToWslSync(targetFile)}`;
+
+            cp.exec(cmd, (err: any, stdout: any, stderr: any) => {
+              
+            });
+          }
 
           break;
         }
