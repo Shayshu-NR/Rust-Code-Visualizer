@@ -106,7 +106,7 @@ class profiler:
 
     # Creates a JSON file and writes the data into it
     def __create_json(self):
-        graph_data = ["L1 Data Cache Misses", "LL Data Cache Misses", "Instruction Count", "Branch mispredictions"]
+        graph_data = ["L1 Data Cache Misses", "LL Data Cache Misses", "Instruction Count", "Branch Mispredictions"]
         func_labels = list(self.__func_dict.keys())[1:]
         graph_dict = {}
         for dataset in graph_data:
