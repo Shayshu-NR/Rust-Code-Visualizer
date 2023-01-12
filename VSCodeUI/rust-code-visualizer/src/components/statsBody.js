@@ -11,7 +11,7 @@ import {
 } from 'chart.js';
 import { Bar, Scatter, Pie } from 'react-chartjs-2';
 import { faker } from '@faker-js/faker';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 ChartJS.register(
   CategoryScale,
@@ -24,8 +24,28 @@ ChartJS.register(
   Legend
 );
 
+const tableColumnName = [
+  "Function Name",
+  "Instruction Count",
+  "Data Reads",
+  "Data Writes",
+  "First level I cache misses",
+  "First level data cache read misses",
+  "First level data cache write misses",
+  "Last level instruction cache misses",
+  "Last level data cache read misses",
+  "Last level data cache write misses",
+  "Total branches",
+  "Branch Mispredictions",
+  "Total indirect jumps",
+  "Indirect jump address mispredictions"
+];
+
 function removeData(chart) {
   chart.data.labels.pop();
+  chart.data.datasets.forEach((dataset) => {
+    dataset.data.pop();
+  });
   chart.data.datasets.pop();
   chart.update();
 }
@@ -34,28 +54,59 @@ function addData(chart, label, data) {
   label.forEach(x => chart.data.labels.push(x));
   data.forEach(x => chart.data.datasets.push(x));
   chart.update();
-  console.log(chart);
-  console.log(chart.data);
 }
 
+function formatTableData(preData) {
+  let postData = {
+    "columns": tableColumnName,
+    "rows": []
+  };
+
+  try {
+    let i = 0;
+    for (let [key, value] of Object.entries(preData)) {
+      postData.rows.push([]);
+      postData.rows[i].push(key);
+      for (let [innerKey, innerValue] of Object.entries(value)) {
+        postData.rows[i].push(innerValue);
+      }
+      i++;
+    }
+    return postData;
+  }
+  catch {
+    return {
+      "columns": tableColumnName,
+      "rows": []
+    };
+  }
+}
+
+
 function StatsBody({ collapseState, programTarget }) {
+  const [tableData, setTableData] = useState({
+    "columns": [],
+    "rows": []
+  });
+
   let classNames = require('classnames');
-  let l1Data = {
+
+  const [l1Data, setl1Data] = useState({
     labels: [],
     datasets: []
-  };
-  let llData = {
+  });
+  const [llData, setllData] = useState({
     labels: [],
     datasets: []
-  };
-  let instructionData = {
+  });
+  const [instructionData, setinstructionData] = useState({
     labels: [],
     datasets: []
-  };
-  let branchData = {
+  });
+  const [branchData, setbranchData] = useState({
     labels: [],
     datasets: []
-  };
+  });
   const l1ChartRef = useRef(null);
   const llChartRef = useRef(null);
   const instructionChartRef = useRef(null);
@@ -76,30 +127,51 @@ function StatsBody({ collapseState, programTarget }) {
         case "profileDataResults":
           let profilerData = message.value;
           let data = profilerData.chart;
+          let tabularData = profilerData.table;
 
           // Update all four charts with the returned data....
-          removeData(l1Chart);
-          addData(l1Chart, data["L1 Data Cache Misses"].labels, data["L1 Data Cache Misses"].datasets);
+          setl1Data({
+            labels: data["L1 Data Cache Misses"].labels,
+            datasets: data["L1 Data Cache Misses"].datasets
+          });
 
-          removeData(llChart);
-          addData(llChart, data["LL Data Cache Misses"].labels, data["LL Data Cache Misses"].datasets);
+          setllData(
+            {
+              labels: data["LL Data Cache Misses"].labels,
+              datasets: data["LL Data Cache Misses"].datasets
+            }
+          );
 
-          removeData(instructionChart);
-          addData(instructionChart, data["Instruction Count"].labels, data["Instruction Count"].datasets);
+          setinstructionData(
+            {
+              labels: data["Instruction Count"].labels,
+              datasets: data["Instruction Count"].datasets
+            }
+          );
 
-          removeData(branchChart);
-          addData(branchChart, data["Branch Mispredictions"].labels, data["Branch Mispredictions"].datasets);
+          setbranchData(
+            {
+              labels: data["Branch Mispredictions"].labels,
+              datasets: data["Branch Mispredictions"].datasets
+            }
+          );
+
+          setTableData(formatTableData(tabularData));
           break;
       }
     });
 
-    vscode.postMessage({ type: 'reqProfileData', value: programTarget });
+    if (programTarget.target?.value !== undefined) {
+      vscode.postMessage({ type: 'reqProfileData', value: programTarget.target.value });
+    }
   }, []);
 
   // On program target change
   useEffect(() => {
     console.log("Program target changed: ", programTarget);
-    vscode.postMessage({ type: 'reqProfileData', value: programTarget });
+    if (programTarget.target?.value !== undefined) {
+      vscode.postMessage({ type: 'reqProfileData', value: programTarget.target.value });
+    }
   }, [programTarget]);
 
   let containerCollapseClass = classNames({
@@ -125,16 +197,6 @@ function StatsBody({ collapseState, programTarget }) {
     },
   };
 
-  const tableData = {
-    data: Array.from({ length: 5 }, () => ({
-      colData1: faker.datatype.float({ min: 0, max: 100 }),
-      colData2: faker.datatype.float({ min: 0, max: 100 }),
-      colData3: faker.datatype.float({ min: 0, max: 100 }),
-      colData4: faker.datatype.float({ min: 0, max: 100 }),
-      colData5: faker.datatype.float({ min: 0, max: 100 })
-    }))
-  };
-
   return (
     <div className={containerCollapseClass}>
       <div className="flex flex-row">
@@ -157,27 +219,21 @@ function StatsBody({ collapseState, programTarget }) {
           <Bar ref={branchChartRef} options={options} data={branchData} style={{ display: collapseState ? 'none' : '' }} className='!w-full text-white' />
         </div>
       </div>
-      <div className='flex flex-row'>
+      <div className='flex flex-row mt-2 overflow-scroll'>
         <div className='text-white basis-full'>
           <table className='table-auto w-full border-collapse border border-slate-600 rounded-md p-5'>
             <thead>
               <tr className='justify-start'>
-                <th className='border border-slate-600 font-semibold p-4 text-left bg-slate-500'>Col1</th>
-                <th className='border border-slate-600 font-semibold p-4 text-left bg-slate-500'>Col2</th>
-                <th className='border border-slate-600 font-semibold p-4 text-left bg-slate-500'>Col3</th>
-                <th className='border border-slate-600 font-semibold p-4 text-left bg-slate-500'>Col4</th>
-                <th className='border border-slate-600 font-semibold p-4 text-left bg-slate-500'>Col5</th>
+                {tableData.columns.map((col) => <th className='border border-slate-600 font-semibold p-4 text-left bg-slate-500'>{col}</th>)}
               </tr>
             </thead>
             <tbody>
-              {tableData.data.map((row) =>
+              {tableData.rows.map((row) =>
               (
                 <tr>
-                  <td className='border border-slate-600 p-4'>{row.colData1}</td>
-                  <td className='border border-slate-600 p-4'>{row.colData2}</td>
-                  <td className='border border-slate-600 p-4'>{row.colData3}</td>
-                  <td className='border border-slate-600 p-4'>{row.colData4}</td>
-                  <td className='border border-slate-600 p-4'>{row.colData5}</td>
+                  {row?.map((data) => (
+                    <td className='border border-slate-600 p-4'>{data}</td>
+                  ))}
                 </tr>
               )
               )}

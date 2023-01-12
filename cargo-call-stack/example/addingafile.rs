@@ -11,6 +11,7 @@ fn main() {
 
 #[inline(never)]
 fn foo(n: i32) -> i32 {
+    println!("boogers1");
     let x = n + 3;
     return x;
 }

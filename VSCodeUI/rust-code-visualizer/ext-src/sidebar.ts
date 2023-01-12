@@ -65,13 +65,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
               data.value
             );
 
-            let targetFilePosix: string = targetFile;//windowsToWslSync(targetFile);
-            let cwdPosix: string = cwd;//windowsToWslSync(cwd);
-
-            console.log(targetFilePosix, cwdPosix)
-
-            let cmd: string = `python3 ${cwdPosix} ${targetFilePosix}`;
-            console.log(cmd);
+            let cmd: string = `python3 ${cwd} ${targetFile}`;
 
             cp.exec(cmd, (err: any, stdout: any, stderr: any) => {
              try {

@@ -1,52 +1,64 @@
 {
     "L1 Data Cache Misses": {
         "labels": [
-            "bar"
+            "bar",
+            "foo"
         ],
         "datasets": [
             {
                 "label": "L1 Data Cache Misses",
+                "backgroundColor": "#36a2eb",
                 "data": [
-                    12
+                    12,
+                    2
                 ]
             }
         ]
     },
     "LL Data Cache Misses": {
         "labels": [
-            "bar"
+            "bar",
+            "foo"
         ],
         "datasets": [
             {
                 "label": "LL Data Cache Misses",
+                "backgroundColor": "#ff6384",
                 "data": [
-                    3
+                    3,
+                    1
                 ]
             }
         ]
     },
     "Instruction Count": {
         "labels": [
-            "bar"
+            "bar",
+            "foo"
         ],
         "datasets": [
             {
                 "label": "Instruction Count",
+                "backgroundColor": "#4bc0c0",
                 "data": [
-                    20038
+                    20088,
+                    18865
                 ]
             }
         ]
     },
-    "Branch mispredictions": {
+    "Branch Mispredictions": {
         "labels": [
-            "bar"
+            "bar",
+            "foo"
         ],
         "datasets": [
             {
-                "label": "Branch mispredictions",
+                "label": "Branch Mispredictions",
+                "backgroundColor": "#ff9f40",
                 "data": [
-                    57
+                    49,
+                    64
                 ]
             }
         ]
