@@ -166,7 +166,7 @@ exports.SidebarProvider = void 0;
 const vscode = __webpack_require__(1);
 const path = __webpack_require__(5);
 const utilities_1 = __webpack_require__(3);
-const wsl_path_1 = __webpack_require__(8);
+const wsl_path_1 = __webpack_require__(6);
 class SidebarProvider {
     constructor(_extensionUri, _extensionPath) {
         this._extensionUri = _extensionUri;
@@ -204,13 +204,20 @@ class SidebarProvider {
                     if (!data.value) {
                         return;
                     }
-                    var cp = __webpack_require__(6);
-                    var fs = __webpack_require__(7);
+                    var cp = __webpack_require__(9);
+                    var fs = __webpack_require__(12);
                     if (vscode.workspace.workspaceFolders !== undefined) {
                         let cwd = path.join(this._extensionPath, "ext-src", "scripts", "profilerChartData.py");
                         let targetFile = path.join(vscode.workspace.workspaceFolders[0].uri.fsPath, data.value);
-                        let cmd = `python3 ${(0, wsl_path_1.windowsToWslSync)(cwd)} ${(0, wsl_path_1.windowsToWslSync)(targetFile)}`;
+                        let targetFilePosix = (0, wsl_path_1.windowsToWslSync)(targetFile);
+                        let cwdPosix = (0, wsl_path_1.windowsToWslSync)(cwd);
+                        //
+                        let cmd = `bash -l -c "python3 ${cwdPosix} ${targetFilePosix}"`;
+                        console.log(cmd);
                         cp.exec(cmd, (err, stdout, stderr) => {
+                            console.log(stdout);
+                            console.log(stderr);
+                            console.log(err);
                         });
                     }
                     break;
@@ -220,7 +227,7 @@ class SidebarProvider {
                         return;
                     }
                     if (vscode.workspace.workspaceFolders !== undefined) {
-                        var fs = __webpack_require__(7);
+                        var fs = __webpack_require__(12);
                         let rustFiles = [];
                         fs.readdirSync(vscode.workspace.workspaceFolders[0].uri.fsPath).forEach((file) => {
                             if (file.endsWith(".rs")) {
@@ -245,8 +252,8 @@ class SidebarProvider {
         console.log("getHTML");
         // Specify where to grab the script that is generated from react...
         try {
-            var fs = __webpack_require__(7);
-            var cp = __webpack_require__(6);
+            var fs = __webpack_require__(12);
+            var cp = __webpack_require__(9);
             const manifest = JSON.parse(fs.readFileSync(path.join(this._extensionPath, "build", "asset-manifest.json")));
             const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "build", manifest["files"]["main.js"]));
             const mainCSS = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "build", manifest["files"]["main.css"]));
@@ -300,18 +307,6 @@ module.exports = require("path");
 
 /***/ }),
 /* 6 */
-/***/ ((module) => {
-
-module.exports = require("child_process");
-
-/***/ }),
-/* 7 */
-/***/ ((module) => {
-
-module.exports = require("fs");
-
-/***/ }),
-/* 8 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -330,12 +325,12 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-__exportStar(__webpack_require__(9), exports);
-__exportStar(__webpack_require__(10), exports);
+__exportStar(__webpack_require__(7), exports);
+__exportStar(__webpack_require__(8), exports);
 
 
 /***/ }),
-/* 9 */
+/* 7 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -343,7 +338,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 
 /***/ }),
-/* 10 */
+/* 8 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -360,9 +355,9 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports._setForceRunInWsl = exports.windowsToWslSync = exports.wslToWindowsSync = exports.wslToWindows = exports.windowsToWsl = exports.resetCache = void 0;
-var child_process_1 = __webpack_require__(6);
-var path_handling_1 = __webpack_require__(11);
-var mount_1 = __webpack_require__(12);
+var child_process_1 = __webpack_require__(9);
+var path_handling_1 = __webpack_require__(10);
+var mount_1 = __webpack_require__(11);
 var WSL_UTIL = "wslpath";
 var _forceRunInWsl = undefined;
 var inMemoryCacheInstance = {};
@@ -611,7 +606,13 @@ var buildPosixResolutionContext = function (path, options) {
 
 
 /***/ }),
-/* 11 */
+/* 9 */
+/***/ ((module) => {
+
+module.exports = require("child_process");
+
+/***/ }),
+/* 10 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -687,13 +688,13 @@ exports.joinPath = joinPath;
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.determineMountPoints = void 0;
-var child_process_1 = __webpack_require__(6);
+var child_process_1 = __webpack_require__(9);
 /**
  * Module for determining the (linux) mount point of a file
  */
@@ -714,6 +715,12 @@ var determineMountPoints = function (wslCommand) {
 };
 exports.determineMountPoints = determineMountPoints;
 
+
+/***/ }),
+/* 12 */
+/***/ ((module) => {
+
+module.exports = require("fs");
 
 /***/ })
 /******/ 	]);

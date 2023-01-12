@@ -1,0 +1,32 @@
+{
+    "main": {
+        "Instruction Count": "9212",
+        "Data Reads": "3285",
+        "Data Writes": "2889",
+        "First level I cache misses": "8",
+        "First level data cache read misses": "0",
+        "First level data cache write misses": "0",
+        "Last level instruction cache misses": "8",
+        "Last level data cache read misses": "0",
+        "Last level data cache write misses": "0",
+        "Total branches": "398",
+        "Branch mispredictions": "7",
+        "Total indirect jumps": "0",
+        "Indirect jump address mispredictions": "0"
+    },
+    "bar": {
+        "Instruction Count": "20038",
+        "Data Reads": "5285",
+        "Data Writes": "4827",
+        "First level I cache misses": "49",
+        "First level data cache read misses": "12",
+        "First level data cache write misses": "0",
+        "Last level instruction cache misses": "47",
+        "Last level data cache read misses": "3",
+        "Last level data cache write misses": "0",
+        "Total branches": "2370",
+        "Branch mispredictions": "57",
+        "Total indirect jumps": "403",
+        "Indirect jump address mispredictions": "10"
+    }
+}

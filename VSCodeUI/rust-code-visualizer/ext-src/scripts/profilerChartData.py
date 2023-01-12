@@ -1,5 +1,7 @@
 import sys
 import os
+import getpass
+import platform
 from profiler import profiler
 
 def main(argv):
