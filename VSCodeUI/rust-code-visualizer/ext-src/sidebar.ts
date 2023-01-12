@@ -1,9 +1,9 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { getNonce } from "./utilities";
-import { read, readFile, readFileSync } from "fs";
-import { spawnSync } from "child_process";
-import { windowsToWslSync } from "wsl-path";
+import { readFileSync } from "fs";
+// import { spawnSync } from "child_process";
+// import { windowsToWslSync } from "wsl-path";
 
 export class SidebarProvider implements vscode.WebviewViewProvider {
   _view?: vscode.WebviewView;
@@ -65,18 +65,34 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
               data.value
             );
 
-            let targetFilePosix = windowsToWslSync(targetFile);
-            let cwdPosix = windowsToWslSync(cwd);
+            let targetFilePosix: string = targetFile;//windowsToWslSync(targetFile);
+            let cwdPosix: string = cwd;//windowsToWslSync(cwd);
 
-            //
-            let cmd: string = `bash -l -c "python3 ${cwdPosix} ${targetFilePosix}"`;
+            console.log(targetFilePosix, cwdPosix)
 
+            let cmd: string = `python3 ${cwdPosix} ${targetFilePosix}`;
             console.log(cmd);
 
             cp.exec(cmd, (err: any, stdout: any, stderr: any) => {
-              console.log(stdout);
-              console.log(stderr);
-              console.log(err);
+             try {
+              let chartData = JSON.parse(fs.readFileSync(
+                path.join(this._extensionPath, "profiler_graphs.json")
+              ));
+
+              let tableData = JSON.parse(fs.readFileSync(
+                path.join(this._extensionPath, "profiling_data.json")
+              ));
+              webviewView.webview.postMessage({
+                type: "profileDataResults",
+                value: {
+                  chart : chartData, 
+                  table : tableData
+                },
+              });
+             }
+             catch {
+              return;
+             }
             });
           }
 

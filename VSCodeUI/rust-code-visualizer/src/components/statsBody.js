@@ -74,7 +74,7 @@ function StatsBody({ collapseState, programTarget }) {
 
       switch (message.type) {
         case "profileDataResults":
-          let profilerData = JSON.parse(message.value);
+          let profilerData = message.value;
           let data = profilerData.chart;
 
           // Update all four charts with the returned data....
