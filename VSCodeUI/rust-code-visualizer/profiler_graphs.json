@@ -10,7 +10,7 @@
                 "backgroundColor": "#36a2eb",
                 "data": [
                     12,
-                    7
+                    2
                 ]
             }
         ]
@@ -25,7 +25,7 @@
                 "label": "LL Data Cache Misses",
                 "backgroundColor": "#ff6384",
                 "data": [
-                    4,
+                    3,
                     1
                 ]
             }
@@ -58,7 +58,7 @@
                 "backgroundColor": "#ff9f40",
                 "data": [
                     49,
-                    34
+                    64
                 ]
             }
         ]

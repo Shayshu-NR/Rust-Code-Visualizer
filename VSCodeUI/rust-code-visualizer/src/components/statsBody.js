@@ -12,6 +12,7 @@ import {
 import { Bar, Scatter, Pie } from 'react-chartjs-2';
 import { faker } from '@faker-js/faker';
 import { useEffect, useRef, useState } from 'react';
+import ReactPaginate from 'react-paginate';
 
 ChartJS.register(
   CategoryScale,
@@ -41,21 +42,7 @@ const tableColumnName = [
   "Indirect jump address mispredictions"
 ];
 
-function removeData(chart) {
-  chart.data.labels.pop();
-  chart.data.datasets.forEach((dataset) => {
-    dataset.data.pop();
-  });
-  chart.data.datasets.pop();
-  chart.update();
-}
-
-function addData(chart, label, data) {
-  label.forEach(x => chart.data.labels.push(x));
-  data.forEach(x => chart.data.datasets.push(x));
-  chart.update();
-}
-
+//----- Functions -----
 function formatTableData(preData) {
   let postData = {
     "columns": tableColumnName,
@@ -82,37 +69,89 @@ function formatTableData(preData) {
   }
 }
 
+function Items({ currentItems }) {
+  return (
+    <>
+      {currentItems?.map((row) => (
+        <tr>
+          {row?.map((data) => (
+            <td className='border border-slate-600 p-4'>{data}</td>
+          ))}
+        </tr>
+      ))}
+    </>
+  );
+}
+//---------------------
 
 function StatsBody({ collapseState, programTarget }) {
+  //----- State -----
   const [tableData, setTableData] = useState({
     "columns": [],
     "rows": []
   });
 
-  let classNames = require('classnames');
-
   const [l1Data, setl1Data] = useState({
     labels: [],
     datasets: []
   });
+
   const [llData, setllData] = useState({
     labels: [],
     datasets: []
   });
+
   const [instructionData, setinstructionData] = useState({
     labels: [],
     datasets: []
   });
+
   const [branchData, setbranchData] = useState({
     labels: [],
     datasets: []
   });
+
+  const [itemOffset, setItemOffset] = useState(0);
+  //-----------------
+
+  //----- Set up -----
+  let classNames = require('classnames');
+  let containerCollapseClass = classNames({
+    'collapse': collapseState,
+    'visible': !collapseState,
+    'mx-auto': !collapseState,
+    'px-2': !collapseState,
+    'sm:px-6': !collapseState,
+    'lg:px-8': !collapseState,
+    'pb-4': !collapseState
+  });
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: false,
+        text: 'Chart.js Bar Chart',
+      },
+    },
+  };
+  const itemsPerPage = 5;
+  const endOffset = itemOffset + itemsPerPage;
+  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+  const currentItems = tableData.rows.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(tableData.rows.length / itemsPerPage);
+  //------------------
+
+  //----- Ref -----
   const l1ChartRef = useRef(null);
   const llChartRef = useRef(null);
   const instructionChartRef = useRef(null);
   const branchChartRef = useRef(null);
+  //---------------
 
-  // On Mount
+  //----- Effect -----
   useEffect(() => {
     const l1Chart = l1ChartRef.current;
     const llChart = llChartRef.current;
@@ -166,36 +205,23 @@ function StatsBody({ collapseState, programTarget }) {
     }
   }, []);
 
-  // On program target change
   useEffect(() => {
     console.log("Program target changed: ", programTarget);
     if (programTarget.target?.value !== undefined) {
       vscode.postMessage({ type: 'reqProfileData', value: programTarget.target.value });
     }
   }, [programTarget]);
+  //------------------
 
-  let containerCollapseClass = classNames({
-    'collapse': collapseState,
-    'visible': !collapseState,
-    'mx-auto': !collapseState,
-    'px-2': !collapseState,
-    'sm:px-6': !collapseState,
-    'lg:px-8': !collapseState,
-    'pb-4': !collapseState
-  });
-
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: false,
-        text: 'Chart.js Bar Chart',
-      },
-    },
+  //----- Callback -----
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % tableData.rows.length;
+    console.log(
+      `User requested page number ${event.selected}, which is offset ${newOffset}`
+    );
+    setItemOffset(newOffset);
   };
+  //--------------------
 
   return (
     <div className={containerCollapseClass}>
@@ -224,21 +250,39 @@ function StatsBody({ collapseState, programTarget }) {
           <table className='table-auto w-full border-collapse border border-slate-600 rounded-md p-5'>
             <thead>
               <tr className='justify-start'>
-                {tableData.columns.map((col) => <th className='border border-slate-600 font-semibold p-4 text-left bg-slate-500'>{col}</th>)}
+                {tableData.columns.map((col) =>
+                  <th className='border border-slate-600 font-semibold p-4 text-left bg-slate-500'>{col}</th>
+                )}
               </tr>
             </thead>
             <tbody>
-              {tableData.rows.map((row) =>
-              (
-                <tr>
-                  {row?.map((data) => (
-                    <td className='border border-slate-600 p-4'>{data}</td>
-                  ))}
-                </tr>
-              )
-              )}
+              <Items currentItems={currentItems} />
             </tbody>
           </table>
+        </div>
+      </div>
+      <div className='flex mx-auto mt-4 w-full justify-center'>
+        <div className='mx-auto'>
+          <ReactPaginate
+            nextLabel={<>Next <i class='bi bi-caret-right'></i></>}
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={3}
+            marginPagesDisplayed={2}
+            pageCount={pageCount}
+            previousLabel={<><i class='bi bi-caret-left'></i> Previous</>}
+            pageClassName="page-item"
+            pageLinkClassName="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            previousClassName="page-item"
+            nextLinkClassName="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            nextClassName="page-item"
+            previousLinkClassName="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            breakLabel="..."
+            breakClassName="page-item"
+            breakLinkClassName="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            containerClassName="inline-flex -space-x-px"
+            activeClassName="active"
+            renderOnZeroPageCount={null}
+          />
         </div>
       </div>
     </div>

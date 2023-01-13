@@ -1,12 +1,12 @@
 --------------------------------------------------------------------------------
-Profile data file 'callgrind.out.380' (creator: callgrind-3.15.0)
+Profile data file 'callgrind.out.146' (creator: callgrind-3.15.0)
 --------------------------------------------------------------------------------
 I1 cache: 32768 B, 64 B, 8-way associative
 D1 cache: 32768 B, 64 B, 8-way associative
 LL cache: 9437184 B, 64 B, 18-way associative
 Timerange: Basic block 0 - 103985
 Trigger: Program termination
-Profiled target:  ./addingafile (PID 380, part 1)
+Profiled target:  ./addingafile (PID 146, part 1)
 Events recorded:  Ir Dr Dw I1mr D1mr D1mw ILmr DLmr DLmw Bc Bcm Bi Bim
 Events shown:     Ir Dr Dw I1mr D1mr D1mw ILmr DLmr DLmw Bc Bcm Bi Bim
 Event sort order: Ir Dr Dw I1mr D1mr D1mw ILmr DLmr DLmw Bc Bcm Bi Bim
@@ -116,30 +116,30 @@ Ir      Dr      Dw     I1mr  D1mr  D1mw  ILmr  DLmr  DLmw Bc     Bcm   Bi    Bim
      34      10      0     2     0     0     2     0    0      6     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/memcpy.c:memcpy@@GLIBC_2.14 (2x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
      34       6      0     3     0     0     3     0    0      2     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/wcsmbs/../sysdeps/x86_64/multiarch/wmemset.c:wmemset (2x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
      26      10      0     2     0     0     2     0    0      6     2     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/memcmp.c:bcmp (2x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
-     20       6      0     2     0     0     2     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/memrchr.c:memrchr (2x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
      20       6      0     2     0     0     2     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/wcsmbs/../sysdeps/x86_64/multiarch/wmemchr.c:wmemchr (2x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
      20       6      0     2     0     0     2     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strnlen.c:strnlen (2x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+     20       6      0     2     0     0     2     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/memrchr.c:memrchr (2x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
      20       6      0     1     2     0     1     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strlen.c:strlen (2x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
      20       6      0     1     0     0     1     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/wcsmbs/../sysdeps/x86_64/multiarch/wcschr.c:wcschr (2x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
      17       5      0     2     0     0     2     0    0      3     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/mempcpy.c:mempcpy (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
      13       5      0     1     0     0     1     0    0      3     1     .   .  >   /build/glibc-SzIz7B/glibc-2.31/wcsmbs/../sysdeps/x86_64/multiarch/wmemcmp.c:wmemcmp (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+     10       3      0     2     0     0     2     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/rawmemchr.c:rawmemchr (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
      10       3      0     2     0     0     2     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/wcsmbs/../sysdeps/x86_64/multiarch/wcscmp.c:wcscmp (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
      10       3      0     2     0     0     2     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/wcsmbs/../sysdeps/x86_64/multiarch/wcslen.c:wcslen (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
-     10       3      0     2     0     0     2     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/rawmemchr.c:rawmemchr (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
-     10       3      0     1     0     0     1     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strchrnul.c:strchrnul (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
      10       3      0     1     0     0     1     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/memchr.c:memchr (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+     10       3      0     1     0     0     1     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strchrnul.c:strchrnul (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
      10       3      0     1     0     0     1     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strrchr.c:rindex (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
-      9       3      0     2     0     0     2     0    0      1     1     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strcat.c:strcat (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
-      9       3      0     2     0     0     2     0    0      1     1     .   .  >   /build/glibc-SzIz7B/glibc-2.31/wcsmbs/../sysdeps/x86_64/multiarch/wcsnlen.c:wcsnlen (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
-      9       3      0     2     0     0     2     0    0      1     1     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strncpy.c:strncpy (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
-      9       3      0     2     0     0     2     0    0      1     1     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strcmp.c:strcmp (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
       9       3      0     2     0     0     2     0    0      1     1     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strncmp.c:strncmp (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+      9       3      0     2     0     0     2     0    0      1     1     .   .  >   /build/glibc-SzIz7B/glibc-2.31/wcsmbs/../sysdeps/x86_64/multiarch/wcsnlen.c:wcsnlen (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+      9       3      0     2     0     0     2     0    0      1     1     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strcat.c:strcat (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+      9       3      0     2     0     0     2     0    0      1     1     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strcmp.c:strcmp (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+      9       3      0     2     0     0     2     0    0      1     1     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strncpy.c:strncpy (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
       9       3      0     2     0     0     2     0    0      1     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/stpcpy.c:stpcpy (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+      9       3      0     1     0     0     1     0    0      1     1     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strchr.c:index (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
       9       3      0     1     0     0     1     0    0      1     1     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strcpy.c:strcpy (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
       9       3      0     1     0     0     1     0    0      1     1     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/stpncpy.c:stpncpy (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
-      9       3      0     1     0     0     1     0    0      1     1     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strchr.c:index (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
-      7       3      0     2     0     0     2     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strcspn.c:strcspn (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
       7       3      0     2     0     0     2     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strspn.c:strspn (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
+      7       3      0     2     0     0     2     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strcspn.c:strcspn (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
       7       3      0     1     0     0     1     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/wcsmbs/../sysdeps/x86_64/multiarch/wcscpy.c:wcscpy (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
       7       3      0     1     0     0     1     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strpbrk.c:strpbrk (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
       6       3      0     2     0     0     2     0    0      1     1     .   .  >   /build/glibc-SzIz7B/glibc-2.31/string/../sysdeps/x86_64/multiarch/strncase.c:strncasecmp (1x) [/usr/lib/x86_64-linux-gnu/libc-2.31.so]
@@ -418,8 +418,8 @@ Ir      Dr      Dw     I1mr  D1mr  D1mw  ILmr  DLmr  DLmw Bc     Bcm   Bi    Bim
      12       1      0     3     0     0     3     0    0      1     1     .   .  >   ???:0x00000000000012e0 (1x) [/usr/lib/x86_64-linux-gnu/libdl-2.31.so]
      12       1      0     3     0     0     3     0    0      1     1     .   .  >   ???:0x0000000000003ce0 (1x) [/usr/lib/x86_64-linux-gnu/libgcc_s.so.1]
      12       1      0     2     0     0     2     0    0      1     .     .   .  >   ???:0x0000000000006bc0 (1x) [/usr/lib/x86_64-linux-gnu/libpthread-2.31.so]
-      7       2      0     1     1     0     1     0    0      1     1     .   .  >   ???:0x0000000004831000 (1x) [???]
       7       2      0     1     1     0     1     0    0      1     1     .   .  >   ???:0x000000000487e000 (1x) [???]
+      7       2      0     1     1     0     1     0    0      1     1     .   .  >   ???:0x0000000004831000 (1x) [???]
       7       2      0     1     1     0     1     0    0      1     1     .   .  >   ???:0x0000000004842000 (1x) [???]
       4       1      2     1     0     1     1     .    .      .     .     .   .  >   /build/glibc-SzIz7B/glibc-2.31/dlfcn/dlfcn.c:init (1x) [/usr/lib/x86_64-linux-gnu/libdl-2.31.so]
 

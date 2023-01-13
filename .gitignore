@@ -10,3 +10,4 @@ VSCodeUI/rust-code-visualizer/node_modules
 VSCodeUI/rust-code-visualizer/node_modules/.bin/*
 **/node_modules
 node_modules
+VSCodeUI/rust-code-visualizer/node_modules/.package-lock.json

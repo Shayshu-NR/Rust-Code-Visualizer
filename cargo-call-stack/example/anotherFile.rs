@@ -1,7 +1,10 @@
 fn main() {
-    for n in 1..100 {
+    for n in 1..1000 {
         if n % 2 == 0 {
             foo(n);
+        }
+        else if n % 3 == 0 {
+            foo(bar(n));
         }
         else {
             bar(n);
