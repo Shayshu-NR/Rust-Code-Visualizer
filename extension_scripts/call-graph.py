@@ -5,15 +5,18 @@ import pathlib
 import re
 
 
+OUTDIR_NAME = ".rcv/"
+
+
 def extract_config_info(proj_dir):
-"""
-Read Cargo.toml and filesystem to get the name of rust source files and binary names
-"""
+    """
+    Read Cargo.toml and filesystem to get the name of rust source files and binary names
+    """
     if not os.path.isdir(proj_dir):
         raise RuntimeError(f"Given project directory is not a directory: {proj_dir}")
 
     toml_path = os.path.join(proj_dir, "Cargo.toml")
-    if nos os.path.isfile(toml_path):
+    if not os.path.isfile(toml_path):
         raise RuntimeError(f"Given project directory does not contain a 'Cargo.toml' file: {proj_dir}")
     
     config = configparser.ConfigParser(allow_no_value=True)
@@ -27,6 +30,16 @@ Read Cargo.toml and filesystem to get the name of rust source files and binary n
     if rust_file_path is None:
         raise RuntimeError("Given Cargo.toml file in project directory does not specify a rust file path in the [[bin]] section")
     
+    rust_file_path = os.path.join(proj_dir, rust_file_path.strip("\"'"))
+    
+    # Create a directory for intermediate files
+    intermediate_storage_dir = os.path.join(proj_dir, OUTDIR_NAME)
+    if os.path.isfile(intermediate_storage_dir):
+        raise RuntimeError(f"{intermediate_storage_dir} configuration is invalid. Should be directory")
+    
+    if not os.path.exists(intermediate_storage_dir):
+        os.makedirs(intermediate_storage_dir)
+
     return rust_file_path, bin_name
 
 """
@@ -34,7 +47,8 @@ Class containing information about the Rust source code file we are
 generating the call graph for
 """
 class RustFileDetails:
-    def __init__(self, rust_file):
+    def __init__(self, rust_file, proj_dir):
+        self.proj_dir = proj_dir
         self.add_file(rust_file)
         self.function_list = []
         self.function_lines = dict()
@@ -88,23 +102,25 @@ def update_source_code(file_class):
         if idx != (len(code_list) - 1):
             updated_source_code += '\n'
     
-    os.remove(file_class.rust_file)
+    # move file to data storage dir instead of deleting
+    file_name = os.path.basename(file_class.rust_file)
+    os.replace(file_class.rust_file, os.path.join(file_class.proj_dir, OUTDIR_NAME, file_name + ".bk"))
 
     with open(file_class.rust_file, 'w') as f:
         f.write(updated_source_code)
 
 def execute_call_stack(proj_dir, compiler, bin_name):
-"""
-Execute cargo call stack and save dot file for conversion later
-"""
+    """
+    Execute cargo call stack and save dot file for conversion later
+    """
     os.environ["RUSTC_BOOTSTRAP"] = "1"
     os.system(f"cd {proj_dir} &&" \
               f"cargo build --release --target {compiler} &&" \
-              f"cargo call-stack --bin {bin_name} --target {compiler} > .rcv/graph_intermediate.dot")
+              f"cargo call-stack --bin {bin_name} --target {compiler} > {OUTDIR_NAME}graph_intermediate.dot")
 
 def generate_call_graph(args):
     rust_file, bin_name = extract_config_info(args.proj_dir)
-    file_class = RustFileDetails(rust_file)
+    file_class = RustFileDetails(rust_file, args.proj_dir)
     update_source_code(file_class)
     execute_call_stack(args.proj_dir, args.compiler, bin_name)
 
