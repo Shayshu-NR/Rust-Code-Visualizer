@@ -14,6 +14,8 @@ class RustFileDetails:
         self.function_lines = dict()
         self.get_functions()
 
+        print(self.function_lines)
+
     def add_file(self, rust_file):
         if not os.path.isfile(rust_file):
             raise RuntimeError(f"File specidied does not exist {rust_file}")
@@ -24,12 +26,14 @@ class RustFileDetails:
         self.rust_file = rust_file
 
     def get_functions(self):
+        regex_pattern = re.compile(r"fn\s+([a-zA-Z0-9_]+?)\s*\(")
+        
         with open(self.rust_file, 'r') as f:
             i = 0
             for line in f:
-                if 'fn' in line:
-                    regex_pattern = "fn " + '(.+?)' + '\('
-                    func_name = re.search(regex_pattern, line).group(1)
+                match = regex_pattern.search(line)
+                if match:
+                    func_name = match.group(1)
                     if func_name != 'main':
                         self.function_list.append(func_name)
                         self.function_lines[func_name] = i
