@@ -10,14 +10,14 @@ def process_label(label):
     return label.split('\n')[0]
 
 def filter_graph(agraph, graph_functions):
-"""Remove nodes from the call graph that do not correspond to relevant functions.
+    """Remove nodes from the call graph that do not correspond to relevant functions.
 
-Relevant pygraphviz functions:
-    Get list of all node names (numbers) : agraph.nodes()
-    Delete a node by name (number) : agraph.delete_node(n)
-    Get node by name (number) : agraph.get_node(n)
-    Get node label : node.attr["label"]
-"""
+    Relevant pygraphviz functions:
+        Get list of all node names (numbers) : agraph.nodes()
+        Delete a node by name (number) : agraph.delete_node(n)
+        Get node by name (number) : agraph.get_node(n)
+        Get node label : node.attr["label"]
+    """
     for node in agraph.nodes():
         if process_label(agraph.get_node(node).attr["label"]) not in graph_functions:
             agraph.delete_node(node)
