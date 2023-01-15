@@ -1,7 +1,33 @@
 import argparse
+import configparser
 import os
 import pathlib
 import re
+
+
+def extract_config_info(proj_dir):
+"""
+Read Cargo.toml and filesystem to get the name of rust source files and binary names
+"""
+    if not os.path.isdir(proj_dir):
+        raise RuntimeError(f"Given project directory is not a directory: {proj_dir}")
+
+    toml_path = os.path.join(proj_dir, "Cargo.toml")
+    if nos os.path.isfile(toml_path):
+        raise RuntimeError(f"Given project directory does not contain a 'Cargo.toml' file: {proj_dir}")
+    
+    config = configparser.ConfigParser(allow_no_value=True)
+    config.read(toml_path)
+
+    bin_name = config['[bin']['name']
+    rust_file_path = config['[bin']['path']
+    if bin_name is None:
+        raise RuntimeError("Given Cargo.toml file in project directory does not specify a bin name")
+    
+    if rust_file_path is None:
+        raise RuntimeError("Given Cargo.toml file in project directory does not specify a rust file path in the [[bin]] section")
+    
+    return rust_file_path, bin_name
 
 """
 Class containing information about the Rust source code file we are
@@ -18,7 +44,7 @@ class RustFileDetails:
 
     def add_file(self, rust_file):
         if not os.path.isfile(rust_file):
-            raise RuntimeError(f"File specidied does not exist {rust_file}")
+            raise RuntimeError(f"File specified does not exist: {rust_file}")
 
         if (pathlib.Path(rust_file).suffix != ".rs"):
             raise RuntimeError(f"{rust_file} is not a Rust source code file")
@@ -67,12 +93,25 @@ def update_source_code(file_class):
     with open(file_class.rust_file, 'w') as f:
         f.write(updated_source_code)
 
-def generate_call_graph(rust_file):
+def execute_call_stack(proj_dir, compiler, bin_name):
+"""
+Execute cargo call stack and save dot file for conversion later
+"""
+    os.environ["RUSTC_BOOTSTRAP"] = "1"
+    os.system(f"cd {proj_dir} &&" \
+              f"cargo build --release --target {compiler} &&" \
+              f"cargo call-stack --bin {bin_name} --target {compiler} > .rcv/graph_intermediate.dot")
+
+def generate_call_graph(args):
+    rust_file, bin_name = extract_config_info(args.proj_dir)
     file_class = RustFileDetails(rust_file)
     update_source_code(file_class)
+    execute_call_stack(args.proj_dir, args.compiler, bin_name)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Script to generate the call graph of a Rust source code file.")
-    parser.add_argument("-f","--rust_file", required=True, help="Rust source code file.")
+    parser.add_argument("proj_dir", default=".", help="Directory containing Cargo.toml file and rust source files")
+    #parser.add_argument("-f","--rust_file", required=True, help="Rust source code file.")
+    parser.add_argument("-c", "--compiler", default="x86_64-unknown-linux-gnu", help="Compiler target to use when generating a call stack")
     args = parser.parse_args()
-    generate_call_graph(args.rust_file)
+    generate_call_graph(args)
