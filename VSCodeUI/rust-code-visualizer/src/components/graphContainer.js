@@ -6,7 +6,7 @@ import Header from './header';
 
 
 
-function GraphContainer({filesResults}) {
+function GraphContainer({filesResults, programTarget}) {
     const [containerCollapse, setContainerCollapse] = useState(false);
 
     const handleCollapse = _ => {
@@ -19,7 +19,7 @@ function GraphContainer({filesResults}) {
             <Header header="Call Graph" handleCollapse={handleCollapse} collapseState={containerCollapse}></Header>
                 
             {/* Body */}
-            <GraphBody collapseState={containerCollapse}></GraphBody>
+            <GraphBody collapseState={containerCollapse} programTarget={programTarget}></GraphBody>
 
             {/* Footer */}
              <GraphFooter collapseState={containerCollapse}></GraphFooter>

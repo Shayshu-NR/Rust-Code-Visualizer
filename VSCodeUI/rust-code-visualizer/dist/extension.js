@@ -213,17 +213,18 @@ class SidebarProvider {
                         let cmd = `python3 ${cwd} ${targetFile}`;
                         cp.exec(cmd, (err, stdout, stderr) => {
                             try {
-                                let chartData = JSON.parse(fs.readFileSync(path.join(this._extensionPath, "profiler_graphs.json")));
-                                let tableData = JSON.parse(fs.readFileSync(path.join(this._extensionPath, "profiling_data.json")));
+                                let chartData = JSON.parse(fs.readFileSync(path.join(this._extensionPath, "data", "profiler_graphs.json")));
+                                let tableData = JSON.parse(fs.readFileSync(path.join(this._extensionPath, "data", "profiling_data.json")));
                                 webviewView.webview.postMessage({
                                     type: "profileDataResults",
                                     value: {
                                         chart: chartData,
-                                        table: tableData
+                                        table: tableData,
                                     },
                                 });
                             }
-                            catch {
+                            catch (err) {
+                                console.log(err);
                                 return;
                             }
                         });
@@ -248,6 +249,14 @@ class SidebarProvider {
                             value: rustFiles,
                         });
                     }
+                    break;
+                }
+                case "reqGraphData": {
+                    var cp = __webpack_require__(6);
+                    let cwd = path.join(this._extensionPath, "ext-src", "scripts", "grapher.py");
+                    let targetFile = "";
+                    let cmd = `python3 ${cwd} ${targetFile}`;
+                    cp.exec(cmd, (err, stdout, stderr) => { });
                     break;
                 }
             }

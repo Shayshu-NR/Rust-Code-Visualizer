@@ -21,8 +21,6 @@ function CustomNode() {
       'pb-4': !containerCollapse
     });
 
-    
-
     return (
 
         <div className="container mx-auto rounded-lg bg-gray-700 border-slate-600 font-mono">

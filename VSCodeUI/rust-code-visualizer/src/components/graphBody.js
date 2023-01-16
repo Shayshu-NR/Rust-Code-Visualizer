@@ -1,10 +1,20 @@
+import { useEffect, useState, useRef } from 'react';
 import CytoscapeComponent from 'react-cytoscapejs';
-import './graph.css'
+import './graph.css';
 
 
-function GraphBody({ collapseState }) {
+function GraphBody({ collapseState, programTarget }) {
+    //----- State -----
+    const [elements, setElements] = useState(
+        {
+            nodes: [],
+            edges: []
+        }
+    );
+    //-----------------
+
+    //----- Set up -----
     let classNames = require('classnames');
-
     let containerCollapseClass = classNames({
         'collapse': collapseState,
         'visible': !collapseState,
@@ -14,26 +24,6 @@ function GraphBody({ collapseState }) {
         'lg:px-8': !collapseState,
         'pb-4': !collapseState
     });
-
-
-    const elements = CytoscapeComponent.normalizeElements({
-        nodes: [
-            { data: { id: 'one', label: 'Main()' }, position: { x: 0, y: 50 } },
-            { data: { id: 'two', label: 'Fizz()' }, position: { x: 100, y: 30 } },
-            { data: { id: 'three', label: 'Buzz()' }, position: { x: 120, y: 60 } }
-        ],
-        edges: [
-            {
-                data: { source: 'one', target: 'two', label: 'Edge from Node1 to Node2' }
-            },
-            {
-                data: { source: 'one', target: 'three', label: 'Edge' }
-            }
-        ]
-    })
-
-    console.log(elements);
-
     const styleSheet = [
         {
             selector: 'node',
@@ -55,20 +45,51 @@ function GraphBody({ collapseState }) {
             }
         }
     ];
-
     const layout = { name: 'grid' };
+    //------------------
+
+    //----- Ref -----
+    const cyRef = useRef(null);
+    //---------------
+
+    //----- Effect -----
+    useEffect(() => {
+        window.addEventListener('message', event => {
+            const message = event.data;
+            console.log("GraphBody Event:", event);
+
+            switch (message.type) {
+                case "graphDataResults":
+                    console.log(message.value);
+                    break;
+            }
+        });
+
+        if (programTarget.target?.value !== undefined) {
+            vscode.postMessage({ type: 'reqGraphData', value: programTarget.target.value });
+          }
+    }, []);
+
+    useEffect(() => {
+        console.log("Program target changed: ", programTarget);
+        if (programTarget.target?.value !== undefined) {
+          vscode.postMessage({ type: 'reqGraphData', value: programTarget.target.value });
+        }
+      }, [programTarget]);
+    //------------------
+
 
     return (
         <div className={containerCollapseClass}>
-            <CytoscapeComponent 
-                elements={elements} 
-                style={{ width: '100%', height: 'auto', minHeight: '300px', display: collapseState ? 'none' : 'block' }} 
-                stylesheet={styleSheet} 
-                layout={layout} 
-                // cy={(cy) => { this.cy = cy }}
+            <CytoscapeComponent
+                elements={elements}
+                style={{ width: '100%', height: 'auto', minHeight: '300px', display: collapseState ? 'none' : 'block' }}
+                stylesheet={styleSheet}
+                layout={layout}
+                cy={cyRef}
             />
         </div>
-    )
+    );
 }
 
 export default GraphBody;

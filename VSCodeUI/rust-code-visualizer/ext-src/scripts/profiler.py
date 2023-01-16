@@ -150,10 +150,10 @@ class profiler:
             graph_dict[dataset]["datasets"][0]["data"] = graph_data_list
             index += 1
 
-        with open('profiler_graphs.json', 'w') as f:
+        with open('./data/profiler_graphs.json', 'w') as f:
             json.dump(graph_dict, f, indent=4,)
 
-        with open('profiling_data.json', 'w') as f:
+        with open('./data/profiling_data.json', 'w') as f:
             json.dump(self.__func_dict, f, indent=4,)
 
     def __print_info(self):

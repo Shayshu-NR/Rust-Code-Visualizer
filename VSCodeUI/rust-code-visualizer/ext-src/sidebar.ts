@@ -68,25 +68,37 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
             let cmd: string = `python3 ${cwd} ${targetFile}`;
 
             cp.exec(cmd, (err: any, stdout: any, stderr: any) => {
-             try {
-              let chartData = JSON.parse(fs.readFileSync(
-                path.join(this._extensionPath, "profiler_graphs.json")
-              ));
+              try {
+                let chartData = JSON.parse(
+                  fs.readFileSync(
+                    path.join(
+                      this._extensionPath,
+                      "data",
+                      "profiler_graphs.json"
+                    )
+                  )
+                );
 
-              let tableData = JSON.parse(fs.readFileSync(
-                path.join(this._extensionPath, "profiling_data.json")
-              ));
-              webviewView.webview.postMessage({
-                type: "profileDataResults",
-                value: {
-                  chart : chartData, 
-                  table : tableData
-                },
-              });
-             }
-             catch {
-              return;
-             }
+                let tableData = JSON.parse(
+                  fs.readFileSync(
+                    path.join(
+                      this._extensionPath,
+                      "data",
+                      "profiling_data.json"
+                    )
+                  )
+                );
+                webviewView.webview.postMessage({
+                  type: "profileDataResults",
+                  value: {
+                    chart: chartData,
+                    table: tableData,
+                  },
+                });
+              } catch (err) {
+                console.log(err);
+                return;
+              }
             });
           }
 
@@ -115,6 +127,22 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
             });
           }
 
+          break;
+        }
+        case "reqGraphData": {
+          var cp = require("child_process");
+
+          let cwd: string = path.join(
+            this._extensionPath,
+            "ext-src",
+            "scripts",
+            "grapher.py"
+          );
+          let targetFile = "";
+
+          let cmd: string = `python3 ${cwd} ${targetFile}`;
+
+          cp.exec(cmd, (err: any, stdout: any, stderr: any) => {});
           break;
         }
       }
