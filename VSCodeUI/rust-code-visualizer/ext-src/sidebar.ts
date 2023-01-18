@@ -54,7 +54,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           var fs = require("fs");
 
           if (vscode.workspace.workspaceFolders !== undefined) {
-            let cwd: string = path.join(
+            let scriptPath: string = path.join(
               this._extensionPath,
               "ext-src",
               "scripts",
@@ -65,7 +65,9 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
               data.value
             );
 
-            let cmd: string = `python3 ${cwd} ${targetFile}`;
+            let cmd: string = `python3 ${scriptPath} ${targetFile}`;
+
+            console.log(cmd);
 
             cp.exec(cmd, (err: any, stdout: any, stderr: any) => {
               try {
@@ -131,18 +133,37 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         }
         case "reqGraphData": {
           var cp = require("child_process");
+          var fs = require("fs");
 
-          let cwd: string = path.join(
-            this._extensionPath,
-            "ext-src",
-            "scripts",
-            "grapher.py"
-          );
-          let targetFile = "";
+          if (vscode.workspace.workspaceFolders !== undefined) {
+            let scriptPath: string = path.join(
+              this._extensionPath,
+              "ext-src",
+              "scripts",
+              "grapher.py"
+            );
+            let dataPath: string = path.join(this._extensionPath, "data");
+            let targetFile = vscode.workspace.workspaceFolders[0].uri.fsPath;
 
-          let cmd: string = `python3 ${cwd} ${targetFile}`;
+            let cmd: string = `python3 ${scriptPath} --data_dir ${dataPath} ${targetFile}`;
 
-          cp.exec(cmd, (err: any, stdout: any, stderr: any) => {});
+            console.log(cmd);
+
+            cp.exec(cmd, (err: any, stdout: any, stderr: any) => {
+              console.log(stdout);
+              console.log(stderr);
+              let graphData = JSON.parse(
+                fs.readFileSync(
+                  path.join(this._extensionPath, "data", "cyto.json")
+                )
+              );
+
+              webviewView.webview.postMessage({
+                type: "graphDataResults",
+                value: graphData,
+              }).then(() => console.log("Sent"));
+            });
+          }
           break;
         }
       }

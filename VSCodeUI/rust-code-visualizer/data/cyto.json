@@ -1,0 +1,105 @@
+{
+    "data": [
+        [
+            "fontname",
+            ""
+        ],
+        [
+            "label",
+            ""
+        ],
+        [
+            "style",
+            ""
+        ],
+        [
+            "graph",
+            {
+                "fontname": "",
+                "label": "",
+                "style": ""
+            }
+        ],
+        [
+            "node",
+            {
+                "fontname": "",
+                "label": "",
+                "shape": "box",
+                "style": ""
+            }
+        ],
+        [
+            "edge",
+            {}
+        ]
+    ],
+    "directed": true,
+    "multigraph": true,
+    "elements": {
+        "nodes": [
+            {
+                "data": {
+                    "label": "addingafile::main\\nmax >= 11408\\nlocal = 8",
+                    "id": "47",
+                    "value": "47",
+                    "name": "47"
+                }
+            },
+            {
+                "data": {
+                    "label": "addingafile::foo\\nmax >= 11408\\nlocal = 56",
+                    "id": "48",
+                    "value": "48",
+                    "name": "48"
+                }
+            },
+            {
+                "data": {
+                    "label": "addingafile::bar\\nmax >= 11408\\nlocal = 56",
+                    "id": "49",
+                    "value": "49",
+                    "name": "49"
+                }
+            },
+            {
+                "data": {
+                    "label": "NEW NODE",
+                    "id": "50",
+                    "value": "50",
+                    "name": "50"
+                }
+            }
+        ],
+        "edges": [
+            {
+                "data": {
+                    "source": "47",
+                    "target": "48",
+                    "key": 0
+                }
+            },
+            {
+                "data": {
+                    "source": "47",
+                    "target": "49",
+                    "key": 0
+                }
+            },
+            {
+                "data": {
+                    "source": "50",
+                    "target": "49",
+                    "key": 0
+                }
+            },
+            {
+                "data": {
+                    "source": "47",
+                    "target": "50",
+                    "key": 0
+                }
+            }
+        ]
+    }
+}

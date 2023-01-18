@@ -8,7 +8,7 @@ import os
 import pathlib
 import re
 
-DATA_DIR = "../../../data"
+DATA_DIR = "data/"
 OUTDIR_NAME = ".rcv/"
 DOT_INTERMEDIATE_NAME = "inter.dot"
 CYTO_OUTPUT_NAME = "cyto.json"
@@ -42,7 +42,8 @@ def extract_config_info(proj_dir):
     rust_file_path = os.path.join(proj_dir, rust_file_path.strip("\"'"))
 
     # Create a directory for intermediate files
-    intermediate_storage_dir = os.path.join(OUTDIR_NAME)
+    intermediate_storage_dir = os.path.join(DATA_DIR)
+    print(intermediate_storage_dir)
     if os.path.isfile(intermediate_storage_dir):
         raise RuntimeError(
             f"{intermediate_storage_dir} configuration is invalid. Should be directory")
@@ -173,10 +174,11 @@ def convert_to_json(file_class):
     G = filter_graph(G, file_class.function_list)
     nx_graph = nx.nx_agraph.from_agraph(G)
     json_to_file(json_graph.cytoscape_data(nx_graph),
-                 file_path=os.path.join(OUTDIR_NAME, CYTO_OUTPUT_NAME))
+                 file_path=os.path.join(DATA_DIR, CYTO_OUTPUT_NAME))
 
 
 def generate_call_graph(args):
+    DATA_DIR = args.data_dir
     rust_file, bin_name = extract_config_info(args.proj_dir)
     file_class = RustFileDetails(rust_file, args.proj_dir)
     update_source_code(file_class)
@@ -192,5 +194,7 @@ if __name__ == "__main__":
     #parser.add_argument("-f","--rust_file", required=True, help="Rust source code file.")
     parser.add_argument("-c", "--compiler", default="x86_64-unknown-linux-gnu",
                         help="Compiler target to use when generating a call stack")
+    parser.add_argument("-d", "--data_dir", default="data/.rcv/",
+                        help="Directory where output data should be stored")
     args = parser.parse_args()
     generate_call_graph(args)

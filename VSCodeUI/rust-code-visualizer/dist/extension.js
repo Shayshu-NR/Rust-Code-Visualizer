@@ -208,9 +208,10 @@ class SidebarProvider {
                     var cp = __webpack_require__(6);
                     var fs = __webpack_require__(7);
                     if (vscode.workspace.workspaceFolders !== undefined) {
-                        let cwd = path.join(this._extensionPath, "ext-src", "scripts", "profilerChartData.py");
+                        let scriptPath = path.join(this._extensionPath, "ext-src", "scripts", "profilerChartData.py");
                         let targetFile = path.join(vscode.workspace.workspaceFolders[0].uri.fsPath, data.value);
-                        let cmd = `python3 ${cwd} ${targetFile}`;
+                        let cmd = `python3 ${scriptPath} ${targetFile}`;
+                        console.log(cmd);
                         cp.exec(cmd, (err, stdout, stderr) => {
                             try {
                                 let chartData = JSON.parse(fs.readFileSync(path.join(this._extensionPath, "data", "profiler_graphs.json")));
@@ -253,10 +254,23 @@ class SidebarProvider {
                 }
                 case "reqGraphData": {
                     var cp = __webpack_require__(6);
-                    let cwd = path.join(this._extensionPath, "ext-src", "scripts", "grapher.py");
-                    let targetFile = "";
-                    let cmd = `python3 ${cwd} ${targetFile}`;
-                    cp.exec(cmd, (err, stdout, stderr) => { });
+                    var fs = __webpack_require__(7);
+                    if (vscode.workspace.workspaceFolders !== undefined) {
+                        let scriptPath = path.join(this._extensionPath, "ext-src", "scripts", "grapher.py");
+                        let dataPath = path.join(this._extensionPath, "data");
+                        let targetFile = vscode.workspace.workspaceFolders[0].uri.fsPath;
+                        let cmd = `python3 ${scriptPath} --data_dir ${dataPath} ${targetFile}`;
+                        console.log(cmd);
+                        cp.exec(cmd, (err, stdout, stderr) => {
+                            console.log(stdout);
+                            console.log(stderr);
+                            let graphData = JSON.parse(fs.readFileSync(path.join(this._extensionPath, "data", "cyto.json")));
+                            webviewView.webview.postMessage({
+                                type: "graphDataResults",
+                                value: graphData,
+                            }).then(() => console.log("Sent"));
+                        });
+                    }
                     break;
                 }
             }
