@@ -123,11 +123,10 @@ def execute_call_stack(proj_dir, compiler, bin_name):
 def process_label(label):
     """Convert label from cargo call stack into format identifying the function
     """
-    # match = re.search(r"([a-zA-Z0-9_]*)$", label.split('\\')[0])
-    # if not match:
-    #     raise RuntimeError(f"Label {label} could not match to a function name")
-    # return match.group(1)
-    return label.split('\\')[0]
+    match = re.search(r"((?:[a-zA-Z0-9_]*\:\:)?[a-zA-Z0-9_]*)$", label.split('\\')[0])
+    if not match:
+        raise RuntimeError(f"Label {label} could not match to a function name")
+    return match.group(1)
 
 def filter_graph(agraph, graph_functions, bin_name):
     """Remove nodes from the call graph that do not correspond to relevant functions.
@@ -138,15 +137,18 @@ def filter_graph(agraph, graph_functions, bin_name):
         Get node by name (number) : agraph.get_node(n)
         Get node label : node.attr["label"]
     """
-    str_bin_name = bin_name.replace('"','')
+    str_bin_name = bin_name.strip("\"'")
     for idx, function in enumerate(graph_functions):
         graph_functions[idx] = str_bin_name + '::' + function
 
     graph_functions.append(str_bin_name + "::main")
     
     for node in agraph.nodes():
-        if process_label(agraph.get_node(node).attr["label"]) not in graph_functions:
+        processed_label = process_label(agraph.get_node(node).attr["label"])
+        if processed_label not in graph_functions:
             agraph.delete_node(node)
+        else:
+            agraph.get_node(node).attr["label"] = processed_label
 
     return agraph #pgv.AGraph
 
