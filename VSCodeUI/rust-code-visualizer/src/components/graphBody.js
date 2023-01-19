@@ -25,12 +25,10 @@ function formatGraphData(cytoData) {
         })
     );
 
-    console.log(retElements);
-
     return retElements;
 }
 
-function GraphBody({ collapseState, programTarget }) {
+function GraphBody({ collapseState, programTarget, searchValue}) {
     //----- State -----
     const [elements, setElements] = useState([]);
     //-----------------
@@ -113,6 +111,10 @@ function GraphBody({ collapseState, programTarget }) {
             });
         }
     }, [programTarget]);
+
+    useEffect(() => {
+        console.log(`Search Value Changed ${searchValue}`);
+    }, [searchValue]);
     //------------------
 
     return (

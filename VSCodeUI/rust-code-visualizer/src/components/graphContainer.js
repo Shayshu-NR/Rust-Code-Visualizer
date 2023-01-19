@@ -4,13 +4,16 @@ import GraphFooter from './graphFooter.js';
 import GraphBody from './graphBody';
 import Header from './header';
 
-
-
 function GraphContainer({filesResults, programTarget}) {
     const [containerCollapse, setContainerCollapse] = useState(false);
+    const [searchValue, setSearchValue] = useState("");
 
     const handleCollapse = _ => {
         setContainerCollapse(containerCollapse => !containerCollapse);
+    };
+
+    const setParentSearchValue = (childSearchValue) => {
+        setSearchValue(childSearchValue);
     };
 
     return (
@@ -19,10 +22,10 @@ function GraphContainer({filesResults, programTarget}) {
             <Header header="Call Graph" handleCollapse={handleCollapse} collapseState={containerCollapse}></Header>
                 
             {/* Body */}
-            <GraphBody collapseState={containerCollapse} programTarget={programTarget}></GraphBody>
+            <GraphBody collapseState={containerCollapse} programTarget={programTarget} searchValue={searchValue}></GraphBody>
 
             {/* Footer */}
-             <GraphFooter collapseState={containerCollapse}></GraphFooter>
+             <GraphFooter collapseState={containerCollapse} setParentSearchValue={setParentSearchValue}></GraphFooter>
         </div>
     );
 }

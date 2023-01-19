@@ -84,7 +84,7 @@ function Items({ currentItems }) {
 }
 //---------------------
 
-function StatsBody({ collapseState, programTarget }) {
+function StatsBody({ collapseState, programTarget, searchValue }) {
   //----- State -----
   const [tableData, setTableData] = useState({
     "columns": [],
@@ -211,6 +211,9 @@ function StatsBody({ collapseState, programTarget }) {
       vscode.postMessage({ type: 'reqProfileData', value: programTarget.target.value });
     }
   }, [programTarget]);
+
+  useEffect(() => {
+  }, [searchValue]);
   //------------------
 
   //----- Callback -----

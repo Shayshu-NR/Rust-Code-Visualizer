@@ -61,14 +61,6 @@
                     "value": "49",
                     "name": "49"
                 }
-            },
-            {
-                "data": {
-                    "label": "NEW NODE",
-                    "id": "50",
-                    "value": "50",
-                    "name": "50"
-                }
             }
         ],
         "edges": [
@@ -83,20 +75,6 @@
                 "data": {
                     "source": "47",
                     "target": "49",
-                    "key": 0
-                }
-            },
-            {
-                "data": {
-                    "source": "50",
-                    "target": "49",
-                    "key": 0
-                }
-            },
-            {
-                "data": {
-                    "source": "47",
-                    "target": "50",
                     "key": 0
                 }
             }
