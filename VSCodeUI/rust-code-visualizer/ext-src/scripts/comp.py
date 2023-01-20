@@ -42,7 +42,7 @@ def extract_config_info(proj_dir):
     rust_file_path = os.path.join(proj_dir, rust_file_path.strip("\"'"))
 
     # Create a directory for intermediate files
-    intermediate_storage_dir = os.path.join(DATA_DIR)
+    intermediate_storage_dir = os.path.join(proj_dir, OUTDIR_NAME)
     if os.path.isfile(intermediate_storage_dir):
         raise RuntimeError(
             f"{intermediate_storage_dir} configuration is invalid. Should be directory")
@@ -156,7 +156,7 @@ def filter_graph(agraph, graph_functions, bin_name):
     str_bin_name = bin_name.strip("\"'")
     for idx, function in enumerate(graph_functions):
         graph_functions[idx] = str_bin_name + '::' + function
-    
+
     graph_functions.append(str_bin_name + "::main")
 
     for node in agraph.nodes():

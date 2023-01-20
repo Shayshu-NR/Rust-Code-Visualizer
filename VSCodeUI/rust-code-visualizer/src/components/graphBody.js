@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import CytoscapeComponent from "react-cytoscapejs";
+import ReactLoading from 'react-loading';
 import "./graph.css";
 
 function formatGraphData(cytoData) {
@@ -28,21 +29,24 @@ function formatGraphData(cytoData) {
     return retElements;
 }
 
-function GraphBody({ collapseState, programTarget, searchValue}) {
+function GraphBody({ collapseState, programTarget, searchValue }) {
     //----- State -----
     const [elements, setElements] = useState([]);
+    const [loading, setLoading] = useState(true);
     //-----------------
 
     //----- Set up -----
     let classNames = require("classnames");
-    let containerCollapseClass = classNames({
-        collapse: collapseState,
-        visible: !collapseState,
-        "mx-auto": !collapseState,
-        "px-2": !collapseState,
-        "sm:px-6": !collapseState,
-        "lg:px-8": !collapseState,
-        "pb-4": !collapseState,
+    let containerLoading = classNames({
+        "cursor-not-allowed": loading,
+        "opacity-75": loading,
+        "mx-auto": true,
+        "px-2": true,
+        "sm:px-6": true,
+        "lg:px-8": true,
+        "pb-4": true,
+        "relative": true,
+        "z-0": true,
     });
     const styleSheet = [
         {
@@ -86,10 +90,7 @@ function GraphBody({ collapseState, programTarget, searchValue}) {
                     cyRef.add(CytoscapeComponent.normalizeElements(graphData));
                     cyRef.elements().layout(layout).run();
                     cyRef.center();
-
-                    console.log(cyRef.data());
-                    console.log(cyRef.elements());
-                    console.log(cyRef);
+                    setLoading(false);
                     break;
             }
         });
@@ -105,6 +106,7 @@ function GraphBody({ collapseState, programTarget, searchValue}) {
     useEffect(() => {
         console.log("Program target changed: ", programTarget);
         if (programTarget.target?.value !== undefined) {
+            setLoading(true);
             vscode.postMessage({
                 type: "reqGraphData",
                 value: programTarget.target.value,
@@ -118,7 +120,7 @@ function GraphBody({ collapseState, programTarget, searchValue}) {
     //------------------
 
     return (
-        <div className={containerCollapseClass}>
+        <div className={containerLoading}>
             <CytoscapeComponent
                 elements={elements}
                 style={{
@@ -133,6 +135,9 @@ function GraphBody({ collapseState, programTarget, searchValue}) {
                     cyRef = cy;
                 }}
             />
+            <div class="absolute inset-0 flex justify-center items-center z-10 text-white">
+                {loading ? <ReactLoading type={"spin"} color={"#ffffff"}></ReactLoading> : null}
+            </div>
         </div>
     );
 }

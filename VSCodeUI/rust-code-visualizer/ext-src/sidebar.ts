@@ -142,10 +142,10 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
               "scripts",
               "grapher.py"
             );
-            let dataPath: string = path.join(this._extensionPath, "data");
+            let dataPath: string = path.join(this._extensionPath, "data", "cyto.json");
             let targetFile = vscode.workspace.workspaceFolders[0].uri.fsPath;
 
-            let cmd: string = `python3 ${scriptPath} --data_dir ${dataPath} ${targetFile}`;
+            let cmd: string = `python3 ${scriptPath} -p ${targetFile} -o ${dataPath}`;
 
             console.log(cmd);
 
@@ -161,7 +161,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
               webviewView.webview.postMessage({
                 type: "graphDataResults",
                 value: graphData,
-              }).then(() => console.log("Sent"));
+              });
             });
           }
           break;

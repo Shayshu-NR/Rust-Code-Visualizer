@@ -23,16 +23,9 @@ function Header({ header, handleCollapse, collapseState }) {
                     </div>
 
                 </div>
-                <div className="basis-1/5 flex">
-                    <div className='my-auto ml-auto'>
-                        <button className="h-full flex" onClick={event => handleCollapse()}>
-                            <i className={caretClass}></i>
-                        </button>
-                    </div>
-                </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default Header;

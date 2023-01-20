@@ -86,6 +86,7 @@
     "react-chartjs-2": "^4.3.1",
     "react-cytoscapejs": "^2.0.0",
     "react-dom": "^18.2.0",
+    "react-loading": "^2.0.3",
     "react-paginate": "^8.1.4",
     "react-scripts": "5.0.1",
     "tailwind": "^4.0.0",

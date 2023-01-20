@@ -13,7 +13,8 @@ import { Bar, Scatter, Pie } from 'react-chartjs-2';
 import { faker } from '@faker-js/faker';
 import { useEffect, useRef, useState } from 'react';
 import ReactPaginate from 'react-paginate';
-
+import ReactLoading from 'react-loading';
+ 
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -70,12 +71,15 @@ function formatTableData(preData) {
 }
 
 function Items({ currentItems }) {
+
   return (
     <>
       {currentItems?.map((row) => (
-        <tr>
-          {row?.map((data) => (
-            <td className='border border-slate-600 p-4'>{data}</td>
+        <tr className='bg-gray-800 border-gray-700'>
+          {row?.map((data, index) => (
+            index === 0 ?
+              (<th scope="row" className='border border-slate-600 px-6 py-4 font-medium whitespace-nowrap text-white'>{data}</th>) :
+              (<td className='border border-slate-600 px-6 py-4'>{data}</td>)
           ))}
         </tr>
       ))}
@@ -90,40 +94,38 @@ function StatsBody({ collapseState, programTarget, searchValue }) {
     "columns": [],
     "rows": []
   });
-
   const [l1Data, setl1Data] = useState({
     labels: [],
     datasets: []
   });
-
   const [llData, setllData] = useState({
     labels: [],
     datasets: []
   });
-
   const [instructionData, setinstructionData] = useState({
     labels: [],
     datasets: []
   });
-
   const [branchData, setbranchData] = useState({
     labels: [],
     datasets: []
   });
-
   const [itemOffset, setItemOffset] = useState(0);
+  const [loading, setLoading] = useState(true);
   //-----------------
 
   //----- Set up -----
   let classNames = require('classnames');
-  let containerCollapseClass = classNames({
-    'collapse': collapseState,
-    'visible': !collapseState,
-    'mx-auto': !collapseState,
-    'px-2': !collapseState,
-    'sm:px-6': !collapseState,
-    'lg:px-8': !collapseState,
-    'pb-4': !collapseState
+  let containerLoading = classNames({
+    "cursor-not-allowed": loading,
+    "opacity-75": loading,
+    "mx-auto": true,
+    "px-2": true,
+    "sm:px-6": true,
+    "lg:px-8": true,
+    "pb-4": true,
+    "relative" : true,
+    "z-0" : true,
   });
   const options = {
     responsive: true,
@@ -196,6 +198,8 @@ function StatsBody({ collapseState, programTarget, searchValue }) {
           );
 
           setTableData(formatTableData(tabularData));
+
+          setLoading(false);
           break;
       }
     });
@@ -208,6 +212,7 @@ function StatsBody({ collapseState, programTarget, searchValue }) {
   useEffect(() => {
     console.log("Program target changed: ", programTarget);
     if (programTarget.target?.value !== undefined) {
+      setLoading(true);
       vscode.postMessage({ type: 'reqProfileData', value: programTarget.target.value });
     }
   }, [programTarget]);
@@ -227,7 +232,7 @@ function StatsBody({ collapseState, programTarget, searchValue }) {
   //--------------------
 
   return (
-    <div className={containerCollapseClass}>
+    <div className={containerLoading}>
       <div className="flex flex-row">
         <div className="basis-1/2">
           {/* L1 Data Cache Misses */}
@@ -248,13 +253,13 @@ function StatsBody({ collapseState, programTarget, searchValue }) {
           <Bar ref={branchChartRef} options={options} data={branchData} style={{ display: collapseState ? 'none' : '' }} className='!w-full text-white' />
         </div>
       </div>
-      <div className='flex flex-row mt-2 overflow-scroll'>
-        <div className='text-white basis-full'>
-          <table className='table-auto w-full border-collapse border border-slate-600 rounded-md p-5'>
-            <thead>
+      <div className='flex flex-row mt-2'>
+        <div className='text-white basis-full overflow-x-scroll rounded-md'>
+          <table className='table-auto w-full border-collapse border border-slate-600 rounded-md p-5 text-left text-gray-400'>
+            <thead className='text-xs uppercase bg-gray-700 text-gray-400'>
               <tr className='justify-start'>
                 {tableData.columns.map((col) =>
-                  <th className='border border-slate-600 font-semibold p-4 text-left bg-slate-500'>{col}</th>
+                  <th scope="col" className='border border-slate-600 font-semibold p-4 text-left bg-slate-500'>{col}</th>
                 )}
               </tr>
             </thead>
@@ -287,6 +292,9 @@ function StatsBody({ collapseState, programTarget, searchValue }) {
             renderOnZeroPageCount={null}
           />
         </div>
+      </div>
+      <div class="absolute inset-0 flex justify-center items-center z-10 text-white">
+        {loading ? <ReactLoading type={"spin"} color={"#ffffff"}></ReactLoading> : null}
       </div>
     </div>
   );

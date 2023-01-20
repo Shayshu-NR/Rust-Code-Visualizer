@@ -1,7 +1,7 @@
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useState } from 'react';
 
-function GraphFooter({ collapseState, setParentSearchValue }) {
+function GraphFooter({ collapseState, setParentSearchValue, keepButtons }) {
     const [searchValue, setSearchValue] = useState("");
 
     let classNames = require('classnames');
@@ -46,26 +46,32 @@ function GraphFooter({ collapseState, setParentSearchValue }) {
                 <div className='basis-2/6'>
 
                 </div>
-                <div className='basis-1/6'>
-                    <div className="flex align-middle rounded-md items-center pl-3 h-full w-full" role="group">
-                        <button type="button" className="option-btn rounded-l-md">
-                            Btn1
-                        </button>
-                        <button type="button" className="option-btn">
-                            Btn2
-                        </button>
-                        <button type="button" className="option-btn rounded-r-md">
-                            Btn3
-                        </button>
-                    </div>
-                </div>
-                <div className="basis-1/12">
-                    <div className="flex align-middle rounded-md items-center pl-3 h-full">
-                        <button type="button" className="option-btn rounded-md">
-                            <i class="bi bi-filter text-3xl"></i>
-                        </button>
-                    </div>
-                </div>
+                {(keepButtons || false ?
+                    (
+                        <>
+                            <div className='basis-1/6'>
+                                <div className="flex align-middle rounded-md items-center pl-3 h-full w-full" role="group">
+                                    <button type="button" className="option-btn rounded-l-md">
+                                        Btn1
+                                    </button>
+                                    <button type="button" className="option-btn">
+                                        Btn2
+                                    </button>
+                                    <button type="button" className="option-btn rounded-r-md">
+                                        Btn3
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="basis-1/12">
+                                <div className="flex align-middle rounded-md items-center pl-3 h-full">
+                                    <button type="button" className="option-btn rounded-md">
+                                        <i class="bi bi-filter text-3xl"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </>
+                    ) : (<></>)
+                )}
             </div>
         </div>
     );

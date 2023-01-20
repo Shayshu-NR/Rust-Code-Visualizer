@@ -25,7 +25,7 @@ function GraphContainer({filesResults, programTarget}) {
             <GraphBody collapseState={containerCollapse} programTarget={programTarget} searchValue={searchValue}></GraphBody>
 
             {/* Footer */}
-             <GraphFooter collapseState={containerCollapse} setParentSearchValue={setParentSearchValue}></GraphFooter>
+             <GraphFooter collapseState={containerCollapse} setParentSearchValue={setParentSearchValue} keepButtons={true}></GraphFooter>
         </div>
     );
 }
