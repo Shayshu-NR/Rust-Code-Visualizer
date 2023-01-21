@@ -6,9 +6,14 @@ import StatsBody from './statsBody';
 
 function StatsContainer({programTarget}) {
     const [containerCollapse, setContainerCollapse] = useState(false);
+    const [searchValue, setSearchValue] = useState("");
 
     const handleCollapse = _ => {
         setContainerCollapse(containerCollapse => !containerCollapse);
+    };
+
+    const setParentSearchValue = (childSearchValue) => {
+        setSearchValue(childSearchValue);
     };
 
 
@@ -17,10 +22,10 @@ function StatsContainer({programTarget}) {
             {/* Header */}
             <Header header="Performance Statistics" handleCollapse={handleCollapse} collapseState={containerCollapse}></Header>
             
-            <StatsBody collapseState={containerCollapse} programTarget={programTarget}></StatsBody>
+            <StatsBody collapseState={containerCollapse} programTarget={programTarget} searchValue={searchValue}></StatsBody>
 
             {/* Footer */}
-             <GraphFooter collapseState={containerCollapse}></GraphFooter>
+             <GraphFooter collapseState={containerCollapse} setParentSearchValue={setParentSearchValue}></GraphFooter>
         </div>
     );
 }

@@ -132,6 +132,7 @@ class profiler:
             graph_dict[dataset]["datasets"].append({})
             graph_dict[dataset]["datasets"][0]["label"] = dataset
             graph_dict[dataset]["datasets"][0]["backgroundColor"] = graph_colors[index]
+            graph_dict[dataset]["datasets"][0]["borderRadius"] = 5
             # graph_dict[dataset]["datasets"][0]["color"] = "#ffffff"
             graph_data_list = []
             if dataset == "L1 Data Cache Misses":

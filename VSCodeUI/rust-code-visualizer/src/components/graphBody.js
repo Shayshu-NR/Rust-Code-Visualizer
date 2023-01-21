@@ -135,9 +135,12 @@ function GraphBody({ collapseState, programTarget, searchValue }) {
                     cyRef = cy;
                 }}
             />
-            <div class="absolute inset-0 flex justify-center items-center z-10 text-white">
-                {loading ? <ReactLoading type={"spin"} color={"#ffffff"}></ReactLoading> : null}
-            </div>
+            {loading ?
+                <div class="absolute inset-0 flex justify-center items-center z-10 text-white">
+                    <ReactLoading type={"spin"} color={"#ffffff"}></ReactLoading>
+                </div> :
+                null
+            }
         </div>
     );
 }

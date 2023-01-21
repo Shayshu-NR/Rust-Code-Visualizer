@@ -67,8 +67,6 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 
             let cmd: string = `python3 ${scriptPath} ${targetFile}`;
 
-            console.log(cmd);
-
             cp.exec(cmd, (err: any, stdout: any, stderr: any) => {
               try {
                 let chartData = JSON.parse(
@@ -98,12 +96,46 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
                   },
                 });
               } catch (err) {
-                console.log(err);
                 return;
               }
             });
           }
 
+          break;
+        }
+        case "reqGraphData": {
+          var cp = require("child_process");
+          var fs = require("fs");
+
+          if (vscode.workspace.workspaceFolders !== undefined) {
+            let scriptPath: string = path.join(
+              this._extensionPath,
+              "ext-src",
+              "scripts",
+              "grapher.py"
+            );
+            let dataPath: string = path.join(
+              this._extensionPath,
+              "data",
+              "cyto.json"
+            );
+            let targetFile = vscode.workspace.workspaceFolders[0].uri.fsPath;
+
+            let cmd: string = `python3 ${scriptPath} -p ${targetFile} -o ${dataPath}`;
+
+            cp.exec(cmd, (err: any, stdout: any, stderr: any) => {
+              let graphData = JSON.parse(
+                fs.readFileSync(
+                  path.join(this._extensionPath, "data", "cyto.json")
+                )
+              );
+
+              webviewView.webview.postMessage({
+                type: "graphDataResults",
+                value: graphData,
+              });
+            });
+          }
           break;
         }
         case "reqFiles": {
@@ -121,7 +153,6 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
                 rustFiles.push(file);
               }
             });
-            console.log(rustFiles);
 
             webviewView.webview.postMessage({
               type: "filesResults",
@@ -129,41 +160,6 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
             });
           }
 
-          break;
-        }
-        case "reqGraphData": {
-          var cp = require("child_process");
-          var fs = require("fs");
-
-          if (vscode.workspace.workspaceFolders !== undefined) {
-            let scriptPath: string = path.join(
-              this._extensionPath,
-              "ext-src",
-              "scripts",
-              "grapher.py"
-            );
-            let dataPath: string = path.join(this._extensionPath, "data", "cyto.json");
-            let targetFile = vscode.workspace.workspaceFolders[0].uri.fsPath;
-
-            let cmd: string = `python3 ${scriptPath} -p ${targetFile} -o ${dataPath}`;
-
-            console.log(cmd);
-
-            cp.exec(cmd, (err: any, stdout: any, stderr: any) => {
-              console.log(stdout);
-              console.log(stderr);
-              let graphData = JSON.parse(
-                fs.readFileSync(
-                  path.join(this._extensionPath, "data", "cyto.json")
-                )
-              );
-
-              webviewView.webview.postMessage({
-                type: "graphDataResults",
-                value: graphData,
-              });
-            });
-          }
           break;
         }
       }
@@ -175,7 +171,6 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
   }
 
   private _getHtmlForWebview(webview: vscode.Webview) {
-    console.log("getHTML");
     // Specify where to grab the script that is generated from react...
     try {
       var fs = require("fs");
@@ -224,7 +219,6 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
       </html>
       `;
     } catch (err) {
-      console.log(err);
       return `
       <!DOCTYPE html>
       <html lang="en">

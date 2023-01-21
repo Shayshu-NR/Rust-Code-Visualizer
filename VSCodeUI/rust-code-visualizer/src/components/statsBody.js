@@ -14,7 +14,8 @@ import { faker } from '@faker-js/faker';
 import { useEffect, useRef, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import ReactLoading from 'react-loading';
- 
+import Fuse from 'fuse.js';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -42,6 +43,7 @@ const tableColumnName = [
   "Total indirect jumps",
   "Indirect jump address mispredictions"
 ];
+var fuse = null;
 
 //----- Functions -----
 function formatTableData(preData) {
@@ -86,6 +88,10 @@ function Items({ currentItems }) {
     </>
   );
 }
+
+function filterGraph(graphData, setGraphData) {
+
+}
 //---------------------
 
 function StatsBody({ collapseState, programTarget, searchValue }) {
@@ -124,8 +130,8 @@ function StatsBody({ collapseState, programTarget, searchValue }) {
     "sm:px-6": true,
     "lg:px-8": true,
     "pb-4": true,
-    "relative" : true,
-    "z-0" : true,
+    "relative": true,
+    "z-0": true,
   });
   const options = {
     responsive: true,
@@ -135,7 +141,7 @@ function StatsBody({ collapseState, programTarget, searchValue }) {
       },
       title: {
         display: false,
-        text: 'Chart.js Bar Chart',
+        text: 'Profiler Data',
       },
     },
   };
@@ -144,6 +150,12 @@ function StatsBody({ collapseState, programTarget, searchValue }) {
   console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = tableData.rows.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(tableData.rows.length / itemsPerPage);
+  const setDataArr = {
+    "L1 Data Cache Misses" : setl1Data,
+    "LL Data Cache Misses" : setllData,
+    "Instruction Count" : setinstructionData,
+    "Branch Mispredictions" : setbranchData,
+  };
   //------------------
 
   //----- Ref -----
@@ -160,6 +172,13 @@ function StatsBody({ collapseState, programTarget, searchValue }) {
     const instructionChart = instructionChartRef.current;
     const branchChart = branchChartRef.current;
 
+    const setChartArr = {
+      "L1 Data Cache Misses" : l1Chart,
+      "LL Data Cache Misses" : llChart,
+      "Instruction Count" : instructionChart,
+      "Branch Mispredictions" : branchChart,
+    };
+
     window.addEventListener('message', event => {
       const message = event.data;
       console.log("StatsBody Event:", event);
@@ -170,33 +189,25 @@ function StatsBody({ collapseState, programTarget, searchValue }) {
           let data = profilerData.chart;
           let tabularData = profilerData.table;
 
+          fuse = new Fuse(Object.values(data)[0].labels);
+
           // Update all four charts with the returned data....
-          setl1Data({
-            labels: data["L1 Data Cache Misses"].labels,
-            datasets: data["L1 Data Cache Misses"].datasets
-          });
+          for(var f of Object.keys(setDataArr))
+          {
+            setDataArr[f](
+              {
+                labels : data[f].labels,
+                datasets: data[f].datasets
+              }
+            );
 
-          setllData(
-            {
-              labels: data["LL Data Cache Misses"].labels,
-              datasets: data["LL Data Cache Misses"].datasets
-            }
-          );
+            console.log(setChartArr[f]);
+            setChartArr[f].config.options.plugins.title.text = f;
+            setChartArr[f].config.options.plugins.title.display = true;
+            setChartArr[f].update();
 
-          setinstructionData(
-            {
-              labels: data["Instruction Count"].labels,
-              datasets: data["Instruction Count"].datasets
-            }
-          );
-
-          setbranchData(
-            {
-              labels: data["Branch Mispredictions"].labels,
-              datasets: data["Branch Mispredictions"].datasets
-            }
-          );
-
+          }
+        
           setTableData(formatTableData(tabularData));
 
           setLoading(false);
@@ -218,6 +229,9 @@ function StatsBody({ collapseState, programTarget, searchValue }) {
   }, [programTarget]);
 
   useEffect(() => {
+    console.log(searchValue);
+    console.log(fuse?.search(searchValue.searchValue));
+
   }, [searchValue]);
   //------------------
 
@@ -293,9 +307,12 @@ function StatsBody({ collapseState, programTarget, searchValue }) {
           />
         </div>
       </div>
-      <div class="absolute inset-0 flex justify-center items-center z-10 text-white">
-        {loading ? <ReactLoading type={"spin"} color={"#ffffff"}></ReactLoading> : null}
-      </div>
+      {loading ?
+        <div class="absolute inset-0 flex justify-center items-center z-10 text-white">
+          <ReactLoading type={"spin"} color={"#ffffff"}></ReactLoading>
+        </div> :
+        null
+      }
     </div>
   );
 }
