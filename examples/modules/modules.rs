@@ -1,14 +1,16 @@
 fn main() {
-    let mut e: Example = Example { number: 0 };
+    let mut e: Example = Example { number: 0, num_accessed: 0 };
     e.see_my_number();
     Example::boo();
     e.answer();
     e.see_my_number();
-    println!("{}", e.get_number())
+    println!("{}", e.get_number());
+    println!("{}", e.num_accessed);
 }
 
 struct Example {
     number: i32,
+    num_accessed: i32,
 }
 
 impl Example {
@@ -23,12 +25,13 @@ impl Example {
     }
 
 #[inline(never)]
-    fn get_number(&self) -> i32 {
+    fn get_number(&mut self) -> i32 {
+        self.num_accessed += 1;
         self.number
     }
 
 #[inline(never)]
     fn see_my_number(&self) {
-        println!("{}", self.get_number());
+        println!("{}", self.number);
     }
 }
