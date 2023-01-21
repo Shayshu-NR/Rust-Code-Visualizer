@@ -35,6 +35,7 @@ def extract_config_info(proj_dir):
     if rust_file_path is None:
         raise RuntimeError("Given Cargo.toml file in project directory does not specify a rust file path in the [[bin]] section")
     
+    bin_name = bin_name.strip("\"'")
     rust_file_path = os.path.join(proj_dir, rust_file_path.strip("\"'"))
     
     # Create a directory for intermediate files
@@ -123,7 +124,7 @@ def execute_call_stack(proj_dir, compiler, bin_name):
 def process_label(label):
     """Convert label from cargo call stack into format identifying the function
     """
-    match = re.search(r"((?:[a-zA-Z0-9_]*\:\:)?[a-zA-Z0-9_]*)$", label.split('\\')[0])
+    match = re.search(r"((?:[a-zA-Z0-9_]*\:\:)*[a-zA-Z0-9_]*)$", label.split('\\')[0])
     if not match:
         raise RuntimeError(f"Label {label} could not match to a function name")
     return match.group(1)
@@ -137,19 +138,15 @@ def filter_graph(agraph, graph_functions, bin_name):
         Get node by name (number) : agraph.get_node(n)
         Get node label : node.attr["label"]
     """
-    str_bin_name = bin_name.strip("\"'")
-    for idx, function in enumerate(graph_functions):
-        graph_functions[idx] = str_bin_name + '::' + function
-
-    graph_functions.append(str_bin_name + "::main")
+    graph_functions.append("main")
     
     for node in agraph.nodes():
-        processed_label = process_label(agraph.get_node(node).attr["label"])
-        if processed_label not in graph_functions:
-            agraph.delete_node(node)
+        label = process_label(agraph.get_node(node).attr["label"])
+        if any(label.endswith(func) and label.startswith(bin_name) for func in graph_functions):
+            agraph.get_node(node).attr["label"] = label
         else:
-            agraph.get_node(node).attr["label"] = processed_label
-
+            agraph.delete_node(node)
+    
     return agraph #pgv.AGraph
 
 def json_to_file(json_data, file_path=CYTO_OUTPUT_NAME):
