@@ -48,17 +48,20 @@ def extract_config_info(proj_dir):
 
     return rust_file_path, bin_name
 
-"""
-Class containing information about the Rust source code file we are
-generating the call graph for
-"""
+
 class RustFileDetails:
+    """
+    Class containing information about the Rust source code file we are
+    generating the call graph for
+    """
+
     def __init__(self, rust_file, proj_dir):
         self.proj_dir = proj_dir
         self.add_file(rust_file)
         self.function_list = []
         self.function_lines = dict()
         self.get_functions()
+        self.reformat_source_code()
 
     def add_file(self, rust_file):
         if not os.path.isfile(rust_file):
@@ -85,33 +88,70 @@ class RustFileDetails:
 
             f.seek(0)
             self.source_code = f.read()
+    
 
-"""
-Updating the Rust source code file so that the call graph contains information
-about the relevant functions
-"""
+    def reformat_source_code(self):
+        """
+        Insert an inline(never) trait in front of all user functions so they are not optimized away 
+        """
+        trait_regex_pattern = re.compile(r"#\s*\[\s*inline\s*(?:\([a-zA-Z0-9_\s]*\))\s*\]")
+        fn_regex_pattern = re.compile(r"(fn\s+[a-zA-Z0-9_]+?)\s*\(")
+        main_regex_pattern = re.compile(r"fn\s+main\s*\(")
+        
+        code_list = self.source_code.split('\n')
+        new_lines = []
+        skip_next_fn = False
+        for line in code_list:
+            match = trait_regex_pattern.search(line)
+            if match:
+                skip_next_fn = True
+            
+            match = main_regex_pattern.search(line)
+            if match:
+                new_lines.append(line)
+                continue
+
+            match = fn_regex_pattern.search(line)
+            if match and skip_next_fn:
+                new_lines.append(line)
+                skip_next_fn = False
+            elif match:
+                original_fn = match.group(1)
+                fn_start = line.find(original_fn)
+                ammended = line[:fn_start] + "#[inline(never)]\n" + line[fn_start:]
+                new_lines.append(ammended)
+            else:
+                new_lines.append(line)
+        self.source_code = '\n'.join(new_lines)
+
+
 def update_source_code(file_class):
-    code_list = file_class.source_code.split('\n')
+    """
+    Updating the Rust source code file so that the call graph contains information
+    about the relevant functions
+    """
+    # code_list = file_class.source_code.split('\n')
 
-    inserted = 0
-    for func in file_class.function_lines:
-        idx = file_class.function_lines[func]
-        if code_list[idx + inserted - 1] != '#[inline(never)]':
-            code_list.insert(idx + inserted, '#[inline(never)]')
-            inserted += 1
+    # inserted = 0
+    # for func in file_class.function_lines:
+    #     idx = file_class.function_lines[func]
+    #     if code_list[idx + inserted - 1] != '#[inline(never)]':
+    #         code_list.insert(idx + inserted, '#[inline(never)]')
+    #         inserted += 1
 
-    updated_source_code = ''
-    for idx, line in enumerate(code_list):
-        updated_source_code += line
-        if idx != (len(code_list) - 1):
-            updated_source_code += '\n'
+    # updated_source_code = ''
+    # for idx, line in enumerate(code_list):
+    #     updated_source_code += line
+    #     if idx != (len(code_list) - 1):
+    #         updated_source_code += '\n'
     
     # move file to data storage dir instead of deleting
     file_name = os.path.basename(file_class.rust_file)
-    os.replace(file_class.rust_file, os.path.join(file_class.proj_dir, OUTDIR_NAME, file_name + ".bk"))
+    backup_path = os.path.join(file_class.proj_dir, OUTDIR_NAME, file_name + ".bk")
+    os.replace(file_class.rust_file, backup_path)
 
     with open(file_class.rust_file, 'w') as f:
-        f.write(updated_source_code)
+        f.write(file_class.source_code)
 
 def execute_call_stack(proj_dir, compiler, bin_name):
     """Execute cargo call stack and save dot file for conversion later
