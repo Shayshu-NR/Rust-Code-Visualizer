@@ -23,13 +23,6 @@ const utilities_1 = __webpack_require__(3);
  * @class Panel
  */
 class Panel {
-    constructor(panel, extensionUri) {
-        this._disposables = [];
-        this._panel = panel;
-        this._extensionUri = extensionUri;
-        this._update();
-        this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
-    }
     static createOrShow(extensionUri) {
         const column = vscode.window.activeTextEditor
             ? vscode.window.activeTextEditor.viewColumn
@@ -58,6 +51,13 @@ class Panel {
     }
     static revive(panel, extensionUri) {
         Panel.currentPanel = new Panel(panel, extensionUri);
+    }
+    constructor(panel, extensionUri) {
+        this._disposables = [];
+        this._panel = panel;
+        this._extensionUri = extensionUri;
+        this._update();
+        this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
     }
     dispose() {
         Panel.currentPanel = undefined;
@@ -211,7 +211,6 @@ class SidebarProvider {
                         let scriptPath = path.join(this._extensionPath, "ext-src", "scripts", "profilerChartData.py");
                         let targetFile = path.join(vscode.workspace.workspaceFolders[0].uri.fsPath, data.value);
                         let cmd = `python3 ${scriptPath} ${targetFile}`;
-                        console.log(cmd);
                         cp.exec(cmd, (err, stdout, stderr) => {
                             try {
                                 let chartData = JSON.parse(fs.readFileSync(path.join(this._extensionPath, "data", "profiler_graphs.json")));
@@ -225,9 +224,44 @@ class SidebarProvider {
                                 });
                             }
                             catch (err) {
-                                console.log(err);
                                 return;
                             }
+                        });
+                    }
+                    break;
+                }
+                case "reqStaticProfileData": {
+                    try {
+                        var fs = __webpack_require__(7);
+                        let chartData = JSON.parse(fs.readFileSync(path.join(this._extensionPath, "data", "profiler_graphs.json")));
+                        let tableData = JSON.parse(fs.readFileSync(path.join(this._extensionPath, "data", "profiling_data.json")));
+                        webviewView.webview.postMessage({
+                            type: "profileStaticDataResults",
+                            value: {
+                                chart: chartData,
+                                table: tableData,
+                            },
+                        });
+                    }
+                    catch {
+                        return;
+                    }
+                    break;
+                }
+                case "reqGraphData": {
+                    var cp = __webpack_require__(6);
+                    var fs = __webpack_require__(7);
+                    if (vscode.workspace.workspaceFolders !== undefined) {
+                        let scriptPath = path.join(this._extensionPath, "ext-src", "scripts", "grapher.py");
+                        let dataPath = path.join(this._extensionPath, "data", "cyto.json");
+                        let targetFile = vscode.workspace.workspaceFolders[0].uri.fsPath;
+                        let cmd = `python3 ${scriptPath} -p ${targetFile} -o ${dataPath}`;
+                        cp.exec(cmd, (err, stdout, stderr) => {
+                            let graphData = JSON.parse(fs.readFileSync(path.join(this._extensionPath, "data", "cyto.json")));
+                            webviewView.webview.postMessage({
+                                type: "graphDataResults",
+                                value: graphData,
+                            });
                         });
                     }
                     break;
@@ -244,31 +278,9 @@ class SidebarProvider {
                                 rustFiles.push(file);
                             }
                         });
-                        console.log(rustFiles);
                         webviewView.webview.postMessage({
                             type: "filesResults",
                             value: rustFiles,
-                        });
-                    }
-                    break;
-                }
-                case "reqGraphData": {
-                    var cp = __webpack_require__(6);
-                    var fs = __webpack_require__(7);
-                    if (vscode.workspace.workspaceFolders !== undefined) {
-                        let scriptPath = path.join(this._extensionPath, "ext-src", "scripts", "grapher.py");
-                        let dataPath = path.join(this._extensionPath, "data");
-                        let targetFile = vscode.workspace.workspaceFolders[0].uri.fsPath;
-                        let cmd = `python3 ${scriptPath} --data_dir ${dataPath} ${targetFile}`;
-                        console.log(cmd);
-                        cp.exec(cmd, (err, stdout, stderr) => {
-                            console.log(stdout);
-                            console.log(stderr);
-                            let graphData = JSON.parse(fs.readFileSync(path.join(this._extensionPath, "data", "cyto.json")));
-                            webviewView.webview.postMessage({
-                                type: "graphDataResults",
-                                value: graphData,
-                            }).then(() => console.log("Sent"));
                         });
                     }
                     break;
@@ -280,7 +292,6 @@ class SidebarProvider {
         this._view = panel;
     }
     _getHtmlForWebview(webview) {
-        console.log("getHTML");
         // Specify where to grab the script that is generated from react...
         try {
             var fs = __webpack_require__(7);
@@ -310,7 +321,6 @@ class SidebarProvider {
       `;
         }
         catch (err) {
-            console.log(err);
             return `
       <!DOCTYPE html>
       <html lang="en">

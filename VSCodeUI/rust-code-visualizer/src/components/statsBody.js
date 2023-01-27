@@ -43,7 +43,6 @@ const tableColumnName = [
   "Total indirect jumps",
   "Indirect jump address mispredictions"
 ];
-var fuse = null;
 
 //----- Functions -----
 function formatTableData(preData) {
@@ -88,10 +87,6 @@ function Items({ currentItems }) {
     </>
   );
 }
-
-function filterGraph(graphData, setGraphData) {
-
-}
 //---------------------
 
 function StatsBody({ collapseState, programTarget, searchValue }) {
@@ -100,22 +95,34 @@ function StatsBody({ collapseState, programTarget, searchValue }) {
     "columns": [],
     "rows": []
   });
-  const [l1Data, setl1Data] = useState({
+  const [filteredTableData, setFilteredTableData] = useState({
+    "columns": [],
+    "rows": []
+  });
+  // const l1Data = useRef({
+  //   labels: [],
+  //   datasets: []
+  // });
+  const [l1Data, setL1Data] = useState({
     labels: [],
     datasets: []
   });
-  const [llData, setllData] = useState({
+
+  const [llData, setLlData] = useState({
     labels: [],
     datasets: []
   });
-  const [instructionData, setinstructionData] = useState({
+
+  const [instructionData, setInstructionData] = useState({
     labels: [],
     datasets: []
   });
-  const [branchData, setbranchData] = useState({
+
+  const [branchData, setBranchData] = useState({
     labels: [],
     datasets: []
   });
+
   const [itemOffset, setItemOffset] = useState(0);
   const [loading, setLoading] = useState(true);
   //-----------------
@@ -148,14 +155,8 @@ function StatsBody({ collapseState, programTarget, searchValue }) {
   const itemsPerPage = 5;
   const endOffset = itemOffset + itemsPerPage;
   console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-  const currentItems = tableData.rows.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(tableData.rows.length / itemsPerPage);
-  const setDataArr = {
-    "L1 Data Cache Misses" : setl1Data,
-    "LL Data Cache Misses" : setllData,
-    "Instruction Count" : setinstructionData,
-    "Branch Mispredictions" : setbranchData,
-  };
+  const currentItems = filteredTableData.rows.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(filteredTableData.rows.length / itemsPerPage);
   //------------------
 
   //----- Ref -----
@@ -172,13 +173,6 @@ function StatsBody({ collapseState, programTarget, searchValue }) {
     const instructionChart = instructionChartRef.current;
     const branchChart = branchChartRef.current;
 
-    const setChartArr = {
-      "L1 Data Cache Misses" : l1Chart,
-      "LL Data Cache Misses" : llChart,
-      "Instruction Count" : instructionChart,
-      "Branch Mispredictions" : branchChart,
-    };
-
     window.addEventListener('message', event => {
       const message = event.data;
       console.log("StatsBody Event:", event);
@@ -186,29 +180,39 @@ function StatsBody({ collapseState, programTarget, searchValue }) {
       switch (message.type) {
         case "profileDataResults":
           let profilerData = message.value;
-          let data = profilerData.chart;
+          let apiData = profilerData.chart;
           let tabularData = profilerData.table;
 
-          fuse = new Fuse(Object.values(data)[0].labels);
-
           // Update all four charts with the returned data....
-          for(var f of Object.keys(setDataArr))
-          {
-            setDataArr[f](
-              {
-                labels : data[f].labels,
-                datasets: data[f].datasets
-              }
-            );
+          // setL1Data({
+          //   labels: apiData["L1 Data Cache Misses"].labels,
+          //   datasets: apiData["L1 Data Cache Misses"].datasets
+          // });
 
-            console.log(setChartArr[f]);
-            setChartArr[f].config.options.plugins.title.text = f;
-            setChartArr[f].config.options.plugins.title.display = true;
-            setChartArr[f].update();
+          setL1Data({
+            labels: apiData["L1 Data Cache Misses"].labels,
+            datasets: apiData["L1 Data Cache Misses"].datasets
+          });
 
-          }
-        
-          setTableData(formatTableData(tabularData));
+          setLlData({
+            labels: apiData["LL Data Cache Misses"].labels,
+            datasets: apiData["LL Data Cache Misses"].datasets
+          });
+
+          setInstructionData({
+            labels: apiData["Instruction Count"].labels,
+            datasets: apiData["Instruction Count"].datasets
+          });
+
+          setBranchData({
+            labels: apiData["Branch Mispredictions"].labels,
+            datasets: apiData["Branch Mispredictions"].datasets
+          });
+
+          // Update table data
+          let tableDataFormatted = formatTableData(tabularData);
+          setTableData(tableDataFormatted);
+          setFilteredTableData(tableDataFormatted);
 
           setLoading(false);
           break;
@@ -230,8 +234,25 @@ function StatsBody({ collapseState, programTarget, searchValue }) {
 
   useEffect(() => {
     console.log(searchValue);
-    console.log(fuse?.search(searchValue.searchValue));
 
+
+    if (searchValue.searchValue !== undefined && searchValue.searchValue !== "") {
+      var fuse = new Fuse(tableData.rows.map(x => x[0]));
+
+      let searchRes = fuse?.search(searchValue.searchValue === undefined ? "" : searchValue.searchValue);
+      let searchResNames = searchRes?.map(x => x.item);
+      let filteredRows = tableData.rows.filter(x => searchResNames.includes(x[0]));
+      setFilteredTableData(
+        {
+          "columns": tableData.columns,
+          "rows": filteredRows
+        }
+      );
+        
+    }
+    else {
+      setFilteredTableData(tableData);
+    }
   }, [searchValue]);
   //------------------
 
@@ -243,6 +264,7 @@ function StatsBody({ collapseState, programTarget, searchValue }) {
     );
     setItemOffset(newOffset);
   };
+
   //--------------------
 
   return (

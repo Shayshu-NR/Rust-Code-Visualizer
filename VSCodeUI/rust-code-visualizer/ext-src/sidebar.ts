@@ -50,6 +50,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           if (!data.value) {
             return;
           }
+
           var cp = require("child_process");
           var fs = require("fs");
 
@@ -99,6 +100,41 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
                 return;
               }
             });
+          }
+          break;
+        }
+        case "reqStaticProfileData": {
+          try {
+            var fs = require("fs");
+            let chartData = JSON.parse(
+              fs.readFileSync(
+                path.join(
+                  this._extensionPath,
+                  "data",
+                  "profiler_graphs.json"
+                )
+              )
+            );
+
+            let tableData = JSON.parse(
+              fs.readFileSync(
+                path.join(
+                  this._extensionPath,
+                  "data",
+                  "profiling_data.json"
+                )
+              )
+            );
+
+            webviewView.webview.postMessage({
+              type: "profileStaticDataResults",
+              value: {
+                chart: chartData,
+                table: tableData,
+              },
+            });
+          } catch {
+            return;
           }
 
           break;
