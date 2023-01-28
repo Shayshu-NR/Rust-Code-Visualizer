@@ -27,8 +27,8 @@ def extract_config_info(proj_dir):
     config = configparser.ConfigParser(allow_no_value=True)
     config.read(toml_path)
 
-    bin_name = config['[bin']['name']
-    rust_file_path = config['[bin']['path']
+    bin_name = config['[bin]']['name']
+    rust_file_path = config['[bin]']['path']
     if bin_name is None:
         raise RuntimeError("Given Cargo.toml file in project directory does not specify a bin name")
     
