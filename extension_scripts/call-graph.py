@@ -6,6 +6,7 @@ import json
 import os
 import pathlib
 import re
+import subprocess
 
 
 OUTDIR_NAME = ".rcv/"
@@ -177,13 +178,29 @@ def update_source_code(file_class):
     with open(file_class.rust_file, 'w') as f:
         f.write(file_class.source_code)
 
+
 def execute_call_stack(proj_dir, compiler, bin_name):
     """Execute cargo call stack and save dot file for conversion later
     """
     os.environ["RUSTC_BOOTSTRAP"] = "1"
-    os.system(f"cd {proj_dir} &&" \
-              f"cargo build --release --target {compiler} &&" \
-              f"cargo call-stack --bin {bin_name} --target {compiler} > {OUTDIR_NAME}{DOT_INTERMEDIATE_NAME}")
+    dot_data = None
+    
+    try:
+        process_output = subprocess.run(["cargo", "build", "--release", "--target", compiler],
+                                            capture_output=True, check=True, cwd=proj_dir, encoding="utf-8")
+        process_output = subprocess.run(["cargo", "call-stack", "--bin", bin_name, "--target", compiler],
+                                            capture_output=True, check=True, cwd=proj_dir, encoding="utf-8")
+        dot_data = process_output.stdout
+    except subprocess.CalledProcessError as e:
+        print("Compilation of Rust source code Failed!\n" + e.stderr)
+        exit(1)
+
+    intermediate_file_path = os.path.join(proj_dir, OUTDIR_NAME, DOT_INTERMEDIATE_NAME)
+    with open(intermediate_file_path, "w") as intermediate_file:
+        intermediate_file.write(dot_data)
+    
+    return dot_data
+
 
 def process_label(label):
     """Convert label from cargo call stack into format identifying the function
@@ -192,6 +209,7 @@ def process_label(label):
     if not match:
         raise RuntimeError(f"Label {label} could not match to a function name")
     return match.group(1)
+
 
 def filter_graph(agraph, graph_functions, bin_name):
     """Remove nodes from the call graph that do not correspond to relevant functions.
@@ -213,30 +231,33 @@ def filter_graph(agraph, graph_functions, bin_name):
     
     return agraph #pgv.AGraph
 
+
 def json_to_file(json_data, file_path=CYTO_OUTPUT_NAME):
     with open(file_path, "w") as write_file:
         json.dump(json_data, write_file, indent=4)
 
-def convert_to_json(file_class, bin_name, output_path):
+
+def convert_to_json(dot_data, file_class, bin_name, output_path):
     """Take input dot file from cargo call stack and convert it into the cytoscape.js file format
     """
-    dot_file = os.path.join(file_class.proj_dir, OUTDIR_NAME, DOT_INTERMEDIATE_NAME)
-    G = pgv.AGraph(dot_file)
+    G = pgv.AGraph(dot_data)
     G = filter_graph(G, file_class.function_list, bin_name)
     nx_graph = nx.nx_agraph.from_agraph(G)
     json_to_file(json_graph.cytoscape_data(nx_graph),
                  file_path=output_path)
 
+
 def generate_call_graph(args):
     rust_file, bin_name = extract_config_info(args.proj_dir)
     file_class = RustFileDetails(rust_file, args.proj_dir)
     update_source_code(file_class)
-    execute_call_stack(args.proj_dir, args.compiler, bin_name)
+    dot_data = execute_call_stack(args.proj_dir, args.compiler, bin_name)
     if not args.output_path:
         output_path = os.path.join(file_class.proj_dir, OUTDIR_NAME, CYTO_OUTPUT_NAME)
     else:
         output_path = args.output_path
-    convert_to_json(file_class, bin_name, output_path)
+    convert_to_json(dot_data, file_class, bin_name, output_path)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Script to generate the call graph of a Rust source code file.")
