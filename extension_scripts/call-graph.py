@@ -119,8 +119,8 @@ class RustFileDetails:
         """
         Insert an inline(never) trait in front of all user functions so they are not optimized away 
         """
-        trait_regex_pattern = re.compile(r"#\s*\[\s*inline\s*(?:\([a-zA-Z0-9_\s]*\))\s*\]")
-        fn_regex_pattern = re.compile(r"(fn\s+[a-zA-Z0-9_]+?)\s*\(")
+        trait_regex_pattern = re.compile(r"#\s*\[\s*inline\s*(?:\([\w\s]*\))?\s*\]")
+        fn_regex_pattern = re.compile(r"((?:\w+\s+)?fn\s+[\w]+?)\s*\(")
         main_regex_pattern = re.compile(r"fn\s+main\s*\(")
         
         code_list = self.source_code.split('\n')
