@@ -1,5 +1,4 @@
 import argparse
-import configparser
 import networkx as nx
 from networkx.readwrite import json_graph
 import pygraphviz as pgv
@@ -24,11 +23,36 @@ def extract_config_info(proj_dir):
     if not os.path.isfile(toml_path):
         raise RuntimeError(f"Given project directory does not contain a 'Cargo.toml' file: {proj_dir}")
     
-    config = configparser.ConfigParser(allow_no_value=True)
-    config.read(toml_path)
+    # Extract target binary and file information
+    bin_name = None
+    rust_file_path = None
+    with open(toml_path, 'r') as toml_file:
+        found_bin = False
+        contains_bin = re.compile(r"\[\[bin\]\]")
+        contains_section = re.compile(r"\[\s*\[?[a-zA-Z0-9._]+\]?\s*\]")
+        extract_attr = re.compile(r"([a-zA-Z]+)\s+=\s+\"(\S+)\"")
+        for line in toml_file:
+            # seek until you find the [[bin]] section
+            if not found_bin:
+                if contains_bin.search(line):
+                    found_bin = True
+                continue
+            
+            # Check for when the [[bin]] section ends
+            if contains_section.search(line):
+                break
+            
+            # extract bin name and file path
+            match = extract_attr.search(line)
+            if match:
+                if match.group(1) == "name":
+                    bin_name = match.group(2)
+                elif match.group(1) == "path":
+                    rust_file_path = match.group(2)
+        
+        if not found_bin:
+            raise RuntimeError("Given Cargo.toml file in project directory does not specify a [[bin]] section")
 
-    bin_name = config['[bin]']['name']
-    rust_file_path = config['[bin]']['path']
     if bin_name is None:
         raise RuntimeError("Given Cargo.toml file in project directory does not specify a bin name")
     
