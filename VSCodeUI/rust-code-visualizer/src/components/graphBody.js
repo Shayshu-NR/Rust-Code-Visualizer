@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import CytoscapeComponent from "react-cytoscapejs";
 import ReactLoading from 'react-loading';
 import "./graph.css";
+import Fuse from "fuse.js";
 
 function formatGraphData(cytoData) {
     let retElements = [];
@@ -27,6 +28,10 @@ function formatGraphData(cytoData) {
     );
 
     return retElements;
+}
+
+function getGraphLabels(cytoData) {
+    return cytoData.elements.nodes.map(x => x.data.label);
 }
 
 function GraphBody({ collapseState, programTarget, searchValue }) {
@@ -70,10 +75,12 @@ function GraphBody({ collapseState, programTarget, searchValue }) {
         },
     ];
     const layout = { name: "breadthfirst" };
-    let cyRef;
+    let cyRef = null;
     //------------------
 
     //----- Ref -----
+    let cytoData = useRef(null);
+    let cytoLabels = useRef([]);
     //---------------
 
     //----- Effect -----
@@ -85,6 +92,10 @@ function GraphBody({ collapseState, programTarget, searchValue }) {
             switch (message.type) {
                 case "graphDataResults":
                     let graphData = formatGraphData(message.value);
+
+                    cytoData.current = graphData;
+                    cytoLabels.current = getGraphLabels(message.value);
+
                     setElements(CytoscapeComponent.normalizeElements(graphData));
                     cyRef.elements().remove();
                     cyRef.add(CytoscapeComponent.normalizeElements(graphData));
@@ -115,7 +126,32 @@ function GraphBody({ collapseState, programTarget, searchValue }) {
     }, [programTarget]);
 
     useEffect(() => {
-        console.log(`Search Value Changed ${searchValue}`);
+        console.log(`Search Value Changed:`, searchValue, cyRef);
+        if (searchValue.searchValue !== undefined && cyRef !== null) {
+            // clear
+            if (searchValue.searchValue === "") {
+                cyRef.reset();
+                let resetLayout = cyRef.layout(layout);
+                resetLayout.run();
+            }
+            else {
+                let fuse = new Fuse(cytoLabels.current);
+                let searchRes = fuse?.search(searchValue.searchValue);
+                let searchResNames = searchRes?.map(x => x.item);
+                console.log(searchRes, searchResNames, cytoLabels.current);
+
+                cyRef.fit(cyRef.filter((ele, i) => {
+                    console.log(ele._private.group);
+                    return (ele._private.group === "nodes" &&
+                        searchResNames.find(x => ele._private.data.label.includes(x) || x.includes(ele._private.data.label))?.length > 0);
+                }));
+
+                console.log(cyRef.filter((ele, i) => {
+                    return (ele._private.group === "nodes" &&
+                        searchResNames.find(x => ele._private.data.label.includes(x) || x.includes(ele._private.data.label))?.length > 0);
+                }));
+            }
+        }
     }, [searchValue]);
     //------------------
 
@@ -134,6 +170,8 @@ function GraphBody({ collapseState, programTarget, searchValue }) {
                 cy={(cy) => {
                     cyRef = cy;
                 }}
+                maxZoom={2}
+                minZoom={0.25}
             />
             {loading ?
                 <div class="absolute inset-0 flex justify-center items-center z-10 text-white">
