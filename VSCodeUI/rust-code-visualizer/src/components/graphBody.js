@@ -34,7 +34,7 @@ function getGraphLabels(cytoData) {
     return cytoData.elements.nodes.map(x => x.data.label);
 }
 
-function GraphBody({ collapseState, programTarget, searchValue }) {
+function GraphBody({ collapseState, programTarget, searchValue, exportGraph }) {
     //----- State -----
     const [elements, setElements] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -59,7 +59,7 @@ function GraphBody({ collapseState, programTarget, searchValue }) {
             style: {
                 width: "25rem",
                 height: "25rem",
-                shape: "rectangle",
+                shape: "circle",
                 label: "data(label)",
                 color: "white",
             },
@@ -153,6 +153,10 @@ function GraphBody({ collapseState, programTarget, searchValue }) {
             }
         }
     }, [searchValue]);
+
+    useEffect(() => {
+        console.log(exportGraph, cyRef);
+    }, [exportGraph]);
     //------------------
 
     return (

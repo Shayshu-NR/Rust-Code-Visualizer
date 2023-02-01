@@ -1,7 +1,7 @@
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useState } from 'react';
 
-function GraphFooter({ collapseState, setParentSearchValue, keepButtons }) {
+function GraphFooter({ collapseState, setParentSearchValue, setParentBtn1Click, setParentBtn2Click, setParentBtn3Click, keepButtons }) {
     const [searchValue, setSearchValue] = useState("");
 
     let classNames = require('classnames');
@@ -26,8 +26,7 @@ function GraphFooter({ collapseState, setParentSearchValue, keepButtons }) {
         );
     };
 
-    const clearBtnClick = (event) => 
-    {
+    const clearBtnClick = (event) => {
         setParentSearchValue(
             {
                 event: event,
@@ -39,6 +38,10 @@ function GraphFooter({ collapseState, setParentSearchValue, keepButtons }) {
     const searchValueChange = (event) => {
         event.preventDefault();
         setSearchValue(event.target.value);
+    };
+
+    const exportBtnClick = (event) => {
+        setParentBtn3Click(event);
     };
 
     return (
@@ -67,9 +70,13 @@ function GraphFooter({ collapseState, setParentSearchValue, keepButtons }) {
                                     <button type="button" className="option-btn">
                                         Btn2
                                     </button>
-                                    <button type="button" className="option-btn rounded-r-md">
-                                        Btn3
+                                    <button onClick={exportBtnClick} type="button" className="option-btn rounded-r-md" data-tooltip-target="export-tooltip">
+                                        <i class="bi bi-file-earmark-image"></i>
                                     </button>
+                                    <div id="export-tooltip" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                        Export Graph
+                                        <div class="tooltip-arrow" data-popper-arrow></div>
+                                    </div>
                                 </div>
                             </div>
                             <div className="basis-1/12">
