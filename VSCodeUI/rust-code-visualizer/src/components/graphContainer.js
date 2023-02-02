@@ -8,6 +8,8 @@ function GraphContainer({filesResults, programTarget}) {
     const [containerCollapse, setContainerCollapse] = useState(false);
     const [searchValue, setSearchValue] = useState("");
     const [btn1Click, setBtn1Click] = useState({});
+    const [btn2Click, setBtn2Click] = useState({});
+    const [btn3Click, setBtn3Click] = useState({});
 
     const handleCollapse = _ => {
         setContainerCollapse(containerCollapse => !containerCollapse);
@@ -17,8 +19,8 @@ function GraphContainer({filesResults, programTarget}) {
         setSearchValue(childSearchValue);
     };
 
-    const setParentBtn1Click = (childBtn1Event) => {
-        setBtn1Click(childBtn1Event);
+    const setParentBtn3Click = (childBtn3Event) => {
+        setBtn3Click(childBtn3Event);
     };
 
     return (
@@ -27,10 +29,10 @@ function GraphContainer({filesResults, programTarget}) {
             <Header header="Call Graph" handleCollapse={handleCollapse} collapseState={containerCollapse}></Header>
                 
             {/* Body */}
-            <GraphBody collapseState={containerCollapse} programTarget={programTarget} searchValue={searchValue} exportGraph={btn1Click}></GraphBody>
+            <GraphBody collapseState={containerCollapse} programTarget={programTarget} searchValue={searchValue} exportGraph={btn3Click}></GraphBody>
 
             {/* Footer */}
-             <GraphFooter collapseState={containerCollapse} setParentSearchValue={setParentSearchValue} keepButtons={true} setParentBtn1Click={setParentBtn1Click}></GraphFooter>
+             <GraphFooter collapseState={containerCollapse} setParentSearchValue={setParentSearchValue} keepButtons={true} setParentBtn3Click={setParentBtn3Click}></GraphFooter>
         </div>
     );
 }

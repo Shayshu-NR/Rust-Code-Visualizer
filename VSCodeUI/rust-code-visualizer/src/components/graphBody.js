@@ -30,6 +30,18 @@ function formatGraphData(cytoData) {
     return retElements;
 }
 
+function downloadGraph(blob)
+{
+    let url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.download = `Graph.png`;
+    link.href = url;
+
+    link.click();
+    console.log(link);
+}
+
 function getGraphLabels(cytoData) {
     return cytoData.elements.nodes.map(x => x.data.label);
 }
@@ -156,6 +168,13 @@ function GraphBody({ collapseState, programTarget, searchValue, exportGraph }) {
 
     useEffect(() => {
         console.log(exportGraph, cyRef);
+        if (exportGraph.target !== undefined && cyRef !== null) {
+            let blob = cyRef.png({
+                "output": "blob"
+            });
+            
+            downloadGraph(blob);
+        }
     }, [exportGraph]);
     //------------------
 
