@@ -30,12 +30,12 @@ function formatGraphData(cytoData) {
     return retElements;
 }
 
-function downloadGraph(blob)
+function downloadGraph(blob, programTarget)
 {
     let url = URL.createObjectURL(blob);
 
     const link = document.createElement("a");
-    link.download = `Graph.png`;
+    link.download = `${programTarget.target?.value.replace(".rs", "")}-Graph.png`;
     link.href = url;
 
     link.click();
@@ -173,7 +173,7 @@ function GraphBody({ collapseState, programTarget, searchValue, exportGraph }) {
                 "output": "blob"
             });
             
-            downloadGraph(blob);
+            downloadGraph(blob, programTarget);
         }
     }, [exportGraph]);
     //------------------
