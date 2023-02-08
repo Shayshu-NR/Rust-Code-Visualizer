@@ -74,19 +74,19 @@ function GraphFooter({ collapseState, setParentSearchValue, setParentBtn1Click, 
                                 <div className="flex align-middle rounded-md items-center pl-3 h-full w-full" role="group">
 
                                     <div className='group relative flex justify-center h-12'>
-                                        <span class="absolute bottom-10 transition-all scale-0 rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100">Export</span>
-                                        <button onClick={resetBtnClick} type="button" className="option-btn rounded-r-md" data-tooltip-target="export-tooltip">
-                                            <i class="bi bi-file-earmark-image"></i>
+                                        <span class="absolute bottom-14 transition-all scale-0 rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100">Reset</span>
+                                        <button onClick={resetBtnClick} type="button" className="option-btn rounded-l-md" data-tooltip-target="export-tooltip">
+                                            <i class="bi bi-bullseye"></i>
                                         </button>
                                     </div>
                                     <div className='group relative flex justify-center h-12'>
-                                        <span class="absolute bottom-10 transition-all scale-0 rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100">Export</span>
-                                        <button onClick={sortBtnClick} type="button" className="option-btn rounded-r-md" data-tooltip-target="export-tooltip">
-                                            <i class="bi bi-file-earmark-image"></i>
+                                        <span class="absolute bottom-14 transition-all scale-0 rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100">Sort</span>
+                                        <button onClick={sortBtnClick} type="button" className="option-btn" data-tooltip-target="export-tooltip">
+                                            <i class="bi bi-diagram-2"></i>
                                         </button>
                                     </div>
                                     <div className='group relative flex justify-center h-12'>
-                                        <span class="absolute bottom-10 transition-all scale-0 rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100">Export</span>
+                                        <span class="absolute bottom-14 transition-all scale-0 rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100">Export</span>
                                         <button onClick={exportBtnClick} type="button" className="option-btn rounded-r-md" data-tooltip-target="export-tooltip">
                                             <i class="bi bi-file-earmark-image"></i>
                                         </button>
