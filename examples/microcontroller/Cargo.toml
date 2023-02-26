@@ -1,0 +1,18 @@
+[package]
+name = "microcontroller"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+cortex-m-rt = "0.7.2"
+panic-halt = "0.2.0"
+
+[profile.release]
+# `lto = true` should also work
+lto = 'fat'
+
+[[bin]]
+name = "microcontroller"
+path = "microcontroller.rs"
