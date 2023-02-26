@@ -55,7 +55,7 @@ function GraphFooter({ collapseState, setParentSearchValue, setParentBtn1Click, 
     return (
         <div className={containerCollapseClass}>
             <div className='flex flex-row'>
-                <div className='basis-2/5'>
+                <div className='basis-3/5'>
                     <div className="relative">
                         <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                             <svg aria-hidden="true" className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -64,41 +64,32 @@ function GraphFooter({ collapseState, setParentSearchValue, setParentBtn1Click, 
                         <button type="submit" className="search-btn" onClick={clearBtnClick}><i className="bi bi-x-circle"></i></button>
                     </div>
                 </div>
-                <div className='basis-2/6'>
+                <div className='basis-1/6'>
 
                 </div>
                 {(keepButtons || false ?
                     (
                         <>
-                            <div className='basis-1/6'>
+                            <div className='basis-2/5'>
                                 <div className="flex align-middle rounded-md items-center pl-3 h-full w-full" role="group">
-
-                                    <div className='group relative flex justify-center h-12'>
+                                    <div className='group relative flex justify-center h-12 w-full'>
                                         <span class="absolute bottom-14 transition-all scale-0 rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100">Reset</span>
                                         <button onClick={resetBtnClick} type="button" className="option-btn rounded-l-md" data-tooltip-target="export-tooltip">
                                             <i class="bi bi-bullseye"></i>
                                         </button>
                                     </div>
-                                    <div className='group relative flex justify-center h-12'>
+                                    <div className='group relative flex justify-center h-12 w-full'>
                                         <span class="absolute bottom-14 transition-all scale-0 rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100">Sort</span>
                                         <button onClick={sortBtnClick} type="button" className="option-btn" data-tooltip-target="export-tooltip">
                                             <i class="bi bi-diagram-2"></i>
                                         </button>
                                     </div>
-                                    <div className='group relative flex justify-center h-12'>
+                                    <div className='group relative flex justify-center h-12 w-full'>
                                         <span class="absolute bottom-14 transition-all scale-0 rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100">Export</span>
                                         <button onClick={exportBtnClick} type="button" className="option-btn rounded-r-md" data-tooltip-target="export-tooltip">
                                             <i class="bi bi-file-earmark-image"></i>
                                         </button>
                                     </div>
-
-                                </div>
-                            </div>
-                            <div className="basis-1/12">
-                                <div className="flex align-middle rounded-md items-center pl-3 h-full">
-                                    <button type="button" className="option-btn rounded-md">
-                                        <i class="bi bi-filter text-3xl"></i>
-                                    </button>
                                 </div>
                             </div>
                         </>

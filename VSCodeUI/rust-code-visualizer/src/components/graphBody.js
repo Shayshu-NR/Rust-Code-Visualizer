@@ -64,6 +64,8 @@ function GraphBody({ collapseState, programTarget, searchValue, exportGraph, sor
         "relative": true,
         "z-0": true,
     });
+
+    // TODO: Update arrow color to be more interesting and less uniform
     const styleSheet = [
         {
             selector: "node",
@@ -183,7 +185,7 @@ function GraphBody({ collapseState, programTarget, searchValue, exportGraph, sor
 
     useEffect(() => {
         if (sortGraph.target !== undefined && cyRef !== null) {
-            cyRef.reset();
+            cyRef.fit();
         }
     }, [resetGraph]);
     //------------------
