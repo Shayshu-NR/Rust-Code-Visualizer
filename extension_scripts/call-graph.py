@@ -205,8 +205,6 @@ def execute_call_stack(proj_dir, compiler, bin_name):
 def process_label(label):
     """Convert label from cargo call stack into format identifying the function
     """
-    if "value" in label:
-        print(label.split('\\')[0])
     match = re.search(r"((?:[a-zA-Z0-9_<>,]*\:\:)*[a-zA-Z0-9_<>,]*)$", label.split('\\')[0])
     if not match:
         raise RuntimeError(f"Label {label} could not match to a function name")
@@ -226,8 +224,6 @@ def filter_graph(agraph, graph_functions, bin_name):
     
     for node in agraph.nodes():
         label = process_label(agraph.get_node(node).attr["label"])
-        if "value" in label:
-            print(label)
         if any(label.endswith(func) and label.startswith(bin_name) for func in graph_functions):
             agraph.get_node(node).attr["label"] = label
         else:
