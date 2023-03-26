@@ -70,7 +70,7 @@ class profiler:
                 data_line = re.sub(r"\(\s\S+\)",'',data_line)
                 data_line = data_line.replace(".","0").replace(",","")
                 data_list = data_line.split()
-                func_name = data_list[14].split(":")[-1]
+                func_name = data_list[14].split(os.path.split(self.__executable)[1] + "::")[-1]
                 data_list = data_list[:13]
                 i += 1
                 while not lines[i].isspace():
