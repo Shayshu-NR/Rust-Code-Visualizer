@@ -4,13 +4,14 @@ import re
 
 
 class profiler:
-    def __init__(self):
+    def __init__(self, script_loc):
         self.__func_dict = {}
         self.__executable = None
         self.__executable_path = None
-        self.__current_path = os.path.abspath("./")
+        self.__current_path = os.path.abspath(os.path.dirname(script_loc))
         self.__orig_file_list = []
         self.__parse_file = ".profile_data.txt"
+        os.chdir(self.__current_path)
 
     # Method that gets called by the main script. Takes the executable name as an argument.
     def get_profiling_info(self, exec):
@@ -19,7 +20,6 @@ class profiler:
             self.__orig_executable = os.path.abspath(exec)
         except:
             raise Exception("Invalid path to executable!")
-
         self.__executable_path = os.path.split(self.__executable)[0]
         self.__orig_file_list = os.listdir(self.__current_path)
         self.__run_profilers()
@@ -62,7 +62,7 @@ class profiler:
         i = 0
         while i < len(lines):
             search = TOTAL_DATA.match(lines[i])
-            if(search != None):
+            if (search != None):
                 data_list = []
                 for val in search.groups():
                     val = val.replace("(", "").replace(")", "").replace(
@@ -74,17 +74,18 @@ class profiler:
                 continue
 
             search = FUNCTION_DATA.match(lines[i])
-            if(search != None):
+            if (search != None):
                 data_line = re.sub(r"\(\S+\)", '', lines[i])
                 data_line = re.sub(r"\(\s\S+\)", '', data_line)
                 data_line = data_line.replace(".", "0").replace(",", "")
                 data_list = data_line.split()
-                func_name = data_list[14].split(":")[-1]
+                func_name = data_list[14].split(
+                    self.__executable + "::")[-1]
                 data_list = data_list[:13]
                 i += 1
                 while not lines[i].isspace():
                     search = FUNCTION_DATA_ALL.match(lines[i])
-                    if(search != None):
+                    if (search != None):
                         callee_line = re.sub(r"\(\S+\)", '', lines[i])
                         callee_line = re.sub(r"\(\s\S+\)", '', callee_line)
                         callee_line = callee_line.replace(
@@ -96,7 +97,15 @@ class profiler:
                     i += 1
 
                 data_dict = self.__fill_data_dict(data_list)
-                self.__func_dict[func_name] = data_dict
+                # Account for cyclical function calls
+                if len(func_name.split("'")) > 0 and func_name.split("'")[-1].isdigit():
+                    func_name = func_name.split("'")[0]
+                if func_name not in self.__func_dict.keys():
+                    self.__func_dict[func_name] = data_dict
+                else:
+                    for data_key in data_dict.keys():
+                        self.__func_dict[func_name][data_key] = int(
+                            self.__func_dict[func_name][data_key]) + int(data_dict[data_key])
                 i += 1
                 continue
 
@@ -151,10 +160,10 @@ class profiler:
             graph_dict[dataset]["datasets"][0]["data"] = graph_data_list
             index += 1
 
-        with open('./data/profiler_graphs.json', 'w') as f:
+        with open('../../data/profiler_graphs.json', 'w+') as f:
             json.dump(graph_dict, f, indent=4,)
 
-        with open('./data/profiling_data.json', 'w') as f:
+        with open('../../data/profiling_data.json', 'w+') as f:
             json.dump(self.__func_dict, f, indent=4,)
 
     def __print_info(self):
