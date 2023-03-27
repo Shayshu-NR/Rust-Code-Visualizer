@@ -85,7 +85,14 @@ class profiler:
                     i += 1
 
                 data_dict = self.__fill_data_dict(data_list)
-                self.__func_dict[func_name] = data_dict
+                # Account for cyclical function calls
+                if len(func_name.split("'")) > 0 and func_name.split("'")[-1].isdigit():
+                    func_name = func_name.split("'")[0]
+                if func_name not in self.__func_dict.keys():
+                    self.__func_dict[func_name] = data_dict
+                else:
+                    for data_key in data_dict.keys():
+                        self.__func_dict[func_name][data_key] = int(self.__func_dict[func_name][data_key]) + int(data_dict[data_key])
                 i += 1
                 continue   
 
