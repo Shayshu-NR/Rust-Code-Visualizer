@@ -2,9 +2,6 @@ import * as vscode from "vscode";
 import * as path from "path";
 import { getNonce } from "./utilities";
 import { readFileSync } from "fs";
-// import { spawnSync } from "child_process";
-import { windowsToWslSync, wslToWindowsSync } from "wsl-path";
-import { spawn, spawnSync } from "child_process";
 
 export class SidebarProvider implements vscode.WebviewViewProvider {
   _view?: vscode.WebviewView;
