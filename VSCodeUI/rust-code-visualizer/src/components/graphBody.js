@@ -30,12 +30,11 @@ function formatGraphData(cytoData) {
     return retElements;
 }
 
-function downloadGraph(blob)
-{
+function downloadGraph(blob, programTarget) {
     let url = URL.createObjectURL(blob);
 
     const link = document.createElement("a");
-    link.download = `Graph.png`;
+    link.download = `${programTarget.target?.value.replace(".rs", "")}-Graph.png`;
     link.href = url;
 
     link.click();
@@ -46,7 +45,7 @@ function getGraphLabels(cytoData) {
     return cytoData.elements.nodes.map(x => x.data.label);
 }
 
-function GraphBody({ collapseState, programTarget, searchValue, exportGraph }) {
+function GraphBody({ collapseState, programTarget, searchValue, exportGraph, sortGraph, resetGraph }) {
     //----- State -----
     const [elements, setElements] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -65,6 +64,8 @@ function GraphBody({ collapseState, programTarget, searchValue, exportGraph }) {
         "relative": true,
         "z-0": true,
     });
+
+    // TODO: Update arrow color to be more interesting and less uniform
     const styleSheet = [
         {
             selector: "node",
@@ -74,6 +75,7 @@ function GraphBody({ collapseState, programTarget, searchValue, exportGraph }) {
                 shape: "circle",
                 label: "data(label)",
                 color: "white",
+                "font-size": "30vh",
             },
         },
         {
@@ -143,8 +145,6 @@ function GraphBody({ collapseState, programTarget, searchValue, exportGraph }) {
             // clear
             if (searchValue.searchValue === "") {
                 cyRef.reset();
-                let resetLayout = cyRef.layout(layout);
-                resetLayout.run();
             }
             else {
                 let fuse = new Fuse(cytoLabels.current);
@@ -172,10 +172,23 @@ function GraphBody({ collapseState, programTarget, searchValue, exportGraph }) {
             let blob = cyRef.png({
                 "output": "blob"
             });
-            
-            downloadGraph(blob);
+
+            downloadGraph(blob, programTarget);
         }
     }, [exportGraph]);
+
+    useEffect(() => {
+        if (sortGraph.target !== undefined && cyRef !== null) {
+            let resetLayout = cyRef.layout(layout);
+            resetLayout.run();
+        }
+    }, [sortGraph]);
+
+    useEffect(() => {
+        if (sortGraph.target !== undefined && cyRef !== null) {
+            cyRef.fit();
+        }
+    }, [resetGraph]);
     //------------------
 
     return (
