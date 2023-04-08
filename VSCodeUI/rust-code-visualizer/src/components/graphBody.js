@@ -75,6 +75,7 @@ function GraphBody({ collapseState, programTarget, searchValue, exportGraph, sor
                 shape: "circle",
                 label: "data(label)",
                 color: "white",
+                "font-size": "30vh",
             },
         },
         {
