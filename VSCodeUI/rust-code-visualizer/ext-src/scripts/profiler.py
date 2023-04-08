@@ -52,8 +52,6 @@ class profiler:
         lines = data_file.readlines()
 
         # Regex patterns for finding specific lines
-        TOTAL_DATA = re.compile(
-            r"(.*)100.0%(.*)100.0%(.*)100.0%(.*)100.0%(.*)100.0%(.*)100.0%(.*)100.0%(.*)100.0%(.*)100.0%(.*)100.0%(.*)100.0%(.*)100.0%(.*)100.0%.*PROGRAM TOTALS")
         FUNCTION_DATA = re.compile(r".*\*.*:" + re.escape(os.path.split(self.__current_path + "/" + self.__executable)[
                                    1]) + r".*\[" + re.escape(self.__current_path + "/" + self.__executable) + r"\].*")
         FUNCTION_DATA_ALL = re.compile(r".*:" + re.escape(os.path.split(self.__current_path + "/" + self.__executable)[
@@ -61,18 +59,6 @@ class profiler:
 
         i = 0
         while i < len(lines):
-            search = TOTAL_DATA.match(lines[i])
-            if (search != None):
-                data_list = []
-                for val in search.groups():
-                    val = val.replace("(", "").replace(")", "").replace(
-                        " ", "").replace(",", "")
-                    data_list.append(val)
-                data_dict = self.__fill_data_dict(data_list)
-                self.__func_dict["Totals"] = data_dict
-                i += 1
-                continue
-
             search = FUNCTION_DATA.match(lines[i])
             if (search != None):
                 data_line = re.sub(r"\(\S+\)", '', lines[i])
@@ -131,7 +117,7 @@ class profiler:
                         "#ff6384",
                         "#4bc0c0",
                         "#ff9f40"]
-        func_labels = list(self.__func_dict.keys())[1:]
+        func_labels = list(self.__func_dict.keys())
         graph_dict = {}
         index = 0
         for dataset in graph_data:
