@@ -2,8 +2,6 @@ import * as vscode from "vscode";
 import * as path from "path";
 import { getNonce } from "./utilities";
 import { readFileSync } from "fs";
-// import { spawnSync } from "child_process";
-// import { windowsToWslSync } from "wsl-path";
 
 export class SidebarProvider implements vscode.WebviewViewProvider {
   _view?: vscode.WebviewView;
@@ -66,9 +64,12 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
               data.value
             );
 
-            let cmd: string = `python3 ${scriptPath} ${targetFile}`;
+            let cmd: string = `bash -l -c "python3 ${scriptPath} ${targetFile}"`;
+
+            console.log(cmd);
 
             cp.exec(cmd, (err: any, stdout: any, stderr: any) => {
+              console.log("Profiler Error:", stderr);
               try {
                 let chartData = JSON.parse(
                   fs.readFileSync(
@@ -103,42 +104,6 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           }
           break;
         }
-        case "reqStaticProfileData": {
-          try {
-            var fs = require("fs");
-            let chartData = JSON.parse(
-              fs.readFileSync(
-                path.join(
-                  this._extensionPath,
-                  "data",
-                  "profiler_graphs.json"
-                )
-              )
-            );
-
-            let tableData = JSON.parse(
-              fs.readFileSync(
-                path.join(
-                  this._extensionPath,
-                  "data",
-                  "profiling_data.json"
-                )
-              )
-            );
-
-            webviewView.webview.postMessage({
-              type: "profileStaticDataResults",
-              value: {
-                chart: chartData,
-                table: tableData,
-              },
-            });
-          } catch {
-            return;
-          }
-
-          break;
-        }
         case "reqGraphData": {
           var cp = require("child_process");
           var fs = require("fs");
@@ -157,7 +122,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
             );
             let targetFile = vscode.workspace.workspaceFolders[0].uri.fsPath;
 
-            let cmd: string = `python3 ${scriptPath} -p ${targetFile} -o ${dataPath}`;
+            let cmd: string = `bash -l "python3 ${scriptPath} -p ${targetFile} -o ${dataPath}"`;
 
             cp.exec(cmd, (err: any, stdout: any, stderr: any) => {
               let graphData = JSON.parse(
