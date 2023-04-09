@@ -4,6 +4,7 @@ import { getNonce } from "./utilities";
 import { readFileSync, createReadStream } from "fs";
 import { createHash } from "crypto";
 import { create } from "domain";
+import { env } from "process";
 
 export class SidebarProvider implements vscode.WebviewViewProvider {
   _view?: vscode.WebviewView;
@@ -184,10 +185,11 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
                 return;
               }
             }
+            let envCmd: string = `source ${path.join(this._extensionPath, 'rcv', 'bin', 'activate')}`;
+            
+            let cmd: string = `${envCmd} && python3 ${scriptPath} -p ${targetFile} -o ${dataPath}`;
 
-            let cmd: string = `python3 ${scriptPath} -p ${targetFile} -o ${dataPath}`;
-
-            cp.exec(cmd, (err: any, stdout: any, stderr: any) => {
+            cp.exec(cmd, {shell: '/bin/bash'}, (err: any, stdout: any, stderr: any) => {
               console.log("Graph Error:", err, stdout, stderr);
               let graphData = JSON.parse(
                 fs.readFileSync(
