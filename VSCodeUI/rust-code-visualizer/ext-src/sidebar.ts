@@ -122,9 +122,13 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
             );
             let targetFile = vscode.workspace.workspaceFolders[0].uri.fsPath;
 
-            let cmd: string = `bash -l "python3 ${scriptPath} -p ${targetFile} -o ${dataPath}"`;
+            let cmd: string = `python3 ${scriptPath} -p ${targetFile} -o ${dataPath}`;
+            console.log(
+              cmd
+            );
 
             cp.exec(cmd, (err: any, stdout: any, stderr: any) => {
+              console.log("Graph Error:", err, stdout, stderr);
               let graphData = JSON.parse(
                 fs.readFileSync(
                   path.join(this._extensionPath, "data", "cyto.json")
