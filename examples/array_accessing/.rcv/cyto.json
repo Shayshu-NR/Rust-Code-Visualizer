@@ -1,0 +1,128 @@
+{
+    "data": [
+        [
+            "fontname",
+            ""
+        ],
+        [
+            "label",
+            ""
+        ],
+        [
+            "style",
+            ""
+        ],
+        [
+            "graph",
+            {
+                "fontname": "",
+                "label": "",
+                "style": ""
+            }
+        ],
+        [
+            "node",
+            {
+                "fontname": "",
+                "label": "",
+                "shape": "box",
+                "style": ""
+            }
+        ],
+        [
+            "edge",
+            {}
+        ]
+    ],
+    "directed": true,
+    "multigraph": true,
+    "elements": {
+        "nodes": [
+            {
+                "data": {
+                    "label": "bfs::check_end_condition",
+                    "id": "48",
+                    "value": "48",
+                    "name": "48"
+                }
+            },
+            {
+                "data": {
+                    "label": "bfs::generate_path",
+                    "id": "49",
+                    "value": "49",
+                    "name": "49"
+                }
+            },
+            {
+                "data": {
+                    "label": "bfs::set_visited_nodes",
+                    "id": "50",
+                    "value": "50",
+                    "name": "50"
+                }
+            },
+            {
+                "data": {
+                    "label": "bfs::bfs_trace",
+                    "id": "51",
+                    "value": "51",
+                    "name": "51"
+                }
+            },
+            {
+                "data": {
+                    "label": "bfs::gen_field_graph",
+                    "id": "52",
+                    "value": "52",
+                    "name": "52"
+                }
+            },
+            {
+                "data": {
+                    "label": "bfs::main",
+                    "id": "53",
+                    "value": "53",
+                    "name": "53"
+                }
+            }
+        ],
+        "edges": [
+            {
+                "data": {
+                    "source": "51",
+                    "target": "48",
+                    "key": 0
+                }
+            },
+            {
+                "data": {
+                    "source": "51",
+                    "target": "49",
+                    "key": 0
+                }
+            },
+            {
+                "data": {
+                    "source": "51",
+                    "target": "50",
+                    "key": 0
+                }
+            },
+            {
+                "data": {
+                    "source": "53",
+                    "target": "51",
+                    "key": 0
+                }
+            },
+            {
+                "data": {
+                    "source": "53",
+                    "target": "52",
+                    "key": 0
+                }
+            }
+        ]
+    }
+}
