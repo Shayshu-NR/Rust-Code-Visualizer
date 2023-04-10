@@ -187,7 +187,7 @@ def execute_call_stack(proj_dir, compiler, bin_name):
     
     try:
         process_output = subprocess.run(["cargo", "build", "--release", "--target", compiler],
-                                            capture_output=True, check=True, cwd=proj_dir, encoding="utf-8")
+                                            capture_output=True, check=True, cwd=proj_dir, encoding="utf-8", shell=True)
         process_output = subprocess.run(["cargo", "call-stack", "--bin", bin_name, "--target", compiler],
                                             capture_output=True, check=True, cwd=proj_dir, encoding="utf-8")
         dot_data = process_output.stdout
